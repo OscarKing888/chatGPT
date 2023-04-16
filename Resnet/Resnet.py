@@ -15,7 +15,8 @@ from tqdm import tqdm
 from pathlib import Path
 from PIL import Image
 import time
-
+from prettytable import PrettyTable
+from PIL import Image
 
 # 数据集名称映射
 dataset_mapping = {
@@ -162,7 +163,15 @@ def truncate_filename(filename, max_width):
         return truncated + "..."
     return filename
 
-def predict_all_images(image_folder, model, device, class_names):
+
+
+def save_resized_image(input_path, output_path, size):
+    image = Image.open(input_path)
+    resized_image = image.resize(size, Image.ANTIALIAS)
+    resized_image.save(output_path)
+
+
+def predict_all_images(image_folder, model, device, class_names, test_transform):
     model.eval()
     supported_extensions = ('.png', '.jpg', '.jpeg', '.bmp')
     image_filenames = [f for f in os.listdir(image_folder) if f.lower().endswith(supported_extensions)]
@@ -181,9 +190,11 @@ def predict_all_images(image_folder, model, device, class_names):
     for image_filename in progress_bar:
         file_path = os.path.join(image_folder, image_filename)
 
-        # Load and preprocess the image
-        image = Image.open(file_path)
-        image_tensor = transform_test(image).unsqueeze(0).to(device)
+        # Convert the image to RGB
+        image = Image.open(file_path).convert("RGB")
+        
+        image_tensor = test_transform(image).unsqueeze(0).to(device)
+
 
         # Predict the class
         with torch.no_grad():
@@ -255,7 +266,8 @@ def main():
     model = create_model(args.model, num_classes=len(class_names))
 
     # Check if GPU is available
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda")
     model = model.to(device)
 
     # Define loss function and optimizer
@@ -280,11 +292,11 @@ def main():
         # Load the best model
         if not os.path.exists(model_filename):
             raise FileNotFoundError(f"Model file not found: {model_filename}")
-
+        
         model.load_state_dict(torch.load(model_filename))
 
         # Predict for images in folder
-        predict_all_images(args.image, best_model, device, class_names)
+        predict_all_images(args.image, model, device, class_names, test_transform)
     else:
         raise ValueError("Invalid mode. Choose 'train' or 'predict'.")
 

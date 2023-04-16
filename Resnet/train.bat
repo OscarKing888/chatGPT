@@ -1,0 +1,1 @@
+python Resnet.py --mode train --epochs 2 %*

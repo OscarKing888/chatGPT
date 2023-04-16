@@ -1,23 +1,32 @@
-@echo off
-echo Creating the "resnet" conda environment...
-conda create -n resnet python=3.10.6 -y
-echo.
 
-echo Activating the "resnet" environment...
-call conda activate resnet
-echo.
+@echo on
 
-echo Installing dependencies from requirements.txt...
-pip install -r requirements.txt
-echo.
+REM Set cache directory
+if exist X:\pycache (
+	set CACHE_DIR= X:\pycache
+) else (
+	set CACHE_DIR= .\pycache
+)
 
+@echo cache dir:%CACHE_DIR%
 
-echo Installing PyTorch 2.0.0 (CUDA 11.8 version)...
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-echo.
+REM Check if the virtual environment exists
+if exist resnet\Scripts\activate (
+    echo Virtual environment 'resnet' already exists.
+) else (
+    REM Create a virtual environment named 'resnet'
+    echo Creating virtual environment 'resnet'...
+    python -m venv resnet
+)
 
-conda install pytorch torchvision -c pytorch
+REM Activate the virtual environment
+call resnet\Scripts\activate
 
+REM Install PyTorch 2.0.0 with CUDA 11.1 and torchvision, torchaudio
+REM conda install pytorch=2.0.0 torchvision torchaudio -c pytorch -c conda-forge -y
+pip3 install --cache-dir %CACHE_DIR% torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
-echo Environment setup completed.
-pause
+REM Install requirements
+pip install --cache-dir %CACHE_DIR% -r requirements.txt
+
+echo Done!

@@ -1,0 +1,1 @@
+python Resnet.py --mode predict %*

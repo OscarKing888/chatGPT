@@ -1,0 +1,1 @@
+call conda activate resnet

@@ -5,23 +5,25 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
 import torch.backends.cudnn as cudnn
-import torchvision
 from torchvision import datasets, models, transforms
 from torch.utils.data import DataLoader
-import time
 import numpy as np
-import unicodedata
 from tqdm import tqdm
 from pathlib import Path
 from PIL import Image
 import time
 from prettytable import PrettyTable
-from PIL import Image
+import unicodedata
+from torch.utils.tensorboard import SummaryWriter
+
+
+max_filename_length = 30
 
 # 数据集名称映射
 dataset_mapping = {
     "CIFAR10": {
         "class_names": ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck'),
+        "image_size": (32, 32),
         "train_transform": transforms.Compose([
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
@@ -36,6 +38,7 @@ dataset_mapping = {
     },
     "STL10": {
         "class_names": ('airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck'),
+        "image_size": (96, 96),
         "train_transform": transforms.Compose([
             transforms.Resize(96),
             transforms.RandomCrop(96, padding=4),
@@ -139,6 +142,13 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
     return model
 
 
+def save_resized_image(input_path, output_path, size):
+    image = Image.open(input_path)
+    resized_image = image.resize(size, Image.ANTIALIAS)
+    resized_image.save(output_path)
+
+
+
 def get_display_width(s):
     width = 0
     for c in s:
@@ -164,14 +174,7 @@ def truncate_filename(filename, max_width):
     return filename
 
 
-
-def save_resized_image(input_path, output_path, size):
-    image = Image.open(input_path)
-    resized_image = image.resize(size, Image.ANTIALIAS)
-    resized_image.save(output_path)
-
-
-def predict_all_images(image_folder, model, device, class_names, test_transform):
+def predict_all_images(image_folder, model, device, class_names, test_transform, img_size=(32, 32)):
     model.eval()
     supported_extensions = ('.png', '.jpg', '.jpeg', '.bmp')
     image_filenames = [f for f in os.listdir(image_folder) if f.lower().endswith(supported_extensions)]
@@ -184,38 +187,46 @@ def predict_all_images(image_folder, model, device, class_names, test_transform)
     progress_bar = tqdm(image_filenames, desc="Predicting", ncols=100)
 
     # Prepare results table
-    table = PrettyTable(["File", "Predicted Class", "Class Name"])
+    table = PrettyTable(["Image Name", "Predicted Class", "Class Name", "Confidence"])
 
+    # Initialize TensorBoard SummaryWriter
+    writer = SummaryWriter('runs/tensorboard_log')
+    
     # Process each image
-    for image_filename in progress_bar:
+    for idx, image_filename in enumerate(progress_bar):
         file_path = os.path.join(image_folder, image_filename)
-
         # Convert the image to RGB
-        image = Image.open(file_path).convert("RGB")
-        
+        image = Image.open(file_path).convert("RGB")        
         image_tensor = test_transform(image).unsqueeze(0).to(device)
-
 
         # Predict the class
         with torch.no_grad():
             output = model(image_tensor)
-            _, predicted_class = torch.max(output, 1)
+            prob, predicted_class = torch.max(nn.functional.softmax(output, dim=1), 1)
 
-        predicted_class_name = class_names[predicted_class.item()]
+        predicted_class_idx = predicted_class.item()
+        predicted_class_name = class_names[predicted_class_idx]
 
-        # Extract correct class from file name if available
-        correct_class = "?"
-        for name in class_names:
-            if name.lower() in image_filename.lower():
-                correct_class = name
-                break
+        # 检查类名是否在文件名中
+        confidence = "✓" if predicted_class_name.lower() in image_filename.lower() else "?"
+
+        # 将数据添加到表格中
+        table.add_row([truncate_filename(image_filename, max_filename_length), predicted_class_idx, predicted_class_name, confidence])
 
         # Save error images as resized 32x32 versions
-        if predicted_class_name.lower() != correct_class.lower():
-            save_resized_image(file_path, os.path.join(error_folder, f"{image_filename[:-4]}_32{image_filename[-4:]}"), (32, 32))
+        if confidence == "?":
+            save_resized_image(file_path, os.path.join(error_folder, f"{predicted_class_name}_{image_filename}"), img_size)
 
-        # Update the results table
-        table.add_row([image_filename, predicted_class.item(), predicted_class_name])
+        # Write to TensorBoard
+        writer.add_scalar('Prediction/class_index', predicted_class_idx, idx)
+        writer.add_scalar('Prediction/probability', prob.item(), idx)
+       
+        # Save error images as resized 32x32 versions
+        if confidence == "?":
+            save_resized_image(file_path, os.path.join(error_folder, f"{predicted_class_name}_{image_filename}"), img_size)
+
+    # Close the TensorBoard SummaryWriter
+    writer.close()
 
     # Print the results table
     print(table)
@@ -249,6 +260,7 @@ def main():
     train_transform = dataset_config["train_transform"]
     test_transform = dataset_config["test_transform"]
     class_names = dataset_config["class_names"]
+    image_size = dataset_config["image_size"]
 
     # Prepare data
     trainset = dataset_config["loader"](root='./data', split='train', download=True, transform=train_transform)
@@ -296,7 +308,7 @@ def main():
         model.load_state_dict(torch.load(model_filename))
 
         # Predict for images in folder
-        predict_all_images(args.image, model, device, class_names, test_transform)
+        predict_all_images(args.image, model, device, class_names, test_transform, image_size)
     else:
         raise ValueError("Invalid mode. Choose 'train' or 'predict'.")
 

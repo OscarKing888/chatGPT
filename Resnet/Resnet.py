@@ -262,13 +262,20 @@ def main():
     class_names = dataset_config["class_names"]
     image_size = dataset_config["image_size"]
 
-    # Prepare data
-    trainset = dataset_config["loader"](root='./data', split='train', download=True, transform=train_transform)
-    testset = dataset_config["loader"](root='./data', split='test', download=True, transform=test_transform)
-    #trainset = dataset_config["loader"](root='./data', train=True, download=True, transform=train_transform)
-    #testset = dataset_config["loader"](root='./data', train=False, download=True, transform=test_transform)
+    trainset = []
+    testset = []
+    trainloader = ()
+    testloader = ()
 
-    trainloader = DataLoader(trainset, batch_size=100, shuffle=True, num_workers=2)    
+    if args.dataset == "CIFAR10":
+        trainset = dataset_config["loader"](root='./data', train=True, download=True, transform=train_transform)
+        testset = dataset_config["loader"](root='./data', train=False, download=True, transform=test_transform)
+
+    elif args.dataset == "STL10":        
+        trainset = dataset_config["loader"](root='./data', split='train', download=True, transform=train_transform)
+        testset = dataset_config["loader"](root='./data', split='test', download=True, transform=test_transform)
+
+    trainloader = DataLoader(trainset, batch_size=100, shuffle=True, num_workers=2)
     testloader = DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
 
     dataloaders = {'train': trainloader, 'val':    testloader}

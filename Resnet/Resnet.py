@@ -87,6 +87,10 @@ all_train_acc = []
 all_test_acc = []
 
 def plot_train_result():
+    global show_plot
+    global used_dataset_name
+    global used_model_name
+
     # 绘制训练和测试损失的变化曲线
     plt.plot(all_train_loss, label='train_loss')
     plt.plot(all_test_loss, label='test_loss')
@@ -284,6 +288,9 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
     supported_extensions = ('.png', '.jpg', '.jpeg', '.bmp')
     image_filenames = [f for f in os.listdir(image_folder) if f.lower().endswith(supported_extensions)]
 
+    global used_dataset_name
+    global used_model_name
+    
     # Prepare to store resized error images
     print(f"used_model_name:{used_model_name} used_dataset_name:{used_dataset_name}")
     
@@ -369,6 +376,9 @@ def main():
     print("\n")
 
     webbrowser.open_new_tab('http://localhost:6006/')
+    
+    global used_dataset_name
+    global used_model_name
 
     used_dataset_name = args.dataset
     used_model_name = args.model

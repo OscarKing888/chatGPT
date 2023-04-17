@@ -290,7 +290,7 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
 
     global used_dataset_name
     global used_model_name
-    
+
     # Prepare to store resized error images
     print(f"used_model_name:{used_model_name} used_dataset_name:{used_dataset_name}")
     
@@ -345,6 +345,13 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
 
 def generate_model_filename(dataset_name, model_name):
     return f"{model_name}_{dataset_name}_best.pth"
+
+
+def try_all_gpus():  #@save
+    """返回所有可用的GPU，如果没有GPU，则返回[cpu(),]。"""
+    devices = [torch.device(f'cuda:{i}')
+             for i in range(torch.cuda.device_count())]
+    return devices if devices else [torch.device('cpu')]
 
 def main():
 
@@ -413,8 +420,8 @@ def main():
     model = create_model(args.model, num_classes=len(class_names))
 
     # Check if GPU is available
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    #device = torch.device("cuda")
+    device = try_all_gpus()[0]#torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"====Device: {device}")
     model = model.to(device)
 
     # Define loss function and optimizer

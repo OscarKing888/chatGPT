@@ -19,8 +19,12 @@ from sklearn.model_selection import train_test_split
 import webbrowser
 import matplotlib.pyplot as plt
 
+tensorboard_log_dir = 'runs/tensorboard_log'
+tensorboard_log_dir_pred = 'runs/tensorboard_log_predition'
 max_filename_length = 30
 used_model_name = ""
+used_dataset_name = ""
+show_plot = False
 
 # 数据集名称映射
 dataset_mapping = {
@@ -71,7 +75,6 @@ def create_model(model_name, num_classes):
     else:
         raise ValueError("Invalid model name. Choose from: " + ", ".join(model_mapping.keys()))
 
-    used_model_name = model_name
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, num_classes)
     
@@ -90,9 +93,12 @@ def plot_train_result():
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.title('Training and Testing Loss')
-    plt.legend()    
-    plt.show()
-    plt.savefig('train_test_loss.png')
+    plt.legend()
+    plt.figure()
+    plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_loss.png")
+    if show_plot:    
+        plt.show()
+    
 
     # 绘制训练和测试准确率的变化曲线
     plt.plot(all_train_acc, label='train_acc')
@@ -101,8 +107,10 @@ def plot_train_result():
     plt.ylabel('Accuracy')
     plt.title('Training and Testing Accuracy')
     plt.legend()
-    plt.show()
-    plt.savefig('train_test_acc.png')
+    plt.figure()
+    plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_acc.png")
+    if show_plot:
+        plt.show()    
 
 
 def train(model, dataloader, criterion, optimizer, scheduler, device, writer, epoch):
@@ -137,13 +145,13 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
     epoch_loss = running_loss / len(dataloader.dataset)
     epoch_acc = running_corrects.double() / len(dataloader.dataset)
 
+    # 记录训练损失和准确率的变化情况
+    all_train_loss.append(epoch_loss)
+    all_train_acc.append(epoch_acc.item())
+
     # 将训练损失和准确率写入TensorBoard
     writer.add_scalar('train_loss', epoch_loss, epoch)
     writer.add_scalar('train_acc', epoch_acc, epoch)
-
-    # 记录训练损失和准确率的变化情况
-    all_train_loss.append(epoch_loss)
-    all_train_acc.append(epoch_acc)
 
     return epoch_loss, epoch_acc
 
@@ -172,13 +180,13 @@ def test(model, dataloader, criterion, device, writer, epoch):
     epoch_loss = running_loss / len(dataloader.dataset)
     epoch_acc = running_corrects.double() / len(dataloader.dataset)
 
+    # 记录测试损失和准确率的变化情况
+    all_test_loss.append(epoch_loss)
+    all_test_acc.append(epoch_acc.item())
+
     # 将验证损失和准确率写入TensorBoard
     writer.add_scalar('test_loss', epoch_loss, epoch)
     writer.add_scalar('test_acc', epoch_acc, epoch)
-
-    # 记录测试损失和准确率的变化情况
-    all_test_loss.append(epoch_loss)
-    all_test_acc.append(epoch_acc)
 
     return epoch_loss, epoch_acc
 
@@ -187,8 +195,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
     since = time.time()
 
     # 划分训练集和验证集
-    #train_data, val_data = train_test_split(dataset, test_size=test_size)
-    
+    #train_data, val_data = train_test_split(dataset, test_size=test_size)    
 
     # 创建数据加载器
     #train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
@@ -201,7 +208,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
     best_acc = 0.0
 
     # 创建TensorBoard的SummaryWriter对象
-    writer = SummaryWriter()
+    writer = SummaryWriter(tensorboard_log_dir)
 
     stat_table = PrettyTable(["Epoch", "Train Loss", "Train Acc", "Test Loss", "Test ACC"])
 
@@ -217,7 +224,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
         print('Train Loss: {:.4f} Acc: {:.4f}'.format(train_loss, train_acc))
         print('Test Loss: {:.4f} Acc: {:.4f}'.format(test_loss, test_acc))
 
-        stat_table.add_row([epoch + 1, train_loss, train_acc, test_loss, test_acc])
+        stat_table.add_row([epoch + 1, train_loss, train_acc.item(), test_loss, test_acc.item()])
 
         # 深度复制模型
         if test_acc > best_acc:
@@ -278,8 +285,9 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
     image_filenames = [f for f in os.listdir(image_folder) if f.lower().endswith(supported_extensions)]
 
     # Prepare to store resized error images
-    print("used_model_name:", used_model_name)
-    error_folder = os.path.join(os.path.dirname(image_folder), "err_" + used_model_name)
+    print(f"used_model_name:{used_model_name} used_dataset_name:{used_dataset_name}")
+    
+    error_folder = os.path.join(os.path.dirname(image_folder), f"err_{used_model_name}_{used_dataset_name}")
     os.makedirs(error_folder, exist_ok=True)
 
     # Initialize progress bar
@@ -289,7 +297,7 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
     table = PrettyTable(["Image Name", "Predicted Class", "Class Name", "Confidence"])
 
     # Initialize TensorBoard SummaryWriter
-    writer = SummaryWriter('runs/tensorboard_log')
+    writer = SummaryWriter(tensorboard_log_dir_pred)
     
     # Process each image
     for idx, image_filename in enumerate(progress_bar):
@@ -312,18 +320,15 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
         # 将数据添加到表格中
         table.add_row([truncate_filename(image_filename, max_filename_length), predicted_class_idx, predicted_class_name, confidence])
 
-        # Save error images as resized 32x32 versions
+        # Save error images as resized versions
         if confidence == "?":
             save_resized_image(file_path, os.path.join(error_folder, f"{predicted_class_name}_{image_filename}"), img_size)
 
         # Write to TensorBoard
         writer.add_scalar('Prediction/class_index', predicted_class_idx, idx)
         writer.add_scalar('Prediction/probability', prob.item(), idx)
-       
-        # Save error images as resized 32x32 versions
-        if confidence == "?":
-            save_resized_image(file_path, os.path.join(error_folder, f"{predicted_class_name}_{image_filename}"), img_size)
 
+       
     # Close the TensorBoard SummaryWriter
     writer.close()
 
@@ -346,9 +351,15 @@ def main():
     parser.add_argument('--lr', default=0.1, type=float, help='Learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, help='Momentum')
     parser.add_argument('--weight-decay', '--wd', default=5e-4, type=float, help='Weight decay')
-    parser.add_argument('--resume', '-r', action='store_true', help='Resume from checkpoint')
-    parser.add_argument('--image', default='./test', type=str, help='Path to the folder containing images for prediction')
-    parser.add_argument('--resize', default=False, action='store_true', help='Resize images in folder to 32x32')
+    #parser.add_argument('--resume', '-r', action='store_true', help='Resume from checkpoint')
+    parser.add_argument('--image', default='./test', type=str, help='Path to the folder containing images for prediction')    
+    parser.add_argument('--showplot', default=False, action='store_true', help='Show plot of training and validation loss')
+
+    # 检查命令行参数中是否包含-h或--help参数
+    if '-h' in sys.argv or '--help' in sys.argv:
+        parser.print_help()
+        sys.exit()
+
     args = parser.parse_args()
 
     # 打印当前命令行参数值
@@ -358,6 +369,9 @@ def main():
     print("\n")
 
     webbrowser.open_new_tab('http://localhost:6006/')
+
+    used_dataset_name = args.dataset
+    used_model_name = args.model
 
     # Select dataset
     dataset_config = dataset_mapping[args.dataset]
@@ -389,8 +403,8 @@ def main():
     model = create_model(args.model, num_classes=len(class_names))
 
     # Check if GPU is available
-    #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cuda")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #device = torch.device("cuda")
     model = model.to(device)
 
     # Define loss function and optimizer
@@ -429,6 +443,7 @@ def main():
 
 
 if __name__ == '__main__':
+    print("Python version: ", sys.version)
     # 在训练或预测开始前
     start_time = time.time()
     main()

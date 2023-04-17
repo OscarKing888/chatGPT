@@ -71,7 +71,7 @@ model_mapping = {
 
 def create_model(model_name, num_classes):
     if model_name in model_mapping:
-        model = model_mapping[model_name](pretrained=False)
+        model = model_mapping[model_name](weights=None)
     else:
         raise ValueError("Invalid model name. Choose from: " + ", ".join(model_mapping.keys()))
 

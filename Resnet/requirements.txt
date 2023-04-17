@@ -3,4 +3,6 @@ Pillow==9.3.0
 tqdm==4.65.0
 PrettyTable==3.7.0
 tensorboard==2.12.2
-
+sklearn
+scikit-learn
+matplotlib

@@ -15,7 +15,9 @@ import time
 from prettytable import PrettyTable
 import unicodedata
 from torch.utils.tensorboard import SummaryWriter
+from sklearn.model_selection import train_test_split
 import webbrowser
+import matplotlib.pyplot as plt
 
 max_filename_length = 30
 used_model_name = ""
@@ -75,72 +77,166 @@ def create_model(model_name, num_classes):
     
     return model
 
-def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, device, num_epochs=25):
+
+all_train_loss = []
+all_test_loss = []
+all_train_acc = []
+all_test_acc = []
+
+def plot_train_result():
+    # 绘制训练和测试损失的变化曲线
+    plt.plot(all_train_loss, label='train_loss')
+    plt.plot(all_test_loss, label='test_loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Training and Testing Loss')
+    plt.legend()    
+    plt.show()
+    plt.savefig('train_test_loss.png')
+
+    # 绘制训练和测试准确率的变化曲线
+    plt.plot(all_train_acc, label='train_acc')
+    plt.plot(all_test_acc, label='test_acc')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.title('Training and Testing Accuracy')
+    plt.legend()
+    plt.show()
+    plt.savefig('train_test_acc.png')
+
+
+def train(model, dataloader, criterion, optimizer, scheduler, device, writer, epoch):
+    model.train()  # 设置模型为训练模式
+    running_loss = 0.0
+    running_corrects = 0
+
+    # 迭代数据
+    for inputs, labels in dataloader:
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        # 参数梯度置零
+        optimizer.zero_grad()
+
+        # 前向传播
+        with torch.set_grad_enabled(True):
+            outputs = model(inputs)
+            _, preds = torch.max(outputs, 1)
+            loss = criterion(outputs, labels)
+
+            # 反向传播和优化
+            loss.backward()
+            optimizer.step()
+
+        # 统计
+        running_loss += loss.item() * inputs.size(0)
+        running_corrects += torch.sum(preds == labels.data)
+
+    scheduler.step()
+
+    epoch_loss = running_loss / len(dataloader.dataset)
+    epoch_acc = running_corrects.double() / len(dataloader.dataset)
+
+    # 将训练损失和准确率写入TensorBoard
+    writer.add_scalar('train_loss', epoch_loss, epoch)
+    writer.add_scalar('train_acc', epoch_acc, epoch)
+
+    # 记录训练损失和准确率的变化情况
+    all_train_loss.append(epoch_loss)
+    all_train_acc.append(epoch_acc)
+
+    return epoch_loss, epoch_acc
+
+
+
+def test(model, dataloader, criterion, device, writer, epoch):
+    model.eval()   # 设置模型为评估模式
+    running_loss = 0.0
+    running_corrects = 0
+
+    # 迭代数据
+    for inputs, labels in dataloader:
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        # 前向传播
+        with torch.set_grad_enabled(False):
+            outputs = model(inputs)
+            _, preds = torch.max(outputs, 1)
+            loss = criterion(outputs, labels)
+
+        # 统计
+        running_loss += loss.item() * inputs.size(0)
+        running_corrects += torch.sum(preds == labels.data)
+
+    epoch_loss = running_loss / len(dataloader.dataset)
+    epoch_acc = running_corrects.double() / len(dataloader.dataset)
+
+    # 将验证损失和准确率写入TensorBoard
+    writer.add_scalar('test_loss', epoch_loss, epoch)
+    writer.add_scalar('test_acc', epoch_acc, epoch)
+
+    # 记录测试损失和准确率的变化情况
+    all_test_loss.append(epoch_loss)
+    all_test_acc.append(epoch_acc)
+
+    return epoch_loss, epoch_acc
+
+
+def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, device, num_epochs=25, batch_size=100, test_size=0.2):
     since = time.time()
+
+    # 划分训练集和验证集
+    #train_data, val_data = train_test_split(dataset, test_size=test_size)
+    
+
+    # 创建数据加载器
+    #train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
+    #val_loader = DataLoader(val_data, batch_size=batch_size, shuffle=False)
+
+    train_loader = dataloaders['train']
+    val_loader = dataloaders['test']
 
     best_model_wts = model.state_dict()
     best_acc = 0.0
 
+    # 创建TensorBoard的SummaryWriter对象
+    writer = SummaryWriter()
+
+    stat_table = PrettyTable(["Epoch", "Train Loss", "Train Acc", "Test Loss", "Test ACC"])
+
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch + 1, num_epochs))
+        epoch_str = 'Epoch {}/{}'.format(epoch + 1, num_epochs)
+        print(epoch_str)
         print('-' * 10)
 
-        # 每个epoch都有一个训练和验证阶段
-        for phase in ['train', 'val']:
-            if phase == 'train':
-                model.train()  # 设置模型为训练模式
-            else:
-                model.eval()   # 设置模型为评估模式
+        # 训练和验证
+        train_loss, train_acc = train(model, train_loader, criterion, optimizer, scheduler, device, writer, epoch)
+        test_loss, test_acc = test(model, val_loader, criterion, device, writer, epoch)
 
-            running_loss = 0.0
-            running_corrects = 0
+        print('Train Loss: {:.4f} Acc: {:.4f}'.format(train_loss, train_acc))
+        print('Test Loss: {:.4f} Acc: {:.4f}'.format(test_loss, test_acc))
 
-            # 迭代数据
-            for inputs, labels in dataloaders[phase]:
-                inputs = inputs.to(device)
-                labels = labels.to(device)
+        stat_table.add_row([epoch + 1, train_loss, train_acc, test_loss, test_acc])
 
-                # 参数梯度置零
-                optimizer.zero_grad()
-
-                # 前向传播
-                with torch.set_grad_enabled(phase == 'train'):
-                    outputs = model(inputs)
-                    _, preds = torch.max(outputs, 1)
-                    loss = criterion(outputs, labels)
-
-                    # 反向传播和优化
-                    if phase == 'train':
-                        loss.backward()
-                        optimizer.step()
-
-                # 统计
-                running_loss += loss.item() * inputs.size(0)
-                running_corrects += torch.sum(preds == labels.data)
-
-            if phase == 'train':
-                scheduler.step()
-
-            epoch_loss = running_loss / dataset_sizes[phase]
-            epoch_acc = running_corrects.double() / dataset_sizes[phase]
-
-            print('{} Loss: {:.4f} Acc: {:.4f}'.format(
-                phase, epoch_loss, epoch_acc))
-
-            # 深度复制模型
-            if phase == 'val' and epoch_acc > best_acc:
-                best_acc = epoch_acc
-                best_model_wts = model.state_dict()
+        # 深度复制模型
+        if test_acc > best_acc:
+            best_acc = test_acc
+            best_model_wts = model.state_dict()
 
         print()
 
     time_elapsed = time.time() - since
-    print('Training complete in {:.0f}m {:.0f}s'.format(
-        time_elapsed // 60, time_elapsed % 60))
+    print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
     print('Best val Acc: {:4f}'.format(best_acc))
 
     # 加载最佳模型权重
     model.load_state_dict(best_model_wts)
+
+    # 关闭SummaryWriter对象
+    writer.close()
+    print(stat_table)
+
     return model
 
 
@@ -286,8 +382,8 @@ def main():
     trainloader = DataLoader(trainset, batch_size=100, shuffle=True, num_workers=2)
     testloader = DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
 
-    dataloaders = {'train': trainloader, 'val':    testloader}
-    dataset_sizes = {'train': len(trainset), 'val': len(testset)}
+    dataloaders = {'train': trainloader, 'test':    testloader}
+    dataset_sizes = {'train': len(trainset), 'test': len(testset)}
 
     # Create model
     model = create_model(args.model, num_classes=len(class_names))
@@ -315,6 +411,9 @@ def main():
 
         # Save the best model
         torch.save(best_model.state_dict(), model_filename)
+
+        plot_train_result()
+
     elif args.mode == 'predict':
         # Load the best model
         if not os.path.exists(model_filename):
@@ -340,7 +439,3 @@ if __name__ == '__main__':
     # 计算并输出所用时间
     elapsed_time = end_time - start_time
     print(f"Time elapsed: {elapsed_time:.2f} seconds")
-
-
-
-

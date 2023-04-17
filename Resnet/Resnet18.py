@@ -297,7 +297,7 @@ def train_data():
 
         train_results.append((epoch + 1, train_loss, train_acc, test_loss, test_acc))
 
-        if train_acc > best_acc:
+        if test_acc > best_acc:
             best_acc = train_acc
             print(f'New Best: {epoch + 1}, Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%')
             torch.save(model.state_dict(), f'resnet18_cifar10_{epoch + 1}_{train_loss:.4f}_{train_acc:.2f}.pth')

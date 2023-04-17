@@ -1,4 +1,4 @@
-import os
+import os,sys
 import argparse
 import torch
 import torch.nn as nn
@@ -15,9 +15,10 @@ import time
 from prettytable import PrettyTable
 import unicodedata
 from torch.utils.tensorboard import SummaryWriter
-
+import webbrowser
 
 max_filename_length = 30
+used_model_name = ""
 
 # 数据集名称映射
 dataset_mapping = {
@@ -68,6 +69,7 @@ def create_model(model_name, num_classes):
     else:
         raise ValueError("Invalid model name. Choose from: " + ", ".join(model_mapping.keys()))
 
+    used_model_name = model_name
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, num_classes)
     
@@ -180,7 +182,8 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
     image_filenames = [f for f in os.listdir(image_folder) if f.lower().endswith(supported_extensions)]
 
     # Prepare to store resized error images
-    error_folder = os.path.join(os.path.dirname(image_folder), "err")
+    print("used_model_name:", used_model_name)
+    error_folder = os.path.join(os.path.dirname(image_folder), "err_" + used_model_name)
     os.makedirs(error_folder, exist_ok=True)
 
     # Initialize progress bar
@@ -236,6 +239,9 @@ def generate_model_filename(dataset_name, model_name):
     return f"{model_name}_{dataset_name}_best.pth"
 
 def main():
+
+    sys.stdout.reconfigure(encoding='utf-8')
+
     parser = argparse.ArgumentParser(description='PyTorch ResNet Training and Prediction')
     parser.add_argument('--mode', default='train', type=str, help='Mode: train or predict (default: train)')
     parser.add_argument('--dataset', default='STL10', choices=['CIFAR10', 'STL10'], help='Dataset')
@@ -254,6 +260,8 @@ def main():
     for arg, value in vars(args).items():
         print(f"{arg}: {value}")
     print("\n")
+
+    webbrowser.open_new_tab('http://localhost:6006/')
 
     # Select dataset
     dataset_config = dataset_mapping[args.dataset]

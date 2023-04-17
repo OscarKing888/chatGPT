@@ -1,9 +1,13 @@
 logs/
+logp/
 data/
 test/
-err/
+err_*/
 resnet/
 runs/
+pycache/
+*.zip
+*.pth
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

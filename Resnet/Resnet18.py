@@ -120,7 +120,7 @@ def test(model, dataloader, criterion, device):
 # 设置超参数
 learning_rate = 0.1
 num_epochs = 100
-batch_size = 100
+batch_size = 512
 momentum = 0.9
 weight_decay = 5e-4
 
@@ -138,10 +138,10 @@ transform_test = transforms.Compose([
 ])
 
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=2)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=4)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
-testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=4)
 
 # 创建模型
 #device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -291,17 +291,19 @@ def train_data():
     train_results = []
 
     #num_epochs = 5
-    for epoch in range(num_epochs):
+    for epoch in tqdm(range(num_epochs), desc=f"Training", ncols=80):
+        print(f"========= Train: {epoch + 1} =========")
         train_loss, train_acc = train(model, trainloader, criterion, optimizer, device)
+        print(f"========= Test: {epoch + 1} =========")
         test_loss, test_acc = test(model, testloader, criterion, device)
 
         train_results.append((epoch + 1, train_loss, train_acc, test_loss, test_acc))
 
         if test_acc > best_acc:
-            best_acc = train_acc
-            print(f'New Best: {epoch + 1}, Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%')
-            torch.save(model.state_dict(), f'resnet18_cifar10_{epoch + 1}_{train_loss:.4f}_{train_acc:.2f}.pth')
-            torch.save(model.state_dict(), 'resnet18_cifar10_best.pth')
+            best_acc = test_acc
+            print(f'========= New Best: {epoch + 1}, Train Loss: {test_loss:.4f}, Train Acc: {test_acc:.2f}%')
+            torch.save(model.state_dict(), f'resnet18_cifar10_{epoch + 1}_{test_loss:.4f}_{test_acc:.2f}.pth')
+            torch.save(model.state_dict(), 'resnet18_cifar10_bestm.pth')
 
         print(f'Epoch: {epoch + 1}, Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%')
 
@@ -310,18 +312,19 @@ def train_data():
     print(f"{'Epoch':<10}{'Train Loss':<15}{'Train Acc':<15}{'Test Loss':<15}{'Test Acc':<15}")
     print("---------------------------------------------------------------")
     for result in train_results:
-        mark = '*' if result[2] == best_acc else ''
+        test_acc_temp = result[4]
+        mark = '*' if test_acc_temp == best_acc else ''
         print(f"{result[0]:<10}{result[1]:<15.4f}{result[2]:<15.2f}{result[3]:<15.4f}{result[4]:<15.2f}{mark}")
 
 
 def main():
     parser = argparse.ArgumentParser(description='ResNet18 for CIFAR-10')
-    parser.add_argument('--image', type=str, help='Path to the image for evaluation')
+    parser.add_argument('--image', type=str, help='Path to the folder containing images for prediction')
     args = parser.parse_args()
 
     if args.image:
         # 加载模型
-        model.load_state_dict(torch.load('resnet18_cifar10_best.pth'))
+        model.load_state_dict(torch.load('resnet18_cifar10_bestm.pth'))
         model.eval()
 
         # 预测并输出结果

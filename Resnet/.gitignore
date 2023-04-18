@@ -2,7 +2,7 @@ logs/
 logp/
 data/
 test/
-err_*/
+err*/
 resnet/
 runs/
 pycache/

@@ -18,6 +18,8 @@ from torch.utils.tensorboard import SummaryWriter
 from sklearn.model_selection import train_test_split
 import webbrowser
 import matplotlib.pyplot as plt
+from typing import Any, Callable, List, Optional, Type, Union
+
 
 tensorboard_log_dir = 'runs/tensorboard_log'
 tensorboard_log_dir_pred = 'runs/tensorboard_log_predition'
@@ -62,16 +64,35 @@ dataset_mapping = {
     },
 }
 
+
+import torch.nn as nn
+import torchvision.models as models
+
+class ResNet18M(nn.Module):
+    def __init__(self, num_classes=1000, weights=None, progress: bool = True, **kwargs: Any):
+        super(ResNet18M, self).__init__()
+        self.resnet18 = models.resnet18(weights=weights, progress=progress, **kwargs)
+        self.resnet18.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+        self.resnet18.fc = nn.Linear(512, num_classes)
+        # trick create_model
+        self.fc = self.resnet18.fc
+
+    def forward(self, x):
+        x = self.resnet18(x)
+        return x
+
+
 # 模型名称映射
 model_mapping = {
-    "ResNet18": models.resnet18,
+    #"ResNet18": models.resnet18,
+    "ResNet18": ResNet18M,
     "ResNet50": models.resnet50,
     "ResNet101": models.resnet101,
 }
 
 def create_model(model_name, num_classes):
     if model_name in model_mapping:
-        model = model_mapping[model_name](weights=None)
+        model = model_mapping[model_name](num_classes=num_classes, weights=None)
     else:
         raise ValueError("Invalid model name. Choose from: " + ", ".join(model_mapping.keys()))
 
@@ -92,27 +113,29 @@ def plot_train_result():
     global used_model_name
 
     # 绘制训练和测试损失的变化曲线
+    plt.figure()
     plt.plot(all_train_loss, label='train_loss')
     plt.plot(all_test_loss, label='test_loss')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.title('Training and Testing Loss')
     plt.legend()
-    plt.figure()
     plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_loss.png")
+    plt.close()
     if show_plot:    
         plt.show()
     
 
     # 绘制训练和测试准确率的变化曲线
+    plt.figure()
     plt.plot(all_train_acc, label='train_acc')
     plt.plot(all_test_acc, label='test_acc')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.title('Training and Testing Accuracy')
     plt.legend()
-    plt.figure()
     plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_acc.png")
+    plt.close()
     if show_plot:
         plt.show()    
 
@@ -123,9 +146,10 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
     running_corrects = 0
 
     # 迭代数据
-    for inputs, labels in dataloader:
-        inputs = inputs.to(device)
-        labels = labels.to(device)
+    progress_bar = tqdm(dataloader, desc="迭代数据[Train]", ncols=80)    
+    for inputs, labels in progress_bar:        
+        inputs = inputs.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
 
         # 参数梯度置零
         optimizer.zero_grad()
@@ -167,9 +191,10 @@ def test(model, dataloader, criterion, device, writer, epoch):
     running_corrects = 0
 
     # 迭代数据
-    for inputs, labels in dataloader:
-        inputs = inputs.to(device)
-        labels = labels.to(device)
+    progress_bar = tqdm(dataloader, desc="迭代数据[Test]", ncols=80)
+    for inputs, labels in progress_bar:
+        inputs = inputs.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
 
         # 前向传播
         with torch.set_grad_enabled(False):
@@ -197,14 +222,6 @@ def test(model, dataloader, criterion, device, writer, epoch):
 
 def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, device, num_epochs=25, batch_size=100, test_size=0.2):
     since = time.time()
-
-    # 划分训练集和验证集
-    #train_data, val_data = train_test_split(dataset, test_size=test_size)    
-
-    # 创建数据加载器
-    #train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
-    #val_loader = DataLoader(val_data, batch_size=batch_size, shuffle=False)
-
     train_loader = dataloaders['train']
     val_loader = dataloaders['test']
 
@@ -216,13 +233,12 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
 
     stat_table = PrettyTable(["Epoch", "Train Loss", "Train Acc", "Test Loss", "Test ACC"])
 
-    for epoch in range(num_epochs):
+    for epoch in tqdm(range(num_epochs), desc=f"Epochs", ncols=80):
         epoch_str = 'Epoch {}/{}'.format(epoch + 1, num_epochs)
         print(epoch_str)
-        print('-' * 10)
 
         # 训练和验证
-        train_loss, train_acc = train(model, train_loader, criterion, optimizer, scheduler, device, writer, epoch)
+        train_loss, train_acc = train(model, train_loader, criterion, optimizer, scheduler, device, writer, epoch)        
         test_loss, test_acc = test(model, val_loader, criterion, device, writer, epoch)
 
         print('Train Loss: {:.4f} Acc: {:.4f}'.format(train_loss, train_acc))
@@ -236,6 +252,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
             best_model_wts = model.state_dict()
 
         print()
+        plot_train_result()
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -359,8 +376,8 @@ def main():
 
     parser = argparse.ArgumentParser(description='PyTorch ResNet Training and Prediction')
     parser.add_argument('--mode', default='train', type=str, help='Mode: train or predict (default: train)')
-    parser.add_argument('--dataset', default='STL10', choices=['CIFAR10', 'STL10'], help='Dataset')
-    parser.add_argument('--model', default='ResNet101', choices=['ResNet18', 'ResNet50', 'ResNet101'], help='Model')
+    parser.add_argument('--dataset', default='CIFAR10', choices=['CIFAR10', 'STL10'], help='Dataset')
+    parser.add_argument('--model', default='ResNet18', choices=['ResNet18', 'ResNet50', 'ResNet101'], help='Model')
     parser.add_argument('--epochs', default=100, type=int, help='Number of epochs to train')
     parser.add_argument('--lr', default=0.1, type=float, help='Learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, help='Momentum')
@@ -410,8 +427,8 @@ def main():
         trainset = dataset_config["loader"](root='./data', split='train', download=True, transform=train_transform)
         testset = dataset_config["loader"](root='./data', split='test', download=True, transform=test_transform)
 
-    trainloader = DataLoader(trainset, batch_size=100, shuffle=True, num_workers=2)
-    testloader = DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
+    trainloader = DataLoader(trainset, batch_size=512, shuffle=True, num_workers=4, pin_memory=True)
+    testloader = DataLoader(testset, batch_size=512, shuffle=False, num_workers=4, pin_memory=True)
 
     dataloaders = {'train': trainloader, 'test':    testloader}
     dataset_sizes = {'train': len(trainset), 'test': len(testset)}

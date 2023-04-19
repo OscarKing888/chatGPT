@@ -9,6 +9,7 @@ import PIL.Image as Image
 import os
 import unicodedata
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 
 # 定义残差块
@@ -34,6 +35,7 @@ class ResidualBlock(nn.Module):
         out += self.shortcut(x)
         out = self.relu(out)
         return out
+
 
 # 定义ResNet模型
 class ResNet(nn.Module):
@@ -70,8 +72,49 @@ class ResNet(nn.Module):
         out = self.fc(out)
         return out
 
+
 def ResNet18():
     return ResNet(ResidualBlock, [2, 2, 2, 2])
+
+
+all_train_loss = []
+all_test_loss = []
+all_train_acc = []
+all_test_acc = []
+
+
+def plot_train_result(epoch):
+    global show_plot
+    global used_dataset_name
+    global used_model_name
+
+    # 绘制训练和测试损失的变化曲线
+    plt.figure()
+    plt.plot(all_train_loss, label='train_loss')
+    plt.plot(all_test_loss, label='test_loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Training and Testing Loss')
+    plt.legend()
+    plt.savefig(f"Resnet18M_train_test_loss_[{epoch}].png")
+    plt.close()
+    #if show_plot:    
+    #    plt.show()
+    
+
+    # 绘制训练和测试准确率的变化曲线
+    plt.figure()
+    plt.plot(all_train_acc, label='train_acc')
+    plt.plot(all_test_acc, label='test_acc')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.title('Training and Testing Accuracy')
+    plt.legend()
+    plt.savefig(f"Resnet18M_train_test_acc_[{epoch}].png")
+    plt.close()
+    #if show_plot:
+    #    plt.show()    
+
 
 # 定义训练函数
 def train(model, dataloader, criterion, optimizer, device):
@@ -297,6 +340,16 @@ def train_data():
         print(f"========= Test: {epoch + 1} =========")
         test_loss, test_acc = test(model, testloader, criterion, device)
 
+        
+
+        # 记录训练损失和准确率的变化情况
+        all_train_loss.append(train_loss)
+        all_train_acc.append(train_acc)
+
+        # 记录测试损失和准确率的变化情况
+        all_test_loss.append(test_loss)
+        all_test_acc.append(test_acc)
+
         train_results.append((epoch + 1, train_loss, train_acc, test_loss, test_acc))
 
         if test_acc > best_acc:
@@ -306,6 +359,8 @@ def train_data():
             torch.save(model.state_dict(), 'resnet18_cifar10_bestm.pth')
 
         print(f'Epoch: {epoch + 1}, Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%')
+        
+        plot_train_result(epoch)
 
     # 输出报表数据
     print("\nTraining Report:")

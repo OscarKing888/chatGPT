@@ -261,8 +261,8 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
             best_model_wts = model.state_dict()
 
         print()
-        plot_train_result(epoch + 1)
-
+    
+    plot_train_result(epoch + 1)
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
     print('Best val Acc: {:4f}'.format(best_acc))

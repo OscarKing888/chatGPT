@@ -105,7 +105,7 @@ all_test_loss = []
 all_train_acc = []
 all_test_acc = []
 
-def plot_train_result():
+def plot_train_result(epoch):
     global show_plot
     global used_dataset_name
     global used_model_name
@@ -155,9 +155,9 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
         profile_memory=True,
         with_stack=True
     ) as profiler:
-    for inputs, labels in dataloader:        
-        inputs = inputs.to(device, non_blocking=False)
-        labels = labels.to(device, non_blocking=False)
+        for inputs, labels in dataloader:        
+            inputs = inputs.to(device, non_blocking=False)
+            labels = labels.to(device, non_blocking=False)
 
             # 参数梯度置零
             optimizer.zero_grad()
@@ -202,7 +202,7 @@ def test(model, dataloader, criterion, device, writer, epoch):
 
     # 迭代数据
     progress_bar = tqdm(dataloader, desc="迭代数据[Test]", ncols=80)
-    for inputs, labels in progress_bar:
+    for inputs, labels in dataloader:
         inputs = inputs.to(device, non_blocking=True)
         labels = labels.to(device, non_blocking=True)
 

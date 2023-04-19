@@ -107,7 +107,7 @@ all_test_loss = []
 all_train_acc = []
 all_test_acc = []
 
-def plot_train_result():
+def plot_train_result(epoch):
     global show_plot
     global used_dataset_name
     global used_model_name
@@ -120,7 +120,7 @@ def plot_train_result():
     plt.ylabel('Loss')
     plt.title('Training and Testing Loss')
     plt.legend()
-    plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_loss.png")
+    plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_loss_[{epoch}].png")
     plt.close()
     if show_plot:    
         plt.show()
@@ -134,7 +134,7 @@ def plot_train_result():
     plt.ylabel('Accuracy')
     plt.title('Training and Testing Accuracy')
     plt.legend()
-    plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_acc.png")
+    plt.savefig(f"{used_model_name}_{used_dataset_name}_train_test_acc_[{epoch}].png")
     plt.close()
     if show_plot:
         plt.show()    
@@ -146,10 +146,10 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
     running_corrects = 0
 
     # 迭代数据
-    progress_bar = tqdm(dataloader, desc="迭代数据[Train]", ncols=80)    
-    for inputs, labels in progress_bar:        
-        inputs = inputs.to(device, non_blocking=True)
-        labels = labels.to(device, non_blocking=True)
+    #progress_bar = tqdm(dataloader, desc="迭代数据[Train]", ncols=80)    
+    for inputs, labels in dataloader:        
+        inputs = inputs.to(device, non_blocking=False)
+        labels = labels.to(device, non_blocking=False)
 
         # 参数梯度置零
         optimizer.zero_grad()
@@ -191,8 +191,8 @@ def test(model, dataloader, criterion, device, writer, epoch):
     running_corrects = 0
 
     # 迭代数据
-    progress_bar = tqdm(dataloader, desc="迭代数据[Test]", ncols=80)
-    for inputs, labels in progress_bar:
+    #progress_bar = tqdm(dataloader, desc="迭代数据[Test]", ncols=80)
+    for inputs, labels in dataloader:
         inputs = inputs.to(device, non_blocking=True)
         labels = labels.to(device, non_blocking=True)
 
@@ -252,7 +252,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
             best_model_wts = model.state_dict()
 
         print()
-        plot_train_result()
+        plot_train_result(epoch + 1)
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -459,8 +459,6 @@ def main():
 
         # Save the best model
         torch.save(best_model.state_dict(), model_filename)
-
-        plot_train_result()
 
     elif args.mode == 'predict':
         # Load the best model

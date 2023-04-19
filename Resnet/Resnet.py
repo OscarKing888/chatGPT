@@ -19,6 +19,7 @@ from sklearn.model_selection import train_test_split
 import webbrowser
 import matplotlib.pyplot as plt
 from typing import Any, Callable, List, Optional, Type, Union
+import torch.profiler
 
 
 tensorboard_log_dir = 'runs/tensorboard_log'
@@ -64,9 +65,6 @@ dataset_mapping = {
     },
 }
 
-
-import torch.nn as nn
-import torchvision.models as models
 
 class ResNet18M(nn.Module):
     def __init__(self, num_classes=1000, weights=None, progress: bool = True, **kwargs: Any):
@@ -146,29 +144,41 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
     running_corrects = 0
 
     # 迭代数据
-    progress_bar = tqdm(dataloader, desc="迭代数据[Train]", ncols=80)    
-    for inputs, labels in progress_bar:        
-        inputs = inputs.to(device, non_blocking=True)
-        labels = labels.to(device, non_blocking=True)
+    progress_bar = tqdm(dataloader, desc="迭代数据[Train]", ncols=80)
+    
+    with torch.profiler.profile(
+        activities=[torch.profiler.ProfilerActivity.CPU,torch.profiler.ProfilerActivity.CUDA],
+        schedule=torch.profiler.schedule(wait=1, warmup=1, active=3, repeat=1),
+        on_trace_ready=torch.profiler.tensorboard_trace_handler("./log/profiler"),
+        #on_trace_ready=torch.profiler.tensorboard_trace_handler('chrome_trace_file.json'),
+        record_shapes=True,
+        profile_memory=True,
+        with_stack=True
+    ) as profiler:
+        for inputs, labels in progress_bar:        
+            inputs = inputs.to(device, non_blocking=True)
+            labels = labels.to(device, non_blocking=True)
 
-        # 参数梯度置零
-        optimizer.zero_grad()
+            # 参数梯度置零
+            optimizer.zero_grad()
 
-        # 前向传播
-        with torch.set_grad_enabled(True):
-            outputs = model(inputs)
-            _, preds = torch.max(outputs, 1)
-            loss = criterion(outputs, labels)
+            # 前向传播
+            with torch.set_grad_enabled(True):
+                outputs = model(inputs)
+                _, preds = torch.max(outputs, 1)
+                loss = criterion(outputs, labels)
 
-            # 反向传播和优化
-            loss.backward()
-            optimizer.step()
+                # 反向传播和优化
+                loss.backward()
+                optimizer.step()
 
-        # 统计
-        running_loss += loss.item() * inputs.size(0)
-        running_corrects += torch.sum(preds == labels.data)
+            profiler.step()
 
-    scheduler.step()
+            # 统计
+            running_loss += loss.item() * inputs.size(0)
+            running_corrects += torch.sum(preds == labels.data)
+
+        scheduler.step()
 
     epoch_loss = running_loss / len(dataloader.dataset)
     epoch_acc = running_corrects.double() / len(dataloader.dataset)
@@ -475,8 +485,12 @@ def main():
         raise ValueError("Invalid mode. Choose 'train' or 'predict'.")
 
 
+#import tf
 
 if __name__ == '__main__':
+    
+    #tf.debugging.experimental.enable_dump_debug_info(tensorboard_log_dir, tensor_debug_mode="FULL_HEALTH", circular_buffer_size=-1)
+
     print("Python version: ", sys.version)
     # 在训练或预测开始前
     start_time = time.time()

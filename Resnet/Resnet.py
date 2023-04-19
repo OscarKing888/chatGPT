@@ -142,9 +142,6 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
     model.train()  # 设置模型为训练模式
     running_loss = 0.0
     running_corrects = 0
-
-    # 迭代数据
-    progress_bar = tqdm(dataloader, desc="迭代数据[Train]", ncols=80)    
     
     with torch.profiler.profile(
         activities=[torch.profiler.ProfilerActivity.CPU,torch.profiler.ProfilerActivity.CUDA],
@@ -155,7 +152,9 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
         profile_memory=True,
         with_stack=True
     ) as profiler:
-        for inputs, labels in dataloader:        
+        # 迭代数据
+        progress_bar = tqdm(dataloader, desc="迭代数据[Train]", ncols=80)
+        for inputs, labels in progress_bar:        
             inputs = inputs.to(device, non_blocking=False)
             labels = labels.to(device, non_blocking=False)
 
@@ -202,7 +201,7 @@ def test(model, dataloader, criterion, device, writer, epoch):
 
     # 迭代数据
     progress_bar = tqdm(dataloader, desc="迭代数据[Test]", ncols=80)
-    for inputs, labels in dataloader:
+    for inputs, labels in progress_bar:
         inputs = inputs.to(device, non_blocking=True)
         labels = labels.to(device, non_blocking=True)
 

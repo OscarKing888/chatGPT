@@ -29,4 +29,6 @@ pip3 install --cache-dir %CACHE_DIR% torch torchvision torchaudio --index-url ht
 REM Install requirements
 pip install --cache-dir %CACHE_DIR% -r requirements.txt
 
+pip install --cache-dir %CACHE_DIR%  -U tensorboard-plugin-profile
+
 echo Done!

@@ -170,7 +170,7 @@ def plot_train_result(epoch):
     plt.ylabel('Loss')
     plt.title('Training and Testing Loss')
     plt.legend()
-    plt.savefig(f"{model_name}_loss_[{used_dataset_name}][{epoch}].png")
+    plt.savefig(f"{model_name}_{used_dataset_name}_loss_[{epoch}].png")
     plt.close()
     #if show_plot:    
     #    plt.show()
@@ -184,7 +184,7 @@ def plot_train_result(epoch):
     plt.ylabel('Accuracy')
     plt.title('Training and Testing Accuracy')
     plt.legend()
-    plt.savefig(f"{model_name}_acc_[{used_dataset_name}][{epoch}].png")
+    plt.savefig(f"{model_name}_{used_dataset_name}_acc_[{epoch}].png")
     plt.close()
     #if show_plot:
     #    plt.show()    

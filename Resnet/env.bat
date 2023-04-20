@@ -1,1 +1,1 @@
-call conda activate resnet
+call .\resnet\Scripts\activate.bat

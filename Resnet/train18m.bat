@@ -1,0 +1,1 @@
+python Resnet18.py --mode train %*

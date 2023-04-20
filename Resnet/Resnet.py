@@ -177,7 +177,7 @@ def train(model, dataloader, criterion, optimizer, scheduler, device, writer, ep
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels.data)
 
-        scheduler.step()
+    scheduler.step()
 
     epoch_loss = running_loss / len(dataloader.dataset)
     epoch_acc = running_corrects.double() / len(dataloader.dataset)
@@ -232,7 +232,7 @@ def test(model, dataloader, criterion, device, writer, epoch):
 def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, device, num_epochs=25, batch_size=100, test_size=0.2):
     since = time.time()
     train_loader = dataloaders['train']
-    val_loader = dataloaders['test']
+    test_loader = dataloaders['test']
 
     best_model_wts = model.state_dict()
     best_acc = 0.0
@@ -248,7 +248,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
 
         # 训练和验证
         train_loss, train_acc = train(model, train_loader, criterion, optimizer, scheduler, device, writer, epoch)        
-        test_loss, test_acc = test(model, val_loader, criterion, device, writer, epoch)
+        test_loss, test_acc = test(model, test_loader, criterion, device, writer, epoch)
 
         print('Train Loss: {:.4f} Acc: {:.4f}'.format(train_loss, train_acc))
         print('Test Loss: {:.4f} Acc: {:.4f}'.format(test_loss, test_acc))

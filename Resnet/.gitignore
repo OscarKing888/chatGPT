@@ -1,7 +1,6 @@
 #logs/
 logp/
 data/
-test/
 err*/
 resnet/
 runs/

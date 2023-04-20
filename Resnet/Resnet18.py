@@ -160,7 +160,7 @@ all_test_acc = []
 def plot_train_result(epoch):
     global show_plot
     global used_dataset_name
-    global used_model_name
+    global model_name
 
     # 绘制训练和测试损失的变化曲线
     plt.figure()
@@ -170,7 +170,7 @@ def plot_train_result(epoch):
     plt.ylabel('Loss')
     plt.title('Training and Testing Loss')
     plt.legend()
-    plt.savefig(f"Resnet18M_train_test_loss_[{epoch}].png")
+    plt.savefig(f"{model_name}_loss_[{used_dataset_name}][{epoch}].png")
     plt.close()
     #if show_plot:    
     #    plt.show()
@@ -184,7 +184,7 @@ def plot_train_result(epoch):
     plt.ylabel('Accuracy')
     plt.title('Training and Testing Accuracy')
     plt.legend()
-    plt.savefig(f"Resnet18M_train_test_acc_[{epoch}].png")
+    plt.savefig(f"{model_name}_acc_[{used_dataset_name}][{epoch}].png")
     plt.close()
     #if show_plot:
     #    plt.show()    

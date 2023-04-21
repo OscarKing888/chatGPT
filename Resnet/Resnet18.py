@@ -31,6 +31,8 @@ batch_size = 512
 momentum = 0.9
 weight_decay = 5e-4
 
+use_scheduler = True
+
 
 # 数据集名称映射
 dataset_mapping = {
@@ -70,6 +72,12 @@ dataset_mapping = {
     },
 }
 
+def scheduler_str():
+    if use_scheduler:
+        return "Scheduler"
+    else:
+        return "NoScheduler"
+
 def print_gpu_info():
     #print(f'GPU count: {torch.cuda.device_count()}')
     #print(f'GPU name: {torch.cuda.get_device_name(0)}')
@@ -81,9 +89,9 @@ def print_gpu_info():
 
 def generate_model_filename(dataset_name, model_name, epoch, is_best=False):
     if is_best:
-        return f"{model_name}_{dataset_name}_best.pth"
+        return f"{model_name}_{dataset_name}_{scheduler_str()}_best.pth"
     else:
-        return f"{model_name}_{dataset_name}_epoch{epoch}.pth"
+        return f"{model_name}_{dataset_name}_{scheduler_str()}_epoch{epoch}.pth"
 
 
 # 定义残差块
@@ -170,7 +178,7 @@ def plot_train_result(epoch):
     plt.ylabel('Loss')
     plt.title('Training and Testing Loss')
     plt.legend()
-    plt.savefig(f"{model_name}_{used_dataset_name}_loss_[{epoch}].png")
+    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}_loss_[{epoch}].png")
     plt.close()
     #if show_plot:    
     #    plt.show()
@@ -184,7 +192,7 @@ def plot_train_result(epoch):
     plt.ylabel('Accuracy')
     plt.title('Training and Testing Accuracy')
     plt.legend()
-    plt.savefig(f"{model_name}_{used_dataset_name}_acc_[{epoch}].png")
+    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}_acc_[{epoch}].png")
     plt.close()
     #if show_plot:
     #    plt.show()    
@@ -211,7 +219,8 @@ def train(epoch, model, dataloader, criterion, optimizer, scheduler, device, wri
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
     
-    scheduler.step()
+    if use_scheduler:
+        scheduler.step()
 
     epoch_loss = running_loss / len(dataloader.dataset)
     epoch_acc = 100.0 * correct / total#running_corrects.double() / len(dataloader.dataset)
@@ -417,7 +426,7 @@ def predict_all_images(test_dir, model, device):
         predictions.append((image_filename, prediction, class_names[prediction]))
 
     # 创建子目录
-    err_dir = "err"
+    err_dir = f"err_{model_name}_{used_dataset_name}_{scheduler_str()}"
     if not os.path.exists(err_dir):
         os.makedirs(err_dir)
 
@@ -505,8 +514,10 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
             torch.save(model.state_dict(), best_model_filename)
 
         print(f'Epoch: {epoch + 1}, Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%')        
-        plot_train_result(epoch)
+        #plot_train_result(epoch)
         print_gpu_info()
+
+    plot_train_result(num_epochs)
 
     # 输出报表数据
     print("\nTraining Report:")
@@ -525,15 +536,18 @@ def main():
     parser = argparse.ArgumentParser(description='ResNet18 for CIFAR-10 | STL10')
     parser.add_argument('--mode', default='predict', type=str, help='Mode: train or predict (default: train)')
     parser.add_argument('--dataset', default='STL10', choices=['CIFAR10', 'STL10'], help='Dataset')
-    parser.add_argument('--image', default='./test', type=str, help='Path to the folder containing images for prediction')    
-    
+    parser.add_argument('--image', default='./test', type=str, help='Path to the folder containing images for prediction')
+    parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
+
     # 检查命令行参数中是否包含-h或--help参数
     if '-h' in sys.argv or '--help' in sys.argv:
         parser.print_help()
         sys.exit()
 
     args = parser.parse_args()
-        
+
+    global use_scheduler
+    use_scheduler = args.scheduler
     #os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb=256"
 
     # 查看当前GPU内存的使用情况    
@@ -552,6 +566,10 @@ def main():
     dataloaders, dataset_sizes = create_dataset_loader(used_dataset_name, batch_size, 2, True)
 
     print_gpu_info()
+
+    # print used_dataset_name,use_scheduler,batch_size to log
+    print(f'used_dataset_name:{used_dataset_name}, use_scheduler:{use_scheduler}, batch_size:{batch_size}')
+
 
     if args.mode == 'predict':
         model_filename = generate_model_filename(used_dataset_name, model_name, 0, True)

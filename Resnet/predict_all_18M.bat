@@ -1,10 +1,21 @@
 @echo on
-mkdir logsp18m
+set logdir=logs18mstl10predict
+mkdir %logdir%
 
-echo predicting ResNet18 on CIFAR10
-python Resnet18.py --mode predict --dataset CIFAR10 > logsp18m\ResNet18M_CIFAR10_predict.log
 
-echo predicting ResNet101 on CIFAR10
-python Resnet18.py --mode predict --dataset STL10 > logsp18m\ResNet18M_STL10_predict.log
+set dataset=STL10
+set scheduler=--scheduler
 
-echo All predictings completed!
+set batchsize=32
+echo Predict %dataset% batch_size:%batchsize% scheduler:%scheduler%
+call predict18M.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+
+set batchsize=64
+echo Predict %dataset% batch_size:%batchsize%
+call predict18M.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+
+set batchsize=128
+echo Predict %dataset% batch_size:%batchsize%
+call predict18M.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+
+echo All Predicts completed!

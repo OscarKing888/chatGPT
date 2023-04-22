@@ -7,7 +7,7 @@ runs/
 pycache/
 *.zip
 *.pth
-*.png
+#*.png
 *.json
 
 # Byte-compiled / optimized / DLL files

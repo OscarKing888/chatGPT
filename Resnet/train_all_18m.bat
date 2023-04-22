@@ -1,10 +1,21 @@
 @echo on
-mkdir logs18m
+set logdir=logs18mstl10
+mkdir %logdir%
 
-echo Training ResNet18M on CIFAR10
-python Resnet18.py --mode train --dataset CIFAR10 > logs18m\ResNet18_CIFAR10_train.log
 
-echo Training ResNet18M on STL10
-python Resnet18.py --mode train --dataset STL10 > logs18m\ResNet18_STL10_train.log
+set dataset=STL10
+set scheduler=--scheduler
+
+set batchsize=32
+echo Training %dataset% batch_size:%batchsize% scheduler:%scheduler%
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+
+set batchsize=64
+echo Training %dataset% batch_size:%batchsize%
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+
+set batchsize=128
+echo Training %dataset% batch_size:%batchsize%
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
 
 echo All trainings completed!

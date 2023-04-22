@@ -32,7 +32,7 @@ momentum = 0.9
 weight_decay = 5e-4
 
 use_scheduler = True
-
+show_plot = False
 
 # 数据集名称映射
 dataset_mapping = {
@@ -53,7 +53,7 @@ dataset_mapping = {
         "loader": datasets.CIFAR10,
     },
     "STL10": {
-        "batch_size" : 100,
+        "batch_size" : 32,
         "class_names": ('airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck'),
         "image_size": (96, 96),
         "train_transform": transforms.Compose([
@@ -89,9 +89,9 @@ def print_gpu_info():
 
 def generate_model_filename(dataset_name, model_name, epoch, is_best=False):
     if is_best:
-        return f"{model_name}_{dataset_name}_{scheduler_str()}_best.pth"
+        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_best.pth"
     else:
-        return f"{model_name}_{dataset_name}_{scheduler_str()}_epoch{epoch}.pth"
+        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_epoch{epoch}.pth"
 
 
 # 定义残差块
@@ -121,13 +121,20 @@ class ResidualBlock(nn.Module):
 
 # 定义ResNet模型
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10):
+    def __init__(self, block, num_blocks, data_set_name, num_classes=10):
         super(ResNet, self).__init__()
         self.in_channels = 64
 
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+        if data_set_name == "STL10":
+            self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)  # 修改 kernel_size 和 stride
+        else:
+            self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
+        if data_set_name == "STL10":
+            self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)  # 增加 maxpool 层
+
         self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)
         self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)
@@ -155,8 +162,8 @@ class ResNet(nn.Module):
         return out
 
 
-def ResNet18():
-    return ResNet(ResidualBlock, [2, 2, 2, 2])
+def ResNet18(dataset_name):
+    return ResNet(ResidualBlock, [2, 2, 2, 2], dataset_name)
 
 
 all_train_loss = []
@@ -169,6 +176,7 @@ def plot_train_result(epoch):
     global show_plot
     global used_dataset_name
     global model_name
+    global batch_size
 
     # 绘制训练和测试损失的变化曲线
     plt.figure()
@@ -178,10 +186,10 @@ def plot_train_result(epoch):
     plt.ylabel('Loss')
     plt.title('Training and Testing Loss')
     plt.legend()
-    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}_loss_[{epoch}].png")
+    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_loss_[{epoch}].png")
     plt.close()
-    #if show_plot:    
-    #    plt.show()
+    if show_plot:    
+        plt.show()
     
 
     # 绘制训练和测试准确率的变化曲线
@@ -192,10 +200,10 @@ def plot_train_result(epoch):
     plt.ylabel('Accuracy')
     plt.title('Training and Testing Accuracy')
     plt.legend()
-    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}_acc_[{epoch}].png")
+    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_acc_[{epoch}].png")
     plt.close()
-    #if show_plot:
-    #    plt.show()    
+    if show_plot:
+        plt.show()
 
 
 # 定义训练函数
@@ -264,7 +272,7 @@ def test(epoch, model, dataloader, criterion, device, writer):
 
 
 
-def create_model():
+def create_model(dataset_name):
     # # 准备CIFAR-10数据集
     # transform_train = transforms.Compose([
     #     transforms.RandomCrop(32, padding=4),
@@ -289,12 +297,15 @@ def create_model():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("Using device:", device)
 
-    model = ResNet18().to(device)
+    model = ResNet18(dataset_name).to(device)
 
     # 定义损失函数和优化器
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum, weight_decay=weight_decay)
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[50, 75], gamma=0.1)
+    #scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[25, 35], gamma=0.1)
+    #optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    #scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
     return device, model, criterion, scheduler, optimizer
 
@@ -426,7 +437,7 @@ def predict_all_images(test_dir, model, device):
         predictions.append((image_filename, prediction, class_names[prediction]))
 
     # 创建子目录
-    err_dir = f"err_{model_name}_{used_dataset_name}_{scheduler_str()}"
+    err_dir = f"err_{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]"
     if not os.path.exists(err_dir):
         os.makedirs(err_dir)
 
@@ -485,8 +496,9 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
     #writer = None
     print_gpu_info()
     
-    #num_epochs = 5
+    #num_epochs = 40
     for epoch in tqdm(range(num_epochs), desc=f"Training", ncols=80):
+        print()
         print(f"========= Train: {epoch + 1} =========")
         train_loss, train_acc = train(epoch, model, train_loader, criterion, optimizer, scheduler, device, writer)
 
@@ -508,7 +520,7 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
         if test_acc > best_acc:
             best_acc = test_acc
             print(f'========= New Best: {epoch + 1}, Train Loss: {test_loss:.4f}, Train Acc: {test_acc:.2f}%')
-            torch.save(model.state_dict(), f'{model_name}_{used_dataset_name}_{epoch + 1}_{test_loss:.4f}_{test_acc:.2f}.pth')
+            #torch.save(model.state_dict(), f'{model_name}_{used_dataset_name}_{epoch + 1}_{test_loss:.4f}_{test_acc:.2f}.pth')
 
             best_model_filename = generate_model_filename(used_dataset_name, model_name, epoch + 1, True)
             torch.save(model.state_dict(), best_model_filename)
@@ -517,7 +529,7 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
         #plot_train_result(epoch)
         print_gpu_info()
 
-    plot_train_result(num_epochs)
+    plot_train_result(888)
 
     # 输出报表数据
     print("\nTraining Report:")
@@ -538,6 +550,7 @@ def main():
     parser.add_argument('--dataset', default='STL10', choices=['CIFAR10', 'STL10'], help='Dataset')
     parser.add_argument('--image', default='./test', type=str, help='Path to the folder containing images for prediction')
     parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
+    parser.add_argument('--batchsize', type=int, default=-1, help='batch size for training')
 
     # 检查命令行参数中是否包含-h或--help参数
     if '-h' in sys.argv or '--help' in sys.argv:
@@ -561,8 +574,14 @@ def main():
     global dataset_config
     dataset_config = dataset_mapping[used_dataset_name]
 
-    batch_size = dataset_config['batch_size']
-    device, model, criterion, scheduler, optimizer = create_model()
+    global batch_size
+
+    if args.batchsize == -1:
+        batch_size = dataset_config['batch_size']
+    else:
+        batch_size = args.batchsize
+
+    device, model, criterion, scheduler, optimizer = create_model(used_dataset_name)
     dataloaders, dataset_sizes = create_dataset_loader(used_dataset_name, batch_size, 2, True)
 
     print_gpu_info()

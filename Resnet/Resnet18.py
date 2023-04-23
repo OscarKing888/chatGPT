@@ -430,6 +430,8 @@ def predict_all_images(test_dir, model, device):
     predictions = []
 
     test_transform = dataset_config["test_transform"]
+    
+    max_filename_length = 30
 
     for image_filename in tqdm(image_filenames, desc="Processing images", ncols=80):
         image_path = os.path.join(test_dir, image_filename)
@@ -437,22 +439,21 @@ def predict_all_images(test_dir, model, device):
         image = test_transform(image).unsqueeze(0).to(device)
 
         prediction = predict(model, image, device)
+        
+        #truncated_filename = truncate_filename(image_filename, max_filename_length)
         predictions.append((image_filename, prediction, class_names[prediction]))
 
     # 创建子目录
-    err_dir = f"err_{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]"
+    err_dir = f"err/err_{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]"
     if not os.path.exists(err_dir):
         os.makedirs(err_dir)
 
-    # 输出报表
-    max_filename_length = 30
-    print("\nPrediction Report:")
-    print(f"{'Image Filename':<{max_filename_length}}{'Predicted Class':<20}{'Class Name':<20}{'Hit':<20}")
+    # 输出报表    
+    nn_print_table(predictions, ['Image Filename', 'Predicted Class', 'Class Name'], 'Prediction Report')
 
-    predictions_new = []
+    predictions_errors = []
 
     for prediction in predictions:
-        truncated_filename = truncate_filename(prediction[0], max_filename_length)
         
         # 从文件名中查找类别名称
         true_label = "?"
@@ -463,27 +464,14 @@ def predict_all_images(test_dir, model, device):
             break
         
         # 将真实类别添加到预测结果中
-        prediction_new = prediction + (true_label,)
-        predictions_new.append(prediction_new)
+        prediction_err = prediction + (true_label,)
+        predictions_errors.append(prediction_err)
 
-        print(f"{truncated_filename:<{max_filename_length - get_display_width(truncated_filename) + len(truncated_filename)}}{prediction[1]:<20}{prediction[2]:<20}{true_label:<20}")
-        
         # 如果文件名中没有找到类别名称，则将其保存到err目录
         if true_label == "?":
             nn_save_image_as(image_path, f"{used_dataset_name}/{predict_class_name}_{os.path.basename(image_path)}")
-            #image_path = os.path.join(test_dir, prediction[0])
-            #image = Image.open(image_path).resize(image_size)
-            #err_image_path = os.path.join(err_dir, f"{prediction[2]}_{prediction[0]}")
-            #image.save(err_image_path)
 
-    
-    #print(predictions_new)
-    print("\nPrediction Report of err?:")
-    print(f"{'Image Filename':<{max_filename_length}}{'Predicted Class':<20}{'Class Name':<20}{'Hit':<20}")    
-    for prediction_err in predictions_new:
-        if prediction_err[2] != prediction_err[3]:            
-            truncated_filename = truncate_filename(prediction_err[0], max_filename_length)
-            print(f"{truncated_filename:<{max_filename_length - get_display_width(truncated_filename) + len(truncated_filename)}}{prediction_err[1]:<20}{prediction_err[2]:<20}{prediction_err[3]:<20}")
+    nn_print_table(predictions_errors, ['Image Filename', 'Predicted Class', 'Class Name', 'Hit'], 'Prediction Report of err')
 
 
 
@@ -598,10 +586,7 @@ def main():
 
     if args.mode == 'predict':
         model_filename = generate_model_filename(used_dataset_name, model_name, 0, True)
-        # Load the best model
-        if not os.path.exists(model_filename):
-            raise FileNotFoundError(f"Model file not found: {model_filename}")
-        
+
         # 加载模型
         nn_load_model(model, model_filename)
         #model.load_state_dict(torch.load(model_filename))

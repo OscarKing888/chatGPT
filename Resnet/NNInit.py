@@ -86,12 +86,12 @@ def nn_print_hyperparameters():
 
 
 
-def nn_save_image_as(src_path, dest_path, image_size=(96, 96)):
+def nn_save_image_as(src_path, dest_file_name, image_size=(96, 96)):
     image = Image.open(src_path).resize(image_size)
-    save_path = nn_get_err_img_path(dest_path)    
+    save_path = nn_get_err_img_path(dest_file_name)    
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     image.save(save_path)
-    print("Image saved to: ", dest_path)
+    print("Image saved to: ", dest_file_name)
 
 
 def nn_print_table(table, headers, title=None):
@@ -108,3 +108,9 @@ def nn_save_model(model, file_name):
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     torch.save(model.state_dict(), save_path)
     print("Model saved to: ", save_path)
+
+
+def nn_load_model(model, file_name):
+    load_path = nn_get_pth_path(file_name)
+    model.load_state_dict(torch.load(load_path))
+    print("Model loaded from: ", load_path)

@@ -114,7 +114,7 @@ def main():
     parser = argparse.ArgumentParser(description="STL10 Classifier")
     parser.add_argument('--mode', default='predict', choices=['train', 'predict'], help="Mode: train or predict")
     parser.add_argument('--batchsize', type=int, default=32, help="Batch size for training/testing")
-    parser.add_argument('--epochs', type=int, default=30, help="Number of epochs to train")
+    parser.add_argument('--epochs', type=int, default=100, help="Number of epochs to train")
     parser.add_argument('--input_dir', type=str, default='./test', help="Directory containing images for prediction")    
     parser.add_argument('--model_file', type=str, default='stl10_model.pth', help="File to save/load model")
     parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
@@ -127,7 +127,8 @@ def main():
     model = create_model().to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.1)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+    #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[50, 75], gamma=0.1)
 
     if args.mode == 'train':
         train_loader, test_loader = load_data(args.batchsize)

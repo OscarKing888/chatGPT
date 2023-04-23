@@ -81,9 +81,9 @@ def scheduler_str():
 
 def generate_model_filename(dataset_name, model_name, epoch, is_best=False):
     if is_best:
-        return nn_get_pth_path(f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_best.pth")
+        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_best.pth"
     else:
-        return nn_get_pth_path(f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_epoch{epoch}.pth")
+        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_epoch{epoch}.pth"
 
 
 # 定义残差块
@@ -171,15 +171,15 @@ def plot_train_result(epoch):
     global batch_size
 
     
-    nn_get_pth_path(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_loss_[{epoch}].png",
+    nn_plot_result(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_loss_[{epoch}].png",
         all_train_loss, all_test_loss,
         data1_label='train_loss', data2_label='test_loss',
-        title='Training and Testing Loss')
+        title=f'{used_dataset_name}-batch:{batch_size} Loss {scheduler_str()}')
     
-    nn_get_pth_path(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_acc_[{epoch}].png",
+    nn_plot_result(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_acc_[{epoch}].png",
         all_train_acc, all_test_acc,
         data1_label='train_acc', data2_label='test_acc',
-        title='Training and Testing Accuracy')
+        title=f'{used_dataset_name}-batch:{batch_size} Accuracy {scheduler_str()}')
 
     # # 绘制训练和测试损失的变化曲线
     # plt.figure()
@@ -456,10 +456,11 @@ def predict_all_images(test_dir, model, device):
         
         # 从文件名中查找类别名称
         true_label = "?"
-        for class_name in class_names:
-            if class_name.lower() in prediction[0].lower():
-                true_label = class_name
-                break
+        predict_class_name = prediction[2].lower()        
+        image_filename = prediction[0].lower()        
+        if predict_class_name in image_filename:
+            true_label = predict_class_name
+            break
         
         # 将真实类别添加到预测结果中
         prediction_new = prediction + (true_label,)
@@ -468,11 +469,12 @@ def predict_all_images(test_dir, model, device):
         print(f"{truncated_filename:<{max_filename_length - get_display_width(truncated_filename) + len(truncated_filename)}}{prediction[1]:<20}{prediction[2]:<20}{true_label:<20}")
         
         # 如果文件名中没有找到类别名称，则将其保存到err目录
-        if prediction_new[2] != prediction_new[3]:
-            image_path = os.path.join(test_dir, prediction[0])
-            image = Image.open(image_path).resize(image_size)
-            err_image_path = os.path.join(err_dir, f"{prediction[2]}_{prediction[0]}")
-            image.save(err_image_path)
+        if true_label == "?":
+            nn_save_image_as(image_path, f"{used_dataset_name}/{predict_class_name}_{os.path.basename(image_path)}")
+            #image_path = os.path.join(test_dir, prediction[0])
+            #image = Image.open(image_path).resize(image_size)
+            #err_image_path = os.path.join(err_dir, f"{prediction[2]}_{prediction[0]}")
+            #image.save(err_image_path)
 
     
     #print(predictions_new)
@@ -526,13 +528,14 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
             #torch.save(model.state_dict(), f'{model_name}_{used_dataset_name}_{epoch + 1}_{test_loss:.4f}_{test_acc:.2f}.pth')
 
             best_model_filename = generate_model_filename(used_dataset_name, model_name, epoch + 1, True)
-            torch.save(model.state_dict(), best_model_filename)
+            nn_save_model(model, best_model_filename)
+            #torch.save(model.state_dict(), best_model_filename)
 
         print(f'Epoch: {epoch + 1}, Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%')        
         #plot_train_result(epoch)
         nn_print_gpu_info()
 
-    plot_train_result(888)
+    plot_train_result(num_epochs)
 
     # 输出报表数据
     print("\nTraining Report:")
@@ -550,7 +553,7 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
 def main():
     parser = argparse.ArgumentParser(description='ResNet18 for CIFAR-10 | STL10')
     parser.add_argument('--mode', default='predict', type=str, help='Mode: train or predict (default: train)')
-    parser.add_argument('--dataset', default='STL10', choices=['CIFAR10', 'STL10'], help='Dataset')
+    parser.add_argument('--dataset', default='CIFAR10', choices=['CIFAR10', 'STL10'], help='Dataset')
     parser.add_argument('--image', default='./test', type=str, help='Path to the folder containing images for prediction')
     parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
     parser.add_argument('--batchsize', type=int, default=-1, help='batch size for training')
@@ -600,7 +603,8 @@ def main():
             raise FileNotFoundError(f"Model file not found: {model_filename}")
         
         # 加载模型
-        model.load_state_dict(torch.load(model_filename))
+        nn_load_model(model, model_filename)
+        #model.load_state_dict(torch.load(model_filename))
         model.eval()
 
         # 预测并输出结果

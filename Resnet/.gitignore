@@ -7,7 +7,7 @@ runs/
 pycache/
 old/
 *.zip
-*.pth
+#*.pth
 #*.png
 *.json
 

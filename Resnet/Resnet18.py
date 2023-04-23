@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-
+from NNInit import *
 
 tensorboard_log_dir = 'runs/tensorboard_log18m'
 tensorboard_log_dir_pred = 'runs/tensorboard_log18m_predition'
@@ -78,20 +78,12 @@ def scheduler_str():
     else:
         return "NoScheduler"
 
-def print_gpu_info():
-    #print(f'GPU count: {torch.cuda.device_count()}')
-    #print(f'GPU name: {torch.cuda.get_device_name(0)}')
-    #print(f'GPU memory: {torch.cuda.get_device_properties(0).total_memory / 1024 / 1024}MB')
-    # 查看当前GPU内存的使用情况
-    print(f'Memory allocated 1:{torch.cuda.memory_allocated() / 1024 / 1024}MB')
-    #torch.cuda.empty_cache()
-    
 
 def generate_model_filename(dataset_name, model_name, epoch, is_best=False):
     if is_best:
-        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_best.pth"
+        return nn_get_pth_path(f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_best.pth")
     else:
-        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_epoch{epoch}.pth"
+        return nn_get_pth_path(f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_epoch{epoch}.pth")
 
 
 # 定义残差块
@@ -178,32 +170,43 @@ def plot_train_result(epoch):
     global model_name
     global batch_size
 
-    # 绘制训练和测试损失的变化曲线
-    plt.figure()
-    plt.plot(all_train_loss, label='train_loss')
-    plt.plot(all_test_loss, label='test_loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.title('Training and Testing Loss')
-    plt.legend()
-    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_loss_[{epoch}].png")
-    plt.close()
-    if show_plot:    
-        plt.show()
+    
+    nn_get_pth_path(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_loss_[{epoch}].png",
+        all_train_loss, all_test_loss,
+        data1_label='train_loss', data2_label='test_loss',
+        title='Training and Testing Loss')
+    
+    nn_get_pth_path(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_acc_[{epoch}].png",
+        all_train_acc, all_test_acc,
+        data1_label='train_acc', data2_label='test_acc',
+        title='Training and Testing Accuracy')
+
+    # # 绘制训练和测试损失的变化曲线
+    # plt.figure()
+    # plt.plot(all_train_loss, label='train_loss')
+    # plt.plot(all_test_loss, label='test_loss')
+    # plt.xlabel('Epoch')
+    # plt.ylabel('Loss')
+    # plt.title('Training and Testing Loss')
+    # plt.legend()
+    # plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_loss_[{epoch}].png")
+    # plt.close()
+    # if show_plot:    
+    #     plt.show()
     
 
-    # 绘制训练和测试准确率的变化曲线
-    plt.figure()
-    plt.plot(all_train_acc, label='train_acc')
-    plt.plot(all_test_acc, label='test_acc')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.title('Training and Testing Accuracy')
-    plt.legend()
-    plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_acc_[{epoch}].png")
-    plt.close()
-    if show_plot:
-        plt.show()
+    # # 绘制训练和测试准确率的变化曲线
+    # plt.figure()
+    # plt.plot(all_train_acc, label='train_acc')
+    # plt.plot(all_test_acc, label='test_acc')
+    # plt.xlabel('Epoch')
+    # plt.ylabel('Accuracy')
+    # plt.title('Training and Testing Accuracy')
+    # plt.legend()
+    # plt.savefig(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_acc_[{epoch}].png")
+    # plt.close()
+    # if show_plot:
+    #     plt.show()
 
 
 # 定义训练函数
@@ -494,7 +497,7 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
     # 创建TensorBoard的SummaryWriter对象
     writer = SummaryWriter(tensorboard_log_dir)
     #writer = None
-    print_gpu_info()
+    nn_print_gpu_info()
     
     #num_epochs = 40
     for epoch in tqdm(range(num_epochs), desc=f"Training", ncols=80):
@@ -527,7 +530,7 @@ def train_data(model, dataloaders, dataset_sizes, criterion, optimizer, schedule
 
         print(f'Epoch: {epoch + 1}, Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%')        
         #plot_train_result(epoch)
-        print_gpu_info()
+        nn_print_gpu_info()
 
     plot_train_result(888)
 
@@ -584,7 +587,7 @@ def main():
     device, model, criterion, scheduler, optimizer = create_model(used_dataset_name)
     dataloaders, dataset_sizes = create_dataset_loader(used_dataset_name, batch_size, 2, True)
 
-    print_gpu_info()
+    nn_print_gpu_info()
 
     # print used_dataset_name,use_scheduler,batch_size to log
     print(f'used_dataset_name:{used_dataset_name}, use_scheduler:{use_scheduler}, batch_size:{batch_size}')
@@ -607,4 +610,5 @@ def main():
         train_data(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, device)
 
 if __name__ == '__main__':
+    nn_init()
     main()

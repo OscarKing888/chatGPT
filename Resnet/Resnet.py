@@ -20,6 +20,7 @@ import webbrowser
 import matplotlib.pyplot as plt
 from typing import Any, Callable, List, Optional, Type, Union
 import torch.profiler
+from NNInit import *
 
 
 tensorboard_log_dir = 'runs/tensorboard_log'
@@ -370,7 +371,7 @@ def predict_all_images(image_folder, model, device, class_names, test_transform,
 
 
 def generate_model_filename(dataset_name, model_name):
-    return f"{model_name}_{dataset_name}_best.pth"
+    return nn_get_pth_path(f"{model_name}_{dataset_name}_best.pth")
 
 
 def try_all_gpus():  #@save
@@ -485,7 +486,7 @@ def main():
 #import tf
 
 if __name__ == '__main__':
-    
+    nn_init()
     #tf.debugging.experimental.enable_dump_debug_info(tensorboard_log_dir, tensor_debug_mode="FULL_HEALTH", circular_buffer_size=-1)
 
     print("Python version: ", sys.version)

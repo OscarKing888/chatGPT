@@ -15,6 +15,8 @@ from tqdm import tqdm
 import unicodedata
 import matplotlib.pyplot as plt
 
+from NNInit import *
+
 all_train_loss = []
 all_test_loss = []
 all_train_acc = []
@@ -96,40 +98,30 @@ def test(model, test_loader, device):
     return epoch_loss, epoch_acc
 
 
-def plot_train_result(epoch):
-    # 绘制训练和测试损失的变化曲线
-    plt.figure()
-    plt.plot(all_train_loss, label='train_loss')
-    plt.plot(all_test_loss, label='test_loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.title('Training and Testing Loss')
-    plt.legend()
-    plt.savefig(f"stl10_loss_[{epoch}].png")
-    plt.close()
-    
+def plot_train_result(epoch, batchsize):
+    nn_plot_result(f"stl10_loss_bsz[{batchsize}][{epoch}].png", all_train_loss, all_test_loss,
+                    data1_label='train_loss', data2_label='test_loss',
+                    title=f'Loss - batch size:{batchsize}')
 
-    # 绘制训练和测试准确率的变化曲线
-    plt.figure()
-    plt.plot(all_train_acc, label='train_acc')
-    plt.plot(all_test_acc, label='test_acc')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.title('Training and Testing Accuracy')
-    plt.legend()
-    plt.savefig(f"stl10_acc_[{epoch}].png")
-    plt.close()
+    nn_plot_result(f"stl10_acc_bsz[{batchsize}][{epoch}].png", all_train_acc, all_test_acc,
+                    data1_label='train_acc', data2_label='test_acc',
+                    title=f'Accuracy - batch size:{batchsize}')
+                    #title='Training and Testing Accuracy')
+
 
 
 def main():
     parser = argparse.ArgumentParser(description="STL10 Classifier")
-    parser.add_argument('--mode', default='train', choices=['train', 'predict'], help="Mode: train or predict")
-    parser.add_argument('--batch_size', type=int, default=32, help="Batch size for training/testing")
-    parser.add_argument('--epochs', type=int, default=100, help="Number of epochs to train")
-    parser.add_argument('--input_dir', type=str, help="Directory containing images for prediction")
-    parser.add_argument('--model_path', type=str, default='./stl10_model.pth', help="Path to save/load model")
-
+    parser.add_argument('--mode', default='predict', choices=['train', 'predict'], help="Mode: train or predict")
+    parser.add_argument('--batchsize', type=int, default=32, help="Batch size for training/testing")
+    parser.add_argument('--epochs', type=int, default=30, help="Number of epochs to train")
+    parser.add_argument('--input_dir', type=str, default='./test', help="Directory containing images for prediction")    
+    parser.add_argument('--model_file', type=str, default='stl10_model.pth', help="File to save/load model")
+    parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
     args = parser.parse_args()
+
+    #used_model_path = nn_get_pth_path(args.model_file)
+    used_model_path = f'stl10/best_bsz[{args.batchsize}].pth'
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = create_model().to(device)
@@ -138,7 +130,7 @@ def main():
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
     if args.mode == 'train':
-        train_loader, test_loader = load_data(args.batch_size)
+        train_loader, test_loader = load_data(args.batchsize)
         
         best_accuracy = 0.0
 
@@ -158,17 +150,21 @@ def main():
             print(f'Epoch {epoch + 1}/{args.epochs}, Loss: {train_loss:.4f}, Accuracy: {test_acc:.2f}%')
             if test_acc > best_accuracy:
                 best_accuracy = test_acc
-                torch.save(model.state_dict(), args.model_path)
-                print(f'New best model saved at {args.model_path}')        
+                #used_model_path = nn_get_pth_path(f'stl10_best_[{args.batchsize}]')
+                #torch.save(model.state_dict(), used_model_path)
+                nn_save_model(model, used_model_path)
+                #print(f'New best model saved at {used_model_path}')        
+            
+            #plot_train_result(epoch, args.batchsize)
 
-        plot_train_result(args.epochs)        
+        plot_train_result(args.epochs, args.batchsize)
 
     elif args.mode == 'predict':
         if not args.input_dir:
             print("Please provide an input directory for prediction.")
             exit(1)
 
-        model.load_state_dict(torch.load(args.model_path))
+        model.load_state_dict(torch.load(nn_get_pth_path(used_model_path)))
         model.eval()
 
         transform = transforms.Compose([
@@ -178,13 +174,37 @@ def main():
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
 
+        class_names = ('airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck')
+
+        all_predict = []
+
         input_dir = Path(args.input_dir)
         for img_path in input_dir.glob("*.jpg"):
             img = Image.open(img_path).convert("RGB")
             img_tensor = transform(img).unsqueeze(0).to(device)
             output = model(img_tensor)
             _, predicted = torch.max(output.data, 1)
-            print(f"Image: {img_path}, Prediction: {predicted.item()}")
+            
+            lower_path = str(img_path).lower()
+            print(lower_path)
+                                 
+            predict_class = class_names[predicted.item()]
+
+            found_label = "?"
+            if predict_class in lower_path:
+                found_label = predict_class
+                break
+            
+            print("====== base name:", os.path.basename(img_path))
+
+            if found_label == "?":
+                nn_save_image_as(img_path, f"stl10_[{args.batchsize}]/{predict_class}_{os.path.basename(img_path)}")
+            #print(f"Image: {img_path}, Prediction: {predicted.item()}:{predict_class} = {found_label}")
+            
+            all_predict.append([img_path, predicted.item(), predict_class, found_label])
+
+        nn_print_table(all_predict, ["Image", "Prediction", "Predicted Class", "Found Class"])
 
 if __name__ == "__main__":
+    nn_init()
     main()

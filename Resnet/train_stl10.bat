@@ -1,0 +1,1 @@
+python stl10_classifier.py --mode train %*

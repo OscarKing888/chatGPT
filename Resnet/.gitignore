@@ -5,6 +5,7 @@ err*/
 resnet/
 runs/
 pycache/
+old/
 *.zip
 *.pth
 #*.png

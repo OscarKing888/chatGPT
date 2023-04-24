@@ -204,7 +204,6 @@ def main():
             found_label = "?"
             if predict_class in lower_path:
                 found_label = predict_class
-                break
             
             #print("====== base name:", os.path.basename(img_path))
 

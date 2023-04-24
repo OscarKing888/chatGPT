@@ -442,7 +442,7 @@ def predict_all_images(test_dir, model, device):
         prediction = predict(model, image, device)
         
         #truncated_filename = truncate_filename(image_filename, max_filename_length)
-        predictions.append((image_filename, prediction, class_names[prediction]))
+        predictions.append((image_path, prediction, class_names[prediction]))
 
     # 创建子目录
     err_dir = f"err/err_{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]"
@@ -457,20 +457,18 @@ def predict_all_images(test_dir, model, device):
     for prediction in predictions:
         
         # 从文件名中查找类别名称
-        true_label = "?"
+        found_label = "?"
         predict_class_name = prediction[2].lower()        
-        image_filename = prediction[0].lower()        
+        image_filename = prediction[0].lower()
         if predict_class_name in image_filename:
-            true_label = predict_class_name
-            break
-        
-        # 将真实类别添加到预测结果中
-        prediction_err = prediction + (true_label,)
-        predictions_errors.append(prediction_err)
-
+            found_label = predict_class_name            
+       
         # 如果文件名中没有找到类别名称，则将其保存到err目录
-        if true_label == "?":
-            nn_save_image_as(image_path, f"{used_dataset_name}/{predict_class_name}_{os.path.basename(image_path)}")
+        if found_label == "?":
+            nn_save_image_as(image_filename, f"{used_dataset_name}/{predict_class_name}_{os.path.basename(image_filename)}")
+            # 将真实类别添加到预测结果中
+            prediction_err = prediction + (found_label,)
+            predictions_errors.append(prediction_err)
 
     nn_print_table(predictions_errors, ['Image Filename', 'Predicted Class', 'Class Name', 'Hit'], 'Prediction Report of err')
 

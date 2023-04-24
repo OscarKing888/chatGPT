@@ -301,6 +301,7 @@ def create_model(dataset_name):
     print("Using device:", device)
 
     model = ResNet18(dataset_name).to(device)
+    nn_print_model_summary(model, True)
 
     # 定义损失函数和优化器
     criterion = nn.CrossEntropyLoss()
@@ -542,7 +543,7 @@ def main():
     parser = argparse.ArgumentParser(description='ResNet18 for CIFAR-10 | STL10')
     parser.add_argument('--mode', default='predict', type=str, help='Mode: train or predict (default: train)')
     parser.add_argument('--dataset', default='CIFAR10', choices=['CIFAR10', 'STL10'], help='Dataset')
-    parser.add_argument('--image', default='./test', type=str, help='Path to the folder containing images for prediction')
+    parser.add_argument('--inputdir', default='./test', type=str, help='Path to the folder containing images for prediction')
     parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
     parser.add_argument('--batchsize', type=int, default=-1, help='batch size for training')
 
@@ -551,7 +552,8 @@ def main():
         parser.print_help()
         sys.exit()
 
-    args = parser.parse_args()
+    args = parser.parse_args()    
+    nn_print_args(args)
 
     global use_scheduler
     use_scheduler = args.scheduler
@@ -593,7 +595,7 @@ def main():
         model.eval()
 
         # 预测并输出结果
-        predict_all_images(args.image, model, device)        
+        predict_all_images(args.inputdir, model, device)        
 
     elif args.mode == 'train':
         train_data(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, device)

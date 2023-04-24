@@ -30,5 +30,6 @@ REM Install requirements
 pip install --cache-dir %CACHE_DIR% -r requirements.txt
 pip install --cache-dir %CACHE_DIR%  -U tensorboard-plugin-profile
 pip install --cache-dir %CACHE_DIR%  tabulate
+pip install --cache-dir %CACHE_DIR%  torchsummary
 
 echo Done!

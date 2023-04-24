@@ -34,11 +34,11 @@ def main():
     # 从命令行读取目录
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_dir", help="Directory containing images to resize")
+    parser.add_argument('--inputdir', type=str, default='./test', help="Directory containing images for prediction")
     args = parser.parse_args()
 
     # 调整图像大小
-    resize_images(args.input_dir)
+    resize_images(args.inputdir)
 
 
 if __name__ == "__main__":

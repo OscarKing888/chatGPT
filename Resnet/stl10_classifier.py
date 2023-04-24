@@ -14,6 +14,7 @@ import PIL.Image as Image
 from tqdm import tqdm
 import unicodedata
 import matplotlib.pyplot as plt
+from torchsummary import summary
 
 from NNInit import *
 
@@ -22,21 +23,35 @@ all_test_loss = []
 all_train_acc = []
 all_test_acc = []
 
-def load_data(batch_size, data_dir='./data'):
-    transform = transforms.Compose([
-        transforms.Resize(96),
-        transforms.RandomCrop(96, padding=4),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ])
+train_transform = transforms.Compose([
+    transforms.Resize(96),
+    transforms.RandomCrop(96, padding=4),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    #transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+])
 
-    train_set = STL10(root=data_dir, split='train', download=True, transform=transform)
-    test_set = STL10(root=data_dir, split='test', download=True, transform=transform)
+test_transform =transforms.Compose([
+    #transforms.Resize(96),
+    transforms.ToTensor(),
+    transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+])
+
+
+def load_data(batch_size, data_dir='./data'):    
+
+    train_set = STL10(root=data_dir, split='train', download=True, transform=train_transform)
+    test_set = STL10(root=data_dir, split='test', download=True, transform=test_transform)
 
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2)
 
+    #nn_extract_dataset_images(train_set, "./stl10/train", "train")
+    #nn_extract_dataset_images(test_set, "./stl10/test", "test")
+
     return train_loader, test_loader
+
 
 def create_model():
     model = resnet18(weights=None, num_classes=10)
@@ -111,24 +126,24 @@ def plot_train_result(epoch, batchsize):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="STL10 Classifier")
-    parser.add_argument('--mode', default='predict', choices=['train', 'predict'], help="Mode: train or predict")
-    parser.add_argument('--batchsize', type=int, default=32, help="Batch size for training/testing")
-    parser.add_argument('--epochs', type=int, default=60, help="Number of epochs to train")
-    parser.add_argument('--input_dir', type=str, default='./test', help="Directory containing images for prediction")    
-    parser.add_argument('--model_file', type=str, default='stl10_model.pth', help="File to save/load model")
-    parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
+    parser = nn_args(description="STL10 Classifier")
     args = parser.parse_args()
+    nn_print_args(args)
 
     #used_model_path = nn_get_pth_path(args.model_file)
     used_model_path = f'stl10/best_bsz[{args.batchsize}].pth'
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = create_model().to(device)
+    
+    #print(summary(model, (3, 96, 96)))
+    nn_print_model_summary(model)
+
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.1)
+    #optimizer = optim.Adam(model.parameters(), lr=0.1)
+    optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
     #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[30, 45], gamma=0.1)
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[50, 75], gamma=0.1)
 
     if args.mode == 'train':
         train_loader, test_loader = load_data(args.batchsize)
@@ -138,7 +153,9 @@ def main():
         for epoch in tqdm(range(args.epochs), desc=f"Training", ncols=80):            
             train_loss, train_acc = train(model, train_loader, criterion, optimizer, device)
             test_loss, test_acc = test(model, test_loader, device)
-            scheduler.step()
+
+            if args.scheduler:
+                scheduler.step()
 
             # 记录训练损失和准确率的变化情况
             all_train_loss.append(train_loss)
@@ -161,33 +178,26 @@ def main():
         plot_train_result(args.epochs, args.batchsize)
 
     elif args.mode == 'predict':
-        if not args.input_dir:
+        if not args.inputdir:
             print("Please provide an input directory for prediction.")
             exit(1)
 
         model.load_state_dict(torch.load(nn_get_pth_path(used_model_path)))
         model.eval()
 
-        transform = transforms.Compose([
-            transforms.Resize(96),
-            transforms.RandomCrop(96, padding=4),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-
         class_names = ('airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck')
 
         all_predict = []
 
-        input_dir = Path(args.input_dir)
+        input_dir = Path(args.inputdir)
         for img_path in input_dir.glob("*.jpg"):
             img = Image.open(img_path).convert("RGB")
-            img_tensor = transform(img).unsqueeze(0).to(device)
+            img_tensor = test_transform(img).unsqueeze(0).to(device)
             output = model(img_tensor)
             _, predicted = torch.max(output.data, 1)
             
             lower_path = str(img_path).lower()
-            print(lower_path)
+            #print(lower_path)
                                  
             predict_class = class_names[predicted.item()]
 
@@ -196,11 +206,11 @@ def main():
                 found_label = predict_class
                 break
             
-            print("====== base name:", os.path.basename(img_path))
+            #print("====== base name:", os.path.basename(img_path))
 
             if found_label == "?":
                 nn_save_image_as(img_path, f"stl10_[{args.batchsize}]/{predict_class}_{os.path.basename(img_path)}")
-            #print(f"Image: {img_path}, Prediction: {predicted.item()}:{predict_class} = {found_label}")
+                #print(f"Image: {img_path}, Prediction: {predicted.item()}:{predict_class} = {found_label}")
             
             all_predict.append([img_path, predicted.item(), predict_class, found_label])
 

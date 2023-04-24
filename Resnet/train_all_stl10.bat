@@ -5,17 +5,20 @@ mkdir %logdir%
 
 set dataset=STL10
 set scheduler=--scheduler
+set log_file=%logdir%\%dataset%_%batchsize%.log
 
 set batchsize=32
-echo Training %dataset% batch_size:%batchsize% scheduler:%scheduler%
-call train_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train_stl10.bat --batchsize %batchsize% %scheduler% > %log_file%
 
 set batchsize=64
-echo Training %dataset% batch_size:%batchsize%
-call train_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train_stl10.bat --batchsize %batchsize% %scheduler% > %log_file%
+
+set batchsize=100
+call train_stl10.bat --batchsize %batchsize% %scheduler% > %log_file%
 
 set batchsize=128
-echo Training %dataset% batch_size:%batchsize%
-call train_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train_stl10.bat --batchsize %batchsize% %scheduler% > %log_file%
 
 echo All trainings completed!
+
+rem shutdown /t 10 /s /f /c "Training completed. Shutting down in 10 seconds."

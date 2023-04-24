@@ -7,52 +7,44 @@ mkdir %logdir%
 
 
 set scheduler=--scheduler
+set log_file=%logdir%\%dataset%_%batchsize%_scheduler.log
 
 set batchsize=32
-echo Training %dataset% batch_size:%batchsize% scheduler:%scheduler%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* %scheduler% > %log_file%
 
 set batchsize=64
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* %scheduler% > %log_file%
 
 set batchsize=128
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* %scheduler% > %log_file%
 
 
 set batchsize=256
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* %scheduler% > %log_file%
 
 
 set batchsize=512
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* %scheduler% > %log_file%
 
 
 set scheduler=""
+set log_file=%logdir%\%dataset%_%batchsize%_noscheduler.log
 
 set batchsize=32
-echo Training %dataset% batch_size:%batchsize% scheduler:%scheduler%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* > %log_file%
 
 set batchsize=64
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* > %log_file%
 
 set batchsize=128
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* > %log_file%
 
 
 set batchsize=256
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* > %log_file%
 
 
 set batchsize=512
-echo Training %dataset% batch_size:%batchsize%
-call train18m.bat --dataset %dataset% --batchsize %batchsize% > %logdir%\%dataset%_%batchsize%.log
+call train18m.bat --dataset %dataset% --batchsize %batchsize% %* > %log_file%
 
 echo All trainings completed!

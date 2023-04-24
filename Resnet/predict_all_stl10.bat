@@ -1,21 +1,23 @@
 @echo on
-set logdir=.\logs\logs_stl10_predict
-mkdir %logdir%
 
 
 set dataset=STL10
+set logdir=.\logs\logs_%dataset%_predict
+mkdir %logdir%
+
 set scheduler=--scheduler
+set log_file=%logdir%\%dataset%_%batchsize%_scheduler.log
 
-set batchsize=32
-echo Predict %dataset% batch_size:%batchsize% scheduler:%scheduler%
-call predict_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+setlocal enabledelayedexpansion
 
-set batchsize=64
-echo Predict %dataset% batch_size:%batchsize%
-call predict_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+set "nums=32 64 100 128"
 
-set batchsize=100
-echo Predict %dataset% batch_size:%batchsize%
-call predict_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
+for %%i in (%nums%) do (
+    echo %%i
+    set batchsize=%%i
+    call predict_stl10.bat --batchsize %batchsize% %scheduler% %* > %log_file%
+)
+
+endlocal
 
 echo All Predicts completed!

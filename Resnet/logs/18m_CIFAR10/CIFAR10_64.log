@@ -1,0 +1,851 @@
+
+(resnet) F:\chatGPT\Resnet>python Resnet18.py --mode train --dataset CIFAR10 --batchsize 64 
+./logs/
+./pth/
+./plots/
+./err/
+Memory allocated 1:0.0MB
+Using device: cuda
+batch_size:64, num_workers:2, pin_memory:True
+Files already downloaded and verified
+Files already downloaded and verified
+batch_size:64
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:42.67724609375MB
+used_dataset_name:CIFAR10, use_scheduler:False, batch_size:64
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:42.67724609375MB
+
+========= Train: 1 =========
+========= Test: 1 =========
+========= New Best: 1, Train Loss: 0.0232, Train Acc: 44.88%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 1, Train Loss: 0.0291, Train Acc: 32.21%, Test Loss: 0.0232, Test Acc: 44.88%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 2 =========
+========= Test: 2 =========
+========= New Best: 2, Train Loss: 0.0180, Train Acc: 58.20%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 2, Train Loss: 0.0214, Train Acc: 49.88%, Test Loss: 0.0180, Test Acc: 58.20%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 3 =========
+========= Test: 3 =========
+========= New Best: 3, Train Loss: 0.0152, Train Acc: 65.09%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 3, Train Loss: 0.0165, Train Acc: 62.29%, Test Loss: 0.0152, Test Acc: 65.09%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 4 =========
+========= Test: 4 =========
+========= New Best: 4, Train Loss: 0.0175, Train Acc: 65.22%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 4, Train Loss: 0.0136, Train Acc: 69.39%, Test Loss: 0.0175, Test Acc: 65.22%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 5 =========
+========= Test: 5 =========
+========= New Best: 5, Train Loss: 0.0126, Train Acc: 72.70%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 5, Train Loss: 0.0118, Train Acc: 73.55%, Test Loss: 0.0126, Test Acc: 72.70%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 6 =========
+========= Test: 6 =========
+========= New Best: 6, Train Loss: 0.0121, Train Acc: 73.70%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 6, Train Loss: 0.0108, Train Acc: 76.20%, Test Loss: 0.0121, Test Acc: 73.70%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 7 =========
+========= Test: 7 =========
+Epoch: 7, Train Loss: 0.0102, Train Acc: 77.69%, Test Loss: 0.0163, Test Acc: 66.95%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 8 =========
+========= Test: 8 =========
+========= New Best: 8, Train Loss: 0.0113, Train Acc: 75.20%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 8, Train Loss: 0.0098, Train Acc: 78.35%, Test Loss: 0.0113, Test Acc: 75.20%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 9 =========
+========= Test: 9 =========
+========= New Best: 9, Train Loss: 0.0107, Train Acc: 77.05%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 9, Train Loss: 0.0095, Train Acc: 79.34%, Test Loss: 0.0107, Test Acc: 77.05%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 10 =========
+========= Test: 10 =========
+Epoch: 10, Train Loss: 0.0092, Train Acc: 79.62%, Test Loss: 0.0109, Test Acc: 77.02%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 11 =========
+========= Test: 11 =========
+Epoch: 11, Train Loss: 0.0090, Train Acc: 80.34%, Test Loss: 0.0155, Test Acc: 69.32%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 12 =========
+========= Test: 12 =========
+Epoch: 12, Train Loss: 0.0089, Train Acc: 80.50%, Test Loss: 0.0110, Test Acc: 76.98%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 13 =========
+========= Test: 13 =========
+Epoch: 13, Train Loss: 0.0086, Train Acc: 81.20%, Test Loss: 0.0113, Test Acc: 76.05%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 14 =========
+========= Test: 14 =========
+Epoch: 14, Train Loss: 0.0086, Train Acc: 81.37%, Test Loss: 0.0107, Test Acc: 76.64%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 15 =========
+========= Test: 15 =========
+Epoch: 15, Train Loss: 0.0084, Train Acc: 81.75%, Test Loss: 0.0117, Test Acc: 76.81%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 16 =========
+========= Test: 16 =========
+Epoch: 16, Train Loss: 0.0083, Train Acc: 81.85%, Test Loss: 0.0120, Test Acc: 74.58%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 17 =========
+========= Test: 17 =========
+========= New Best: 17, Train Loss: 0.0094, Train Acc: 79.99%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 17, Train Loss: 0.0083, Train Acc: 81.79%, Test Loss: 0.0094, Test Acc: 79.99%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 18 =========
+========= Test: 18 =========
+========= New Best: 18, Train Loss: 0.0088, Train Acc: 81.00%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 18, Train Loss: 0.0082, Train Acc: 81.89%, Test Loss: 0.0088, Test Acc: 81.00%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 19 =========
+========= Test: 19 =========
+Epoch: 19, Train Loss: 0.0081, Train Acc: 82.41%, Test Loss: 0.0092, Test Acc: 80.98%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 20 =========
+========= Test: 20 =========
+Epoch: 20, Train Loss: 0.0081, Train Acc: 82.55%, Test Loss: 0.0101, Test Acc: 77.42%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 21 =========
+========= Test: 21 =========
+Epoch: 21, Train Loss: 0.0080, Train Acc: 82.55%, Test Loss: 0.0108, Test Acc: 77.52%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 22 =========
+========= Test: 22 =========
+Epoch: 22, Train Loss: 0.0080, Train Acc: 82.62%, Test Loss: 0.0092, Test Acc: 79.74%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 23 =========
+========= Test: 23 =========
+Epoch: 23, Train Loss: 0.0079, Train Acc: 82.78%, Test Loss: 0.0093, Test Acc: 80.27%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 24 =========
+========= Test: 24 =========
+Epoch: 24, Train Loss: 0.0079, Train Acc: 82.78%, Test Loss: 0.0139, Test Acc: 71.36%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 25 =========
+========= Test: 25 =========
+Epoch: 25, Train Loss: 0.0078, Train Acc: 82.86%, Test Loss: 0.0094, Test Acc: 80.37%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 26 =========
+========= Test: 26 =========
+Epoch: 26, Train Loss: 0.0078, Train Acc: 82.91%, Test Loss: 0.0099, Test Acc: 79.80%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 27 =========
+========= Test: 27 =========
+Epoch: 27, Train Loss: 0.0076, Train Acc: 83.25%, Test Loss: 0.0142, Test Acc: 72.25%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 28 =========
+========= Test: 28 =========
+Epoch: 28, Train Loss: 0.0077, Train Acc: 83.34%, Test Loss: 0.0123, Test Acc: 75.01%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 29 =========
+========= Test: 29 =========
+Epoch: 29, Train Loss: 0.0077, Train Acc: 83.20%, Test Loss: 0.0099, Test Acc: 78.76%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 30 =========
+========= Test: 30 =========
+Epoch: 30, Train Loss: 0.0077, Train Acc: 83.18%, Test Loss: 0.0137, Test Acc: 73.94%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 31 =========
+========= Test: 31 =========
+========= New Best: 31, Train Loss: 0.0082, Train Acc: 82.46%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 31, Train Loss: 0.0076, Train Acc: 83.66%, Test Loss: 0.0082, Test Acc: 82.46%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 32 =========
+========= Test: 32 =========
+Epoch: 32, Train Loss: 0.0076, Train Acc: 83.57%, Test Loss: 0.0100, Test Acc: 79.67%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 33 =========
+========= Test: 33 =========
+Epoch: 33, Train Loss: 0.0075, Train Acc: 83.78%, Test Loss: 0.0110, Test Acc: 78.32%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 34 =========
+========= Test: 34 =========
+Epoch: 34, Train Loss: 0.0076, Train Acc: 83.45%, Test Loss: 0.0102, Test Acc: 78.88%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 35 =========
+========= Test: 35 =========
+Epoch: 35, Train Loss: 0.0075, Train Acc: 83.68%, Test Loss: 0.0146, Test Acc: 74.00%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 36 =========
+========= Test: 36 =========
+Epoch: 36, Train Loss: 0.0075, Train Acc: 83.79%, Test Loss: 0.0089, Test Acc: 81.50%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 37 =========
+========= Test: 37 =========
+Epoch: 37, Train Loss: 0.0074, Train Acc: 83.94%, Test Loss: 0.0098, Test Acc: 78.52%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 38 =========
+========= Test: 38 =========
+Epoch: 38, Train Loss: 0.0074, Train Acc: 84.00%, Test Loss: 0.0112, Test Acc: 76.03%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 39 =========
+========= Test: 39 =========
+Epoch: 39, Train Loss: 0.0075, Train Acc: 83.70%, Test Loss: 0.0096, Test Acc: 79.26%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 40 =========
+========= Test: 40 =========
+Epoch: 40, Train Loss: 0.0074, Train Acc: 84.08%, Test Loss: 0.0108, Test Acc: 77.86%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 41 =========
+========= Test: 41 =========
+Epoch: 41, Train Loss: 0.0073, Train Acc: 84.08%, Test Loss: 0.0081, Test Acc: 82.30%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 42 =========
+========= Test: 42 =========
+Epoch: 42, Train Loss: 0.0074, Train Acc: 83.77%, Test Loss: 0.0083, Test Acc: 82.07%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 43 =========
+========= Test: 43 =========
+Epoch: 43, Train Loss: 0.0074, Train Acc: 83.98%, Test Loss: 0.0202, Test Acc: 65.75%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 44 =========
+========= Test: 44 =========
+Epoch: 44, Train Loss: 0.0073, Train Acc: 84.08%, Test Loss: 0.0087, Test Acc: 81.27%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 45 =========
+========= Test: 45 =========
+Epoch: 45, Train Loss: 0.0074, Train Acc: 83.93%, Test Loss: 0.0094, Test Acc: 80.02%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 46 =========
+========= Test: 46 =========
+Epoch: 46, Train Loss: 0.0073, Train Acc: 84.28%, Test Loss: 0.0108, Test Acc: 78.01%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 47 =========
+========= Test: 47 =========
+Epoch: 47, Train Loss: 0.0073, Train Acc: 83.97%, Test Loss: 0.0091, Test Acc: 81.44%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 48 =========
+========= Test: 48 =========
+Epoch: 48, Train Loss: 0.0073, Train Acc: 84.13%, Test Loss: 0.0098, Test Acc: 80.02%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 49 =========
+========= Test: 49 =========
+========= New Best: 49, Train Loss: 0.0080, Train Acc: 82.93%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 49, Train Loss: 0.0074, Train Acc: 83.88%, Test Loss: 0.0080, Test Acc: 82.93%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 50 =========
+========= Test: 50 =========
+Epoch: 50, Train Loss: 0.0072, Train Acc: 84.21%, Test Loss: 0.0125, Test Acc: 74.72%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 51 =========
+========= Test: 51 =========
+Epoch: 51, Train Loss: 0.0073, Train Acc: 84.04%, Test Loss: 0.0108, Test Acc: 77.99%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 52 =========
+========= Test: 52 =========
+Epoch: 52, Train Loss: 0.0073, Train Acc: 84.20%, Test Loss: 0.0107, Test Acc: 77.41%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 53 =========
+========= Test: 53 =========
+Epoch: 53, Train Loss: 0.0073, Train Acc: 84.25%, Test Loss: 0.0098, Test Acc: 78.97%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 54 =========
+========= Test: 54 =========
+Epoch: 54, Train Loss: 0.0073, Train Acc: 84.09%, Test Loss: 0.0085, Test Acc: 81.42%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 55 =========
+========= Test: 55 =========
+Epoch: 55, Train Loss: 0.0073, Train Acc: 84.21%, Test Loss: 0.0122, Test Acc: 74.74%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 56 =========
+========= Test: 56 =========
+Epoch: 56, Train Loss: 0.0073, Train Acc: 84.23%, Test Loss: 0.0095, Test Acc: 79.51%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 57 =========
+========= Test: 57 =========
+Epoch: 57, Train Loss: 0.0073, Train Acc: 84.13%, Test Loss: 0.0085, Test Acc: 82.19%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 58 =========
+========= Test: 58 =========
+Epoch: 58, Train Loss: 0.0072, Train Acc: 84.24%, Test Loss: 0.0085, Test Acc: 81.92%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 59 =========
+========= Test: 59 =========
+Epoch: 59, Train Loss: 0.0072, Train Acc: 84.40%, Test Loss: 0.0109, Test Acc: 79.50%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 60 =========
+========= Test: 60 =========
+Epoch: 60, Train Loss: 0.0073, Train Acc: 84.05%, Test Loss: 0.0098, Test Acc: 79.52%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 61 =========
+========= Test: 61 =========
+Epoch: 61, Train Loss: 0.0072, Train Acc: 84.27%, Test Loss: 0.0101, Test Acc: 79.19%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 62 =========
+========= Test: 62 =========
+Epoch: 62, Train Loss: 0.0072, Train Acc: 84.18%, Test Loss: 0.0079, Test Acc: 82.51%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 63 =========
+========= Test: 63 =========
+Epoch: 63, Train Loss: 0.0072, Train Acc: 84.26%, Test Loss: 0.0111, Test Acc: 77.03%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 64 =========
+========= Test: 64 =========
+Epoch: 64, Train Loss: 0.0072, Train Acc: 84.37%, Test Loss: 0.0087, Test Acc: 81.44%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 65 =========
+========= Test: 65 =========
+Epoch: 65, Train Loss: 0.0071, Train Acc: 84.54%, Test Loss: 0.0085, Test Acc: 81.90%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 66 =========
+========= Test: 66 =========
+Epoch: 66, Train Loss: 0.0071, Train Acc: 84.62%, Test Loss: 0.0095, Test Acc: 80.12%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 67 =========
+========= Test: 67 =========
+========= New Best: 67, Train Loss: 0.0079, Train Acc: 82.95%
+Model saved to:  ./pth/ResNet18_M_CIFAR10_NoScheduler[64]_best.pth
+Epoch: 67, Train Loss: 0.0072, Train Acc: 84.47%, Test Loss: 0.0079, Test Acc: 82.95%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 68 =========
+========= Test: 68 =========
+Epoch: 68, Train Loss: 0.0072, Train Acc: 84.36%, Test Loss: 0.0088, Test Acc: 81.01%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 69 =========
+========= Test: 69 =========
+Epoch: 69, Train Loss: 0.0072, Train Acc: 84.42%, Test Loss: 0.0101, Test Acc: 79.38%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 70 =========
+========= Test: 70 =========
+Epoch: 70, Train Loss: 0.0072, Train Acc: 84.41%, Test Loss: 0.0093, Test Acc: 79.62%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 71 =========
+========= Test: 71 =========
+Epoch: 71, Train Loss: 0.0072, Train Acc: 84.50%, Test Loss: 0.0092, Test Acc: 80.29%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 72 =========
+========= Test: 72 =========
+Epoch: 72, Train Loss: 0.0072, Train Acc: 84.29%, Test Loss: 0.0107, Test Acc: 78.55%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 73 =========
+========= Test: 73 =========
+Epoch: 73, Train Loss: 0.0072, Train Acc: 84.42%, Test Loss: 0.0099, Test Acc: 79.20%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 74 =========
+========= Test: 74 =========
+Epoch: 74, Train Loss: 0.0072, Train Acc: 84.40%, Test Loss: 0.0113, Test Acc: 76.02%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 75 =========
+========= Test: 75 =========
+Epoch: 75, Train Loss: 0.0072, Train Acc: 84.30%, Test Loss: 0.0081, Test Acc: 82.40%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 76 =========
+========= Test: 76 =========
+Epoch: 76, Train Loss: 0.0072, Train Acc: 84.32%, Test Loss: 0.0087, Test Acc: 81.68%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 77 =========
+========= Test: 77 =========
+Epoch: 77, Train Loss: 0.0071, Train Acc: 84.59%, Test Loss: 0.0104, Test Acc: 79.25%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 78 =========
+========= Test: 78 =========
+Epoch: 78, Train Loss: 0.0072, Train Acc: 84.15%, Test Loss: 0.0089, Test Acc: 81.27%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 79 =========
+========= Test: 79 =========
+Epoch: 79, Train Loss: 0.0071, Train Acc: 84.61%, Test Loss: 0.0089, Test Acc: 81.04%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 80 =========
+========= Test: 80 =========
+Epoch: 80, Train Loss: 0.0071, Train Acc: 84.35%, Test Loss: 0.0101, Test Acc: 79.48%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 81 =========
+========= Test: 81 =========
+Epoch: 81, Train Loss: 0.0072, Train Acc: 84.41%, Test Loss: 0.0120, Test Acc: 76.84%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 82 =========
+========= Test: 82 =========
+Epoch: 82, Train Loss: 0.0072, Train Acc: 84.37%, Test Loss: 0.0124, Test Acc: 75.61%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 83 =========
+========= Test: 83 =========
+Epoch: 83, Train Loss: 0.0072, Train Acc: 84.37%, Test Loss: 0.0090, Test Acc: 80.50%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 84 =========
+========= Test: 84 =========
+Epoch: 84, Train Loss: 0.0071, Train Acc: 84.43%, Test Loss: 0.0118, Test Acc: 75.23%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 85 =========
+========= Test: 85 =========
+Epoch: 85, Train Loss: 0.0072, Train Acc: 84.31%, Test Loss: 0.0110, Test Acc: 77.59%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 86 =========
+========= Test: 86 =========
+Epoch: 86, Train Loss: 0.0072, Train Acc: 84.22%, Test Loss: 0.0107, Test Acc: 77.82%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 87 =========
+========= Test: 87 =========
+Epoch: 87, Train Loss: 0.0071, Train Acc: 84.67%, Test Loss: 0.0081, Test Acc: 82.63%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 88 =========
+========= Test: 88 =========
+Epoch: 88, Train Loss: 0.0072, Train Acc: 84.46%, Test Loss: 0.0093, Test Acc: 80.33%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 89 =========
+========= Test: 89 =========
+Epoch: 89, Train Loss: 0.0071, Train Acc: 84.41%, Test Loss: 0.0086, Test Acc: 81.75%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 90 =========
+========= Test: 90 =========
+Epoch: 90, Train Loss: 0.0071, Train Acc: 84.58%, Test Loss: 0.0152, Test Acc: 72.57%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 91 =========
+========= Test: 91 =========
+Epoch: 91, Train Loss: 0.0072, Train Acc: 84.19%, Test Loss: 0.0109, Test Acc: 78.18%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 92 =========
+========= Test: 92 =========
+Epoch: 92, Train Loss: 0.0072, Train Acc: 84.23%, Test Loss: 0.0092, Test Acc: 80.27%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 93 =========
+========= Test: 93 =========
+Epoch: 93, Train Loss: 0.0071, Train Acc: 84.59%, Test Loss: 0.0086, Test Acc: 81.72%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 94 =========
+========= Test: 94 =========
+Epoch: 94, Train Loss: 0.0071, Train Acc: 84.56%, Test Loss: 0.0090, Test Acc: 80.87%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 95 =========
+========= Test: 95 =========
+Epoch: 95, Train Loss: 0.0071, Train Acc: 84.46%, Test Loss: 0.0095, Test Acc: 78.94%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 96 =========
+========= Test: 96 =========
+Epoch: 96, Train Loss: 0.0071, Train Acc: 84.46%, Test Loss: 0.0104, Test Acc: 77.92%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 97 =========
+========= Test: 97 =========
+Epoch: 97, Train Loss: 0.0072, Train Acc: 84.45%, Test Loss: 0.0083, Test Acc: 82.41%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 98 =========
+========= Test: 98 =========
+Epoch: 98, Train Loss: 0.0071, Train Acc: 84.51%, Test Loss: 0.0106, Test Acc: 78.35%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 99 =========
+========= Test: 99 =========
+Epoch: 99, Train Loss: 0.0071, Train Acc: 84.54%, Test Loss: 0.0094, Test Acc: 79.61%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+
+========= Train: 100 =========
+========= Test: 100 =========
+Epoch: 100, Train Loss: 0.0070, Train Acc: 84.81%, Test Loss: 0.0084, Test Acc: 82.00%
+GPU count: 1
+GPU name: NVIDIA GeForce RTX 3080
+Memory allocated 1:146.55908203125MB
+Plot saved to:  ./plots/ResNet18_M_CIFAR10_NoScheduler[64]_loss_[100].png
+Plot saved to:  ./plots/ResNet18_M_CIFAR10_NoScheduler[64]_acc_[100].png
+
+Training Report:
+Epoch     Train Loss     Train Acc      Test Loss      Test Acc       
+---------------------------------------------------------------
+1         0.0291         32.21          0.0232         44.88          
+2         0.0214         49.88          0.0180         58.20          
+3         0.0165         62.29          0.0152         65.09          
+4         0.0136         69.39          0.0175         65.22          
+5         0.0118         73.55          0.0126         72.70          
+6         0.0108         76.20          0.0121         73.70          
+7         0.0102         77.69          0.0163         66.95          
+8         0.0098         78.35          0.0113         75.20          
+9         0.0095         79.34          0.0107         77.05          
+10        0.0092         79.62          0.0109         77.02          
+11        0.0090         80.34          0.0155         69.32          
+12        0.0089         80.50          0.0110         76.98          
+13        0.0086         81.20          0.0113         76.05          
+14        0.0086         81.37          0.0107         76.64          
+15        0.0084         81.75          0.0117         76.81          
+16        0.0083         81.85          0.0120         74.58          
+17        0.0083         81.79          0.0094         79.99          
+18        0.0082         81.89          0.0088         81.00          
+19        0.0081         82.41          0.0092         80.98          
+20        0.0081         82.55          0.0101         77.42          
+21        0.0080         82.55          0.0108         77.52          
+22        0.0080         82.62          0.0092         79.74          
+23        0.0079         82.78          0.0093         80.27          
+24        0.0079         82.78          0.0139         71.36          
+25        0.0078         82.86          0.0094         80.37          
+26        0.0078         82.91          0.0099         79.80          
+27        0.0076         83.25          0.0142         72.25          
+28        0.0077         83.34          0.0123         75.01          
+29        0.0077         83.20          0.0099         78.76          
+30        0.0077         83.18          0.0137         73.94          
+31        0.0076         83.66          0.0082         82.46          
+32        0.0076         83.57          0.0100         79.67          
+33        0.0075         83.78          0.0110         78.32          
+34        0.0076         83.45          0.0102         78.88          
+35        0.0075         83.68          0.0146         74.00          
+36        0.0075         83.79          0.0089         81.50          
+37        0.0074         83.94          0.0098         78.52          
+38        0.0074         84.00          0.0112         76.03          
+39        0.0075         83.70          0.0096         79.26          
+40        0.0074         84.08          0.0108         77.86          
+41        0.0073         84.08          0.0081         82.30          
+42        0.0074         83.77          0.0083         82.07          
+43        0.0074         83.98          0.0202         65.75          
+44        0.0073         84.08          0.0087         81.27          
+45        0.0074         83.93          0.0094         80.02          
+46        0.0073         84.28          0.0108         78.01          
+47        0.0073         83.97          0.0091         81.44          
+48        0.0073         84.13          0.0098         80.02          
+49        0.0074         83.88          0.0080         82.93          
+50        0.0072         84.21          0.0125         74.72          
+51        0.0073         84.04          0.0108         77.99          
+52        0.0073         84.20          0.0107         77.41          
+53        0.0073         84.25          0.0098         78.97          
+54        0.0073         84.09          0.0085         81.42          
+55        0.0073         84.21          0.0122         74.74          
+56        0.0073         84.23          0.0095         79.51          
+57        0.0073         84.13          0.0085         82.19          
+58        0.0072         84.24          0.0085         81.92          
+59        0.0072         84.40          0.0109         79.50          
+60        0.0073         84.05          0.0098         79.52          
+61        0.0072         84.27          0.0101         79.19          
+62        0.0072         84.18          0.0079         82.51          
+63        0.0072         84.26          0.0111         77.03          
+64        0.0072         84.37          0.0087         81.44          
+65        0.0071         84.54          0.0085         81.90          
+66        0.0071         84.62          0.0095         80.12          
+67        0.0072         84.47          0.0079         82.95          *
+68        0.0072         84.36          0.0088         81.01          
+69        0.0072         84.42          0.0101         79.38          
+70        0.0072         84.41          0.0093         79.62          
+71        0.0072         84.50          0.0092         80.29          
+72        0.0072         84.29          0.0107         78.55          
+73        0.0072         84.42          0.0099         79.20          
+74        0.0072         84.40          0.0113         76.02          
+75        0.0072         84.30          0.0081         82.40          
+76        0.0072         84.32          0.0087         81.68          
+77        0.0071         84.59          0.0104         79.25          
+78        0.0072         84.15          0.0089         81.27          
+79        0.0071         84.61          0.0089         81.04          
+80        0.0071         84.35          0.0101         79.48          
+81        0.0072         84.41          0.0120         76.84          
+82        0.0072         84.37          0.0124         75.61          
+83        0.0072         84.37          0.0090         80.50          
+84        0.0071         84.43          0.0118         75.23          
+85        0.0072         84.31          0.0110         77.59          
+86        0.0072         84.22          0.0107         77.82          
+87        0.0071         84.67          0.0081         82.63          
+88        0.0072         84.46          0.0093         80.33          
+89        0.0071         84.41          0.0086         81.75          
+90        0.0071         84.58          0.0152         72.57          
+91        0.0072         84.19          0.0109         78.18          
+92        0.0072         84.23          0.0092         80.27          
+93        0.0071         84.59          0.0086         81.72          
+94        0.0071         84.56          0.0090         80.87          
+95        0.0071         84.46          0.0095         78.94          
+96        0.0071         84.46          0.0104         77.92          
+97        0.0072         84.45          0.0083         82.41          
+98        0.0071         84.51          0.0106         78.35          
+99        0.0071         84.54          0.0094         79.61          
+100       0.0070         84.81          0.0084         82.00          

@@ -1,0 +1,1 @@
+python %python_file% --mode predict %*

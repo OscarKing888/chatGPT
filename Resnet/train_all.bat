@@ -1,22 +1,38 @@
 @echo on
-mkdir logs
 
-echo Training ResNet18 on CIFAR10
-python Resnet.py --mode train --dataset CIFAR10 --model ResNet18 > logs\ResNet18_CIFAR10_train.log
+set python_file=Resnet.py
+set mode=train
 
-echo Training ResNet101 on CIFAR10
-python Resnet.py --mode train --dataset CIFAR10 --model ResNet101 > logs\ResNet101_CIFAR10_train.log
+if "%*" neq "*--dataset*" (
+    set dataset=CIFAR10
+)
 
-echo Training ResNet50 on CIFAR10
-python Resnet.py --mode train --dataset CIFAR10 --model ResNet50 > logs\ResNet50_CIFAR10_train.log
+if "%*" neq "*--inputdir*" (
+    set inputdir=.\test
+)
 
-echo Training ResNet18 on STL10
-python Resnet.py --mode train --dataset STL10 --model ResNet18 > logs\ResNet18_STL10_train.log
+set "batchs=32 64 128 256 512"
 
-echo Training ResNet101 on STL10
-python Resnet.py --mode train --dataset STL10 --model ResNet101 > logs\ResNet101_STL10_train.log
+call proc_all_template.bat
 
-echo Training ResNet50 on STL10
-python Resnet.py --mode train --dataset STL10 --model ResNet50 > logs\ResNet50_STL10_train.log
+@REM mkdir logs
 
-echo All trainings completed!
+@REM echo Training ResNet18 on CIFAR10
+@REM python Resnet.py --mode train --dataset CIFAR10 --model ResNet18 > logs\ResNet18_CIFAR10_train.log
+
+@REM echo Training ResNet101 on CIFAR10
+@REM python Resnet.py --mode train --dataset CIFAR10 --model ResNet101 > logs\ResNet101_CIFAR10_train.log
+
+@REM echo Training ResNet50 on CIFAR10
+@REM python Resnet.py --mode train --dataset CIFAR10 --model ResNet50 > logs\ResNet50_CIFAR10_train.log
+
+@REM echo Training ResNet18 on STL10
+@REM python Resnet.py --mode train --dataset STL10 --model ResNet18 > logs\ResNet18_STL10_train.log
+
+@REM echo Training ResNet101 on STL10
+@REM python Resnet.py --mode train --dataset STL10 --model ResNet101 > logs\ResNet101_STL10_train.log
+
+@REM echo Training ResNet50 on STL10
+@REM python Resnet.py --mode train --dataset STL10 --model ResNet50 > logs\ResNet50_STL10_train.log
+
+@REM echo All trainings completed!

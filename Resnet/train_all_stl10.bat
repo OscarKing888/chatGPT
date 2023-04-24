@@ -14,7 +14,7 @@ set batchsize=64
 echo Training %dataset% batch_size:%batchsize%
 call train_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
 
-set batchsize=100
+set batchsize=128
 echo Training %dataset% batch_size:%batchsize%
 call train_stl10.bat --batchsize %batchsize% %scheduler% > %logdir%\%dataset%_%batchsize%.log
 

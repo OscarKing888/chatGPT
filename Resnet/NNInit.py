@@ -1,10 +1,12 @@
 import os
 import torch
 import argparse
+import pandas as pd
 import matplotlib.pyplot as plt
 import PIL.Image as Image
 from tabulate import tabulate
 import torchvision.transforms as transforms
+from torch import nn
 
 nn_logs_folder = './logs/'
 nn_pth_folder = './pth/'
@@ -24,12 +26,12 @@ def nn_init():
 def nn_args(description='Image Classifier'):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--mode', default='train', choices=['train', 'predict'], help="Mode: train or predict")
-    parser.add_argument('--dataset', default='CIFAR10', choices=['CIFAR10', 'STL10'], help='Dataset')
+    parser.add_argument('--dataset', default='STL10', choices=['CIFAR10', 'STL10'], help='Dataset')
     parser.add_argument('--batchsize', type=int, default=32, help="Batch size for training/testing")
     parser.add_argument('--epochs', type=int, default=100, help="Number of epochs to train")
     parser.add_argument('--inputdir', type=str, default='./test', help="Directory containing images for prediction")    
     parser.add_argument('--model_file', type=str, default='best_model.pth', help="File to save/load model")
-    parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
+    parser.add_argument('--scheduler', default=True, action='store_true', help='Use or not use scheduler (default: True)')
     return parser
 
 def nn_print_args(args):
@@ -162,7 +164,7 @@ def nn_print_model_summary(model, show_hidden_layers=False):
             layer_neurons_str = f'{in_features} x {out_features}'
             layers.append((idx_all, idx, name, layer_type, layer_neurons_str, layer_neurons))
             idx += 1
-            
+
         elif show_hidden_layers:
             layers.append((idx_all, idx, name, layer_type, "", 0))
             #idx += 1
@@ -170,3 +172,126 @@ def nn_print_model_summary(model, show_hidden_layers=False):
         idx_all += 1
 
     nn_print_table(layers, ['#', '#' 'Layer', 'Type', 'Output Shape', 'Neurons'], title='Model Summary')
+
+
+# 比较两个神经网络
+def nn_print_model_diff(net1, net2):
+    # 比较两个神经网络
+    diff1 = []
+    diff2 = []
+    for i, (layer1, layer2) in enumerate(zip(net1, net2)):
+        if type(layer1) != type(layer2):
+            if type(layer1) < type(layer2):
+                diff1.append((i, layer1))
+            else:
+                diff2.append((i, layer2))
+        elif layer1.weight.shape != layer2.weight.shape:
+            if layer1.weight.shape < layer2.weight.shape:
+                diff1.append((i, layer1))
+            else:
+                diff2.append((i, layer2))
+
+    # 输出比较结果
+    table = []
+    for i, (layer1, layer2) in enumerate(zip(net1, net2)):
+        if i in [x[0] for x in diff1]:
+            table.append([i, str(diff1[[x[0] for x in diff1].index(i)][1]), ''])
+        elif i in [x[0] for x in diff2]:
+            table.append([i, '', str(diff2[[x[0] for x in diff2].index(i)][1])])
+        else:
+            table.append([i, '', ''])
+    print(tabulate(table, headers=['layer', 'net1_diff', 'net2_diff']))
+
+
+#def nn_get_model_layers_count(model):
+#    return sum(1 for _ in model.modules() if isinstance(_, torch.nn.Conv2d))
+from collections import defaultdict
+def nn_stat_modules(model, idx=0, indent=1):
+    module_counts = defaultdict(int)
+    layer_tree = ""
+    for module in model.children():
+        module_name = type(module).__name__
+        module_counts[module_name] += 1
+        layer_tree += f"[{idx}]{'-' * indent}{module_name}\n"
+        
+        idx += 1
+        
+        module_counts_child, child_tree = nn_stat_modules(module, idx, indent + 1)
+        layer_tree += child_tree
+
+        for module_type, count in module_counts_child.items():
+            module_counts[module_type] += count
+
+    return module_counts, layer_tree
+    
+
+# Resnet18
+# 一个7x7的卷积层（64个卷积核） Conv2D
+# 一个批归一化层 BatchNormalization
+# 一个ReLU激活函数 ReLU
+# 一个3x3的最大池化层 MaxPooling2D
+# 4个残差块，每个块包含2个卷积层和1个跳跃连接 ResidualBlock
+# 一个全局平均池化层 GlobalAveragePooling2D
+# 一个全连接层 Dense
+def nn_get_model_layers_count(model: nn.Module) -> int:
+
+    table, tree_dat = nn_stat_modules(model)
+    table = [(module_type, count) for module_type, count in table.items()]        
+    print(tabulate(table, headers=["Module Type", "Count"]))
+    print(tree_dat)
+
+    total_index = 0
+    def _count_layers(module: nn.Module, is_child=False) -> int:
+        nonlocal total_index
+        layer_count = 0
+        for submodule in module.children():
+            # print submodule name
+            #print(submodule.__class__.__name__)
+
+            if isinstance(submodule, (nn.Sequential)):
+                children_count = len(list(submodule.named_modules()))
+                for chmodule in submodule.children():
+                    layer_count += _count_layers(chmodule, True)
+                #print("children_count", children_count)
+                #layer_count += children_count
+
+            #elif isinstance(submodule, (nn.ModuleList, nn.ModuleDict)):
+                #layer_count += _count_layers(submodule)
+            elif not is_child and isinstance(submodule, (nn.ReLU, nn.BatchNorm2d, nn.MaxPool2d, nn.AvgPool2d, nn.AdaptiveAvgPool2d)):
+                layer_count += 1
+                total_index += 1
+                print(total_index, submodule.__class__.__name__)
+            elif isinstance(submodule, (nn.Conv1d, nn.Conv2d, nn.Conv3d)):
+                layer_count += 1
+                total_index += 1
+                print(total_index, submodule.__class__.__name__)
+
+            #elif not isinstance(submodule, (nn.ReLU, nn.BatchNorm2d, nn.Dropout, nn.AdaptiveAvgPool2d, nn.MaxPool2d, nn.AvgPool2d)):
+            #elif not isinstance(submodule, (nn.Dropout)):
+                #layer_count += 1
+
+        return layer_count
+
+    return _count_layers(model)
+    # def _count_layers(module: nn.Module) -> int:
+    #     layer_count = 0
+    #     for submodule in module.children():
+    #         if isinstance(submodule, (nn.Sequential, nn.ModuleList, nn.ModuleDict)):
+    #             layer_count += _count_layers(submodule)
+    #         elif isinstance(submodule, nn.Conv2d) or isinstance(submodule, nn.Linear):
+    #             layer_count += 1
+    #     return layer_count
+
+    # return _count_layers(model)
+
+    # idx = 0
+    # for name, module in model.named_modules():
+    #     if isinstance(module, torch.nn.Conv2d):
+    #         idx += 1
+    #     #elif isinstance(module, torch.nn.Linear):
+    #     #    idx += 1
+    # return idx
+
+
+def nn_get_model_name(model):
+    return f'{type(model).__name__}{nn_get_model_layers_count(model)}'

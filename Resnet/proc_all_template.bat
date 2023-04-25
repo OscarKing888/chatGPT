@@ -10,7 +10,7 @@ rem set inputdir=.\test
 
 rem set
 
-rem setlocal enabledelayedexpansion
+setlocal enabledelayedexpansion
 
 IF not defined dataset (
     @ECHO dataset is not defined.
@@ -34,16 +34,25 @@ if not exist "%logdir%" (
 )
 
 
+set logtofile=0
+if "%*"=="*--logfile*" (
+    set logtofile=1
+)
 
 for %%i in (%batchs%) do (
     @echo start batch:%%i
     set cur_batch=%%i
-    set log_file=!logdir!\!dataset!_%%i_!scheduler_str!.log
-    @echo save to log: !log_file!
+    set log_file=!logdir!\!dataset!_%%i_!scheduler_str!.log    
 
-    call python "%python_file%" --mode %mode% --dataset %dataset% --batchsize %%i %scheduler% --inputdir "%inputdir%" %* > "!log_file!"
+    if %logtofile%==1 (
+        @echo save to log: !log_file!
+        call python "%python_file%" --mode %mode% --dataset %dataset% --batchsize %%i %scheduler% --inputdir "%inputdir%" %* > "!log_file!"
+    ) else (        
+        @echo log to console
+        call python "%python_file%" --mode %mode% --dataset %dataset% --batchsize %%i %scheduler% --inputdir "%inputdir%" %*
+    )    
 )
 
-rem endlocal
+endlocal
 
 echo All Predicts completed!

@@ -299,9 +299,13 @@ def create_model(dataset_name):
     #device = 'cuda' if torch.cuda.is_available() else 'cpu'
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("Using device:", device)
-
+    
     model = ResNet18(dataset_name).to(device)
     nn_print_model_summary(model, True)
+
+    #import stl10_classifier
+    #model2 = stl10_classifier.create_model().to(device)
+    #nn_print_model_diff(model, model2)
 
     # 定义损失函数和优化器
     criterion = nn.CrossEntropyLoss()
@@ -542,7 +546,7 @@ def main():
     parser.add_argument('--mode', default='predict', type=str, help='Mode: train or predict (default: train)')
     parser.add_argument('--dataset', default='CIFAR10', choices=['CIFAR10', 'STL10'], help='Dataset')
     parser.add_argument('--inputdir', default='./test', type=str, help='Path to the folder containing images for prediction')
-    parser.add_argument('--scheduler', default=False, action='store_true', help='Use or not use scheduler (default: True)')
+    parser.add_argument('--scheduler', default=True, action='store_true', help='Use or not use scheduler (default: True)')
     parser.add_argument('--batchsize', type=int, default=-1, help='batch size for training')
 
     # 检查命令行参数中是否包含-h或--help参数

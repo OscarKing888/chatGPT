@@ -9,7 +9,7 @@ if "%*" neq "*--dataset*" (
 )
 
 if "%*" neq "*--inputdir*" (
-    set inputdir=.\test2
+    set inputdir=.\test
 )
 
 set "batchs=32 64 100 128"

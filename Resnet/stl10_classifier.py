@@ -9,7 +9,7 @@ import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from torchvision.datasets import STL10
-from torchvision.models import resnet18
+from torchvision.models import resnet18, resnet50
 import PIL.Image as Image
 from tqdm import tqdm
 import unicodedata
@@ -55,6 +55,7 @@ def load_data(batch_size, data_dir='./data'):
 
 def create_model():
     model = resnet18(weights=None, num_classes=10)
+    #model = resnet50(weights=None, num_classes=10)
     return model
 
 def train(model, train_loader, criterion, optimizer, device):
@@ -113,15 +114,14 @@ def test(model, test_loader, device):
     return epoch_loss, epoch_acc
 
 
-def plot_train_result(epoch, batchsize):
-    nn_plot_result(f"stl10_loss_bsz[{batchsize}][{epoch}].png", all_train_loss, all_test_loss,
+def plot_train_result(model_name, dataset_name, epoch, batchsize, postfix=''):
+    nn_plot_result(f"{model_name}_{dataset_name}_loss_bsz[{batchsize}][{epoch}][{postfix}].png", all_train_loss, all_test_loss,
                     data1_label='train_loss', data2_label='test_loss',
                     title=f'Loss - batch size:{batchsize}')
 
-    nn_plot_result(f"stl10_acc_bsz[{batchsize}][{epoch}].png", all_train_acc, all_test_acc,
+    nn_plot_result(f"{model_name}_{dataset_name}_acc_bsz[{batchsize}][{epoch}][{postfix}].png", all_train_acc, all_test_acc,
                     data1_label='train_acc', data2_label='test_acc',
                     title=f'Accuracy - batch size:{batchsize}')
-                    #title='Training and Testing Accuracy')
 
 
 
@@ -130,9 +130,7 @@ def main():
     args = parser.parse_args()
     nn_print_args(args)
 
-    #used_model_path = nn_get_pth_path(args.model_file)
-    used_model_path = f'stl10/best_bsz[{args.batchsize}].pth'
-
+    
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = create_model().to(device)
     
@@ -140,10 +138,15 @@ def main():
     nn_print_model_summary(model)
 
     criterion = nn.CrossEntropyLoss()
-    #optimizer = optim.Adam(model.parameters(), lr=0.1)
-    optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+    optimizer = optim.Adam(model.parameters(), lr=0.1)
+    #optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
     #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[50, 75], gamma=0.1)
+
+    print("===== ModelName:", nn_get_model_name(model))
+
+    #used_model_path = nn_get_pth_path(args.model_file)
+    used_model_path = f'{nn_get_model_name(model)}/STL10_best_bsz[{args.batchsize}].pth'
 
     if args.mode == 'train':
         train_loader, test_loader = load_data(args.batchsize)
@@ -175,7 +178,7 @@ def main():
             
             #plot_train_result(epoch, args.batchsize)
 
-        plot_train_result(args.epochs, args.batchsize)
+        plot_train_result(nn_get_model_name(model), "STL10", args.epochs, args.batchsize)
 
     elif args.mode == 'predict':
         if not args.inputdir:
@@ -208,7 +211,7 @@ def main():
             #print("====== base name:", os.path.basename(img_path))
 
             if found_label == "?":
-                nn_save_image_as(img_path, f"stl10_[{args.batchsize}]/{predict_class}_{os.path.basename(img_path)}")
+                nn_save_image_as(img_path, f"{nn_get_model_name(model)}_STL10_[{args.batchsize}]/{predict_class}_{os.path.basename(img_path)}")
                 #print(f"Image: {img_path}, Prediction: {predicted.item()}:{predict_class} = {found_label}")
             
             all_predict.append([img_path, predicted.item(), predict_class, found_label])

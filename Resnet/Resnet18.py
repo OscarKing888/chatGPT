@@ -21,7 +21,7 @@ tensorboard_log_dir = 'runs/tensorboard_log18m'
 tensorboard_log_dir_pred = 'runs/tensorboard_log18m_predition'
 
 # 定义超参数
-model_name = "ResNet18_M"
+model_name = "ResNet18M"
 used_dataset_name = ""
 dataset_config = None
 
@@ -81,9 +81,9 @@ def scheduler_str():
 
 def generate_model_filename(dataset_name, model_name, epoch, is_best=False):
     if is_best:
-        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_best.pth"
+        return f"{model_name}/{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_best.pth"
     else:
-        return f"{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_epoch{epoch}.pth"
+        return f"{model_name}/{model_name}_{dataset_name}_{scheduler_str()}[{batch_size}]_epoch{epoch}.pth"
 
 
 # 定义残差块
@@ -171,12 +171,12 @@ def plot_train_result(epoch):
     global batch_size
 
     
-    nn_plot_result(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_loss_[{epoch}].png",
+    nn_plot_result(f"{model_name}/{used_dataset_name}_loss_{scheduler_str()}[{batch_size}]_ep[{epoch}].png",
         all_train_loss, all_test_loss,
         data1_label='train_loss', data2_label='test_loss',
         title=f'{used_dataset_name}-batch:{batch_size} Loss {scheduler_str()}')
     
-    nn_plot_result(f"{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]_acc_[{epoch}].png",
+    nn_plot_result(f"{model_name}/{used_dataset_name}_acc_{scheduler_str()}[{batch_size}]_ep[{epoch}].png",
         all_train_acc, all_test_acc,
         data1_label='train_acc', data2_label='test_acc',
         title=f'{used_dataset_name}-batch:{batch_size} Accuracy {scheduler_str()}')
@@ -449,7 +449,7 @@ def predict_all_images(test_dir, model, device):
         predictions.append((image_path, prediction, class_names[prediction]))
 
     # 创建子目录
-    err_dir = f"err/err_{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]"
+    err_dir = f"err/{model_name}_{used_dataset_name}_{scheduler_str()}[{batch_size}]"
     if not os.path.exists(err_dir):
         os.makedirs(err_dir)
 

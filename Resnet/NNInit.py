@@ -65,8 +65,8 @@ def nn_plot_result(file_name, data1, data2, data1_label='train_acc', data2_label
     plt.ylabel(y_label)
     plt.title(title)
     plt.legend()
+    save_path = nn_get_plot_path(file_name)    
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    save_path = nn_get_plot_path(file_name)
     plt.savefig(save_path)    
     if show:
         plt.show()

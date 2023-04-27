@@ -1,0 +1,4 @@
+Pillow
+matplotlib
+opencv-python-headless
+scikit-learn

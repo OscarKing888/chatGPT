@@ -7,8 +7,6 @@ def select_file():
     file_path = filedialog.askopenfilename(filetypes=[("HTML/MHTML files", "*.html;*.mhtml")])
     return file_path
 
-input_html = select_file()
-
 from bs4 import BeautifulSoup
 
 def extract_chat_content2(html_file):
@@ -42,9 +40,6 @@ def extract_chat_content(content):
 
     return questions, answers
 
-
-questions, answers = extract_chat_content(input_html)
-
 def merge_interrupted_answers(questions, answers):
     merged_questions = []
     merged_answers = []
@@ -63,8 +58,6 @@ def merge_interrupted_answers(questions, answers):
         i += 1
     
     return merged_questions, merged_answers
-
-questions, answers = merge_interrupted_answers(questions, answers)
 
 def create_new_html(questions, answers, input_html):
     with open(input_html, "r", encoding="utf-8") as file:
@@ -87,9 +80,6 @@ def create_new_html(questions, answers, input_html):
         chat_content.append(checkbox)
 
     
-
-
-
 def create_new_html3(questions, answers, input_html):
     with open(input_html, "r", encoding="utf-8") as file:
         content = file.read()
@@ -110,8 +100,6 @@ def create_new_html3(questions, answers, input_html):
         chat_content.append(checkbox)
 
     return soup.prettify()
-
-
 
 def create_new_html2(questions, answers, input_html):
     with open(input_html, "r", encoding="utf-8") as file:
@@ -134,8 +122,6 @@ def create_new_html2(questions, answers, input_html):
 
     return soup.prettify()
 
-new_html = create_new_html(questions, answers, input_html)
-
 def add_export_button(html):
     soup = BeautifulSoup(html, "lxml")
     body = soup.find("body")
@@ -143,8 +129,6 @@ def add_export_button(html):
     export_button.string = "导出Html"
     body.append(export_button)
     return soup.prettify()
-
-new_html = add_export_button(new_html)
 
 def add_javascript(html):
     soup = BeautifulSoup(html, "lxml")
@@ -186,8 +170,6 @@ def add_javascript(html):
     soup.head.append(script)
     return soup.prettify()
 
-new_html = add_javascript(new_html)
-
 def save_new_html(html):
     root = tk.Tk()
     root.withdraw()
@@ -198,8 +180,6 @@ def save_new_html(html):
 
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(html)
-
-save_new_html(new_html)
 
 import tkinter as tk
 from tkinter import filedialog

@@ -9,6 +9,7 @@ def detect_encoding(file_path):
     return result["encoding"]
 
 def convert_to_utf8(src_file_path, dest_file_path, original_encoding):
+
     try:
         with open(src_file_path, "r", encoding=original_encoding) as f:
             content = f.read()
@@ -26,14 +27,15 @@ def convert_to_utf8(src_file_path, dest_file_path, original_encoding):
 def process_directory(directory):
     for root, _, files in os.walk(directory):
         for file in files:
-            if file.endswith(".cs"):
+            if file.endswith((".cpp", ".h", ".hpp", ".cs")):
                 file_path = Path(root) / file
                 original_encoding = detect_encoding(file_path)
                 if original_encoding.lower() != "utf-8":
-                    backup_file_path = file_path.with_suffix(".cs.back")
+                    backup_file_path = file_path.with_suffix(".back")
                     os.rename(file_path, backup_file_path)
                     convert_to_utf8(backup_file_path, file_path, original_encoding)
-                    print(f"Converted {file_path} from {original_encoding} to utf-8")
+                    print(f"Converted {original_encoding}  {file_path} to utf-8")
+                    #os.remove(backup_file_path)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

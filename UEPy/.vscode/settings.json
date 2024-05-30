@@ -1,0 +1,8 @@
+{
+    "python.autoComplete.extraPaths": [
+        "e:\\UEPlugins\\Intermediate\\PythonStub"
+    ],
+    "python.analysis.extraPaths": [
+        "e:\\UEPlugins\\Intermediate\\PythonStub"
+    ]
+}

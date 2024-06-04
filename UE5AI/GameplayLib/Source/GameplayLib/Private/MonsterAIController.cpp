@@ -12,7 +12,7 @@ AMonsterAIController::AMonsterAIController()
 {
     BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
-    // ÕâÀïÌæ»»ÎªÄã´´½¨µÄĞĞÎªÊ÷×ÊÔ´µÄÂ·¾¶
+    // è¿™é‡Œæ›¿æ¢ä¸ºä½ åˆ›å»ºçš„è¡Œä¸ºæ ‘èµ„æºçš„è·¯å¾„
 	/*static ConstructorHelpers::FObjectFinder<UBehaviorTree> BehaviorTreeAsset(TEXT("BehaviorTree'/Game/AI/MonsterBehaviorTree.MonsterBehaviorTree'"));
 	if (BehaviorTreeAsset.Succeeded())
 	{
@@ -41,7 +41,7 @@ void AMonsterAIController::Tick(float DeltaTime)
 
     // Check if the Monster is in Corpse state
     AMonsterCharacter* Monster = Cast<AMonsterCharacter>(GetPawn());
-    if (Monster && Monster->GetMovementState() == EMonsterMovementState::Corpse)
+    if (!Monster || Monster->GetMovementState() == EMonsterMovementState::Corpse)
     {
         // Do not respond to movement input in Corpse state
         return;
@@ -52,12 +52,8 @@ void AMonsterAIController::Tick(float DeltaTime)
     APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
     if (PlayerController != nullptr)
     {
-        APawn* PlayerPawn = PlayerController->GetPawn();
-        if (PlayerPawn != nullptr)
-        {
-            FVector PlayerLocation = PlayerPawn->GetActorLocation();
-            BlackboardComponent->SetValueAsVector(TEXT("PlayerLocation"), PlayerLocation);
-        }
+        FVector PlayerLocation = Monster->GetActorLocation();
+        BlackboardComponent->SetValueAsVector(TEXT("PlayerLocation"), PlayerLocation);
     }
 }
 

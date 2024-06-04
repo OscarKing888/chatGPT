@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AIController.h"
 #include "MonsterCharacter.generated.h"
 
 
@@ -27,6 +28,9 @@ class GAMEPLAYLIB_API AMonsterCharacter : public ACharacter
 public:
     AMonsterCharacter();
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Nav")
+    TWeakObjectPtr<ANavigationData> PreferredNavData;
+
     // Health variable
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Monster")
     float Health;
@@ -39,6 +43,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
 	TArray<AActor*> PatrolPoints;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
+	TObjectPtr<AActor> MoveToTargetActor;
     
 
     // Override the TakeDamage method
@@ -65,4 +72,15 @@ protected:
 private:
     // Add a new variable for the movement state
     EMonsterMovementState MovementState;
+};
+
+
+UCLASS(BlueprintType, Blueprintable)
+class ACustomNavAIController : public AAIController
+{
+    GENERATED_BODY()
+
+public:
+    
+    virtual void FindPathForMoveRequest(const FAIMoveRequest& MoveRequest, FPathFindingQuery& Query, FNavPathSharedPtr& OutPath) const override;
 };

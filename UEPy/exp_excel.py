@@ -46,7 +46,8 @@ for name, var_type, chinese_name in zip(variable_names, variable_types, variable
     # 使用unreal.StructureFactory添加新变量
     variable_type = var_type#getattr(unreal, var_type)
     print(f"Adding:{variable_type} -  {name} - {chinese_name}")
-    unreal.StructureFactory.add_variable(struct_class, name, variable_type, chinese_name)
+    #unreal.StructureFactory.add_variable(struct_class, name, variable_type, chinese_name)
+    unreal.EditorExBPLibrary.add_variable_to_struct(struct_class, name, variable_type, chinese_name)
 
 # 保存结构体
 unreal.EditorAssetLibrary.save_asset(f"{package_path}/{struct_name}")

@@ -26,7 +26,7 @@ file_name_without_ext = os.path.splitext(excel_filename)[0]  # 获取文件名�
 
 # 根据文件名生成struct_name和package_path
 struct_name = f"F{file_name_without_ext}Row"  # 生成Struct名称，例如FItemDataRow
-package_path = f"/Game/DataTable/{file_name_without_ext}"  # 生成路径，例如/Game/DataTable/ItemData
+package_path = f"/Game/DataTable/Struct/{file_name_without_ext}"  # 生成路径，例如/Game/DataTable/ItemData
 
 # 提取表格数据
 variable_names = df.iloc[0].tolist()  # 第一行应该是变量名
@@ -37,17 +37,24 @@ variable_chinese_names = df.iloc[2].tolist() if len(df) > 2 else [""] * len(vari
 asset_tools = unreal.AssetToolsHelpers.get_asset_tools()
 structure_factory = unreal.StructureFactory()
 
-# 在指定路径创建结构体
-struct_asset = asset_tools.create_asset(struct_name, package_path, None, structure_factory)
+if not unreal.EditorAssetLibrary.does_asset_exist(f"{package_path}/{struct_name}"):
+    # 资产不存在，创建新的资产
+    struct_asset = asset_tools.create_asset(struct_name, package_path, None, structure_factory)
+    
 struct_class = unreal.EditorAssetLibrary.load_asset(f"{package_path}/{struct_name}")
 
 # 为结构体添加成员变量
 for name, var_type, chinese_name in zip(variable_names, variable_types, variable_chinese_names):
     # 使用unreal.StructureFactory添加新变量
-    variable_type = var_type#getattr(unreal, var_type)
-    print(f"Adding:{variable_type} -  {name} - {chinese_name}")
-    #unreal.StructureFactory.add_variable(struct_class, name, variable_type, chinese_name)
-    unreal.EditorExBPLibrary.add_variable_to_struct(struct_class, name, variable_type, chinese_name)
+    variable_type = var_type#getattr(unreal, var_type)    
+    if not unreal.EditorExBPLibrary.has_variable_in_struct(struct_class, name):
+        print(f"====== Adding new var:{variable_type} -  {name} - {chinese_name}")
+        unreal.EditorExBPLibrary.add_variable_to_struct(struct_class, name, variable_type, chinese_name)
+
+
+# 删除MemberVar_0这个变量，初始创建的结构体会有这个变量
+if unreal.EditorExBPLibrary.has_variable_in_struct(struct_class, "MemberVar_0"):
+    unreal.EditorExBPLibrary.remove_variable_from_struct(struct_class, "MemberVar_0")
 
 # 保存结构体
 unreal.EditorAssetLibrary.save_asset(f"{package_path}/{struct_name}")

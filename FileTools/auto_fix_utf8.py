@@ -31,7 +31,7 @@ def process_directory(directory):
                 file_path = Path(root) / file
                 original_encoding = detect_encoding(file_path)
                 if original_encoding.lower() != "utf-8":
-                    backup_file_path = file_path.with_suffix(".back")
+                    backup_file_path = file_path.with_suffix(file_path.suffix + ".back")
                     os.rename(file_path, backup_file_path)
                     convert_to_utf8(backup_file_path, file_path, original_encoding)
                     print(f"Converted {original_encoding}  {file_path} to utf-8")

@@ -30,7 +30,7 @@ def export_excel(excel_path):
 
     # 根据文件名生成struct_name和package_path
     struct_name = f"F{file_name_without_ext}Row"  # 生成Struct名称，例如FItemDataRow
-    package_path = f"/Game/DataTable/Struct/{file_name_without_ext}"  # 生成路径，例如/Game/DataTable/ItemData
+    package_path = "/Game/DataTable/Struct"  # 生成路径，例如/Game/DataTable/ItemData
 
     # 提取表格数据
     variable_names = df.iloc[0].tolist()  # 第一行应该是变量名
@@ -71,6 +71,7 @@ def export_excel(excel_path):
 
 
 
+    package_path = "/Game/DataTable"
     # 创建Data Table
     data_table_name = f"{file_name_without_ext}DataTable"  # 生成Data Table名称，例如ItemDataDataTable
     data_table_path = f"{package_path}/{data_table_name}"

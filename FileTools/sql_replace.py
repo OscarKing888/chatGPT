@@ -14,7 +14,12 @@ def build_lookup_table(data):
         # Normalize the filename to handle different path separators
         normalized_filename = os.path.normpath(filename)
         code_blocks = entry['code_blocks']
-        lookup_table[normalized_filename] = code_blocks
+        
+        if normalized_filename in lookup_table:
+            print(f"Error: Duplicate filename detected in JSON data: {normalized_filename}")
+        else:
+            lookup_table[normalized_filename] = code_blocks
+
     return lookup_table
 
 def process_lua_file(file_path, code_blocks):

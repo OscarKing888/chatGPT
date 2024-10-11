@@ -76,12 +76,12 @@ def extract_lua(file_Path):
     code_blocks_json = []
     # If code_blocks is not empty, return the dict
     if len(code_blocks) > 0:
-        global find_count
-        find_count += 1
         # Optionally, print the filename and code_blocks
         print(f"{file_Path}====:")
         for block in code_blocks:
-            print(block)
+            print(block)            
+            global find_count
+            find_count += 1
             code_blocks_json.append({'old':block, 'new':None})
         return {'filename': file_Path, 'code_blocks': code_blocks_json}
     else:

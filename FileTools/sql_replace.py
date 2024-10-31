@@ -14,7 +14,7 @@ def build_lookup_table(data):
         # Normalize the filename to handle different path separators
         normalized_filename = os.path.normpath(filename)
         code_blocks = entry['code_blocks']
-        
+
         if normalized_filename in lookup_table:
             print(f"Error: Duplicate filename detected in JSON data: {normalized_filename}")
         else:
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     else:
         directory = sys.argv[1]
         
-    json_file = 'sql_results.json'
+    json_file = 'sql_extract_ok.json'
 
     if os.path.isdir(directory):
         try:

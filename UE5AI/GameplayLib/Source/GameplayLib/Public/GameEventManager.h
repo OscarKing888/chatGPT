@@ -11,11 +11,11 @@ struct FMessageData
 {
     GENERATED_BODY()
 
-    // ¿ÉÒÔÌí¼Ó±ØÒªµÄÊÂ¼şÊı¾İ³ÉÔ±
+    // å¯ä»¥æ·»åŠ å¿…è¦çš„äº‹ä»¶æ•°æ®æˆå‘˜
 };
 
 
-// ÉùÃ÷Ò»¸öÍ¨ÓÃµÄÊÂ¼şÀàĞÍ
+// å£°æ˜ä¸€ä¸ªé€šç”¨çš„äº‹ä»¶ç±»å‹
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGameEvent, const FMessageData&, Params);
 
 UCLASS()
@@ -24,19 +24,19 @@ class GAMEPLAYLIB_API UGameEventManager : public UBlueprintFunctionLibrary
     GENERATED_BODY()
 
 public:
-    // Ê¹ÓÃ¾²Ì¬º¯Êı×¢²áÊÂ¼ş
+    // ä½¿ç”¨é™æ€å‡½æ•°æ³¨å†Œäº‹ä»¶
     UFUNCTION(BlueprintCallable, Category = "Event Manager", meta = (DisplayName = "Register Event"))
         static void RegisterEvent(const FName& EventID, const FOnGameEvent& Callback);
 
-    // Ê¹ÓÃ¾²Ì¬º¯Êı×¢ÏúÊÂ¼ş
+    // ä½¿ç”¨é™æ€å‡½æ•°æ³¨é”€äº‹ä»¶
     UFUNCTION(BlueprintCallable, Category = "Event Manager")
         static void UnregisterEvent(const FName& EventID);
 
-    // Ê¹ÓÃ¾²Ì¬º¯Êı´¥·¢ÊÂ¼ş
+    // ä½¿ç”¨é™æ€å‡½æ•°è§¦å‘äº‹ä»¶
     UFUNCTION(BlueprintCallable, Category = "Event Manager")
         static void TriggerEvent(const FName& EventID, const FMessageData& Params);
 
 private:
-    // ´æ´¢ÊÂ¼ş¶©ÔÄÕßµÄTMap
+    // å­˜å‚¨äº‹ä»¶è®¢é˜…è€…çš„TMap
     static TMap<FName, FOnGameEvent> EventMap;
 };

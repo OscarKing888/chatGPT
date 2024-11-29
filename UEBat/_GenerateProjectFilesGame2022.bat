@@ -1,3 +1,8 @@
-call _SetEngineDir.bat
-"%EngineDir%\Binaries\DotNET\UnrealBuildTool.exe" -projectfiles -project=%prj% %GenGamePrjParams% -progress -2022
+setlocal enabledelayedexpansion
+ 
+call _SetEngineDir.bat %1
+@echo on
+"%EngineDir%\GenerateProjectFiles.bat" -projectfiles -project=%prj% %GenGamePrjParams% -progress -2022
+
+endlocal
 pause

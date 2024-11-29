@@ -1,3 +1,8 @@
-call _SetEngineDir.bat
-"%EngineDir%\GenerateProjectFiles.bat" -projectfiles -project=%prj% %GenGamePrjParams% -progress -2019
+setlocal enabledelayedexpansion
+ 
+call _SetEngineDir.bat %1
+@echo on
+"%EngineDir%\GenerateProjectFiles.bat" -projectfiles -project=%prj% %GenGamePrjParams% -progress -2019 -platform=Win64 -SkipPlatformModules=PS5
+
+endlocal
 pause

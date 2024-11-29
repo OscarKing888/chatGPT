@@ -1,2 +1,2 @@
 call _SetEngineDir.bat
-start "%EngineDir%\Engine\Engine\Binaries\Win64\%EngineExeDebug%" %1 %GameParams%
+start "%EngineDir%\Binaries\Win64\%EngineExeDebug%" %prj% %GameParams%

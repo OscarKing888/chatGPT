@@ -1,16 +1,18 @@
 @echo off
-
-rem è®¾ç½®å¼•æ“ç›®å½•
+rem ÉèÖÃÒıÇæÄ¿Â¼
 set EngineDir=%~dp0..\Engine
 
-rem è®¾ç½®æ˜¯å¦ä¸º UE5ï¼ˆ0 è¡¨ç¤º UE4ï¼Œ1 è¡¨ç¤º UE5ï¼‰
+rem ÉèÖÃÊÇ·ñÎª UE5£¨0 ±íÊ¾ UE4£¬1 ±íÊ¾ UE5£©
 set IsUE5=0
 
-rem å…¶å®ƒå‚æ•°
+rem ÓÎÏ·ºÍ±à¼­Æ÷Æô¶¯µÄÆäËü²ÎÊı
 set GameParams="-log -Game -Windowed -ResX=1920 -ResY=1080"
 set EditorParams="-log"
 
-rem æ ¹æ® IsUE5 çš„å€¼è®¾ç½®å¼•æ“å¯æ‰§è¡Œæ–‡ä»¶åç§°
+rem Éú³ÉÓÎÏ·¹¤³Ì²ÎÊı
+set GenGamePrjParams=-game -engine
+
+rem ¸ù¾İ IsUE5 µÄÖµÉèÖÃÒıÇæ¿ÉÖ´ĞĞÎÄ¼şÃû³Æ
 if "%IsUE5%"=="1" (
     set EngineExe=UnrealEditor.exe
     set EngineExeDebug=UnrealEditor-Win64-Debug.exe
@@ -19,7 +21,38 @@ if "%IsUE5%"=="1" (
     set EngineExeDebug=UE4Editor-Win64-Debug.exe
 )
 
-rem è¾“å‡ºç»“æœä»¥ä¾›éªŒè¯
-echo å¼•æ“ç›®å½•: %EngineDir%
-echo å¼•æ“å¯æ‰§è¡Œæ–‡ä»¶: %EngineExe%
-echo è°ƒè¯•å¯æ‰§è¡Œæ–‡ä»¶: %EngineExeDebug%
+rem ÆôÓÃÑÓ³ÙÀ©Õ¹£¬È·±£±äÁ¿ÔÚÑ­»·ÖĞ¸üĞÂ
+setlocal enabledelayedexpansion
+
+rem »ñÈ¡´«ÈëµÄ²ÎÊı
+set "prj=%~1"
+
+rem ¼ì²é²ÎÊıÊÇ·ñÎª¿Õ
+color 0C
+if "%prj%"=="" (    
+    echo ²ÎÊıÎª¿Õ£¬²éÕÒµ±Ç°Ä¿Â¼ÖĞµÄµÚÒ»¸ö .uproject ÎÄ¼ş...
+    
+    rem Ê¹ÓÃ for Ñ­»·²éÕÒµÚÒ»¸ö .uproject ÎÄ¼ş²¢ÉèÖÃ prj ±äÁ¿
+    for %%f in (*.uproject) do (
+        set "prj=%%~ff"
+        goto :found
+    )
+    echo µ±Ç°Ä¿Â¼ÖĞÎ´ÕÒµ½ .uproject ÎÄ¼ş¡£
+    exit /b 1
+)
+
+:found
+
+rem Êä³ö½á¹ûÒÔ¹©ÑéÖ¤
+color 0A
+echo ÉèÖÃ²ÎÊıÎª£º
+echo ====================================================================
+echo ÒıÇæÄ¿Â¼:        !EngineDir!
+echo ÒıÇæ¿ÉÖ´ĞĞÎÄ¼ş:  !EngineExe!
+echo µ÷ÊÔ¿ÉÖ´ĞĞÎÄ¼ş:  !EngineExeDebug!
+echo ÉèÖÃ prj Îª:     !prj!
+echo ====================================================================
+color 0F
+
+rem ½áÊøÑÓ³ÙÀ©Õ¹
+endlocal

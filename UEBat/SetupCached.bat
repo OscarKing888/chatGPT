@@ -1,2 +1,5 @@
-Setup.bat --cache=x:\UESetupCache418\
+set CachePath=x:\UESetupCache418\
+if exist "%CachePath%" (
+    Setup.bat --cache="%CachePath%"
+)
 pause

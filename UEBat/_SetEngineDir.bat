@@ -6,8 +6,8 @@ rem 设置是否为 UE5（0 表示 UE4，1 表示 UE5）
 set IsUE5=1
 
 rem 游戏和编辑器启动的其它参数
-set GameParams="-log -Game -Windowed -ResX=1920 -ResY=1080"
-set EditorParams="-log"
+set GameParams=-log -Game -Windowed -ResX=1920 -ResY=1080
+set EditorParams=-log
 
 rem 生成游戏工程参数 -engine带引擎源码
 set GenGamePrjParams=-game -rocket

@@ -1,6 +1,10 @@
 @echo off
 rem 设置引擎目录
-set EngineDir=%~dp0..\Engine
+rem set EngineDir=%~dp0..\Engine
+call _EngineDir.bat
+
+rem 设置为不空的值可以导致BAT执行完后暂停，以方便debug观察
+set PauseCmd=
 
 rem 设置是否为 UE5（0 表示 UE4，1 表示 UE5）
 set IsUE5=1

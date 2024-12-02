@@ -2,6 +2,13 @@ setlocal enabledelayedexpansion
  
 call _SetEngineDir.bat %1
 @echo on
-start %EngineDir%\Engine\Binaries\Win64\%EngineExe% %prj% %EditorParams%
+"%EngineDir%\Binaries\Win64\%EngineExe%" %prj% %EditorParams%
+
+if "%PauseCmd%"=="" (
+    timeout /t 5 >nul
+) else (
+    pause
+)
+
+
 endlocal
-pause

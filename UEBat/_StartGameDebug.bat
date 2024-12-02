@@ -2,6 +2,13 @@ setlocal enabledelayedexpansion
  
 call _SetEngineDir.bat %1
 @echo on
-start %EngineDir%\Engine\Binaries\Win64\%EngineExeDebug% %prj% %GameParams%
+"%EngineDir%\Binaries\Win64\%EngineExe%" %prj% %GameParams% -debug
+
+if "%PauseCmd%"=="" (
+    timeout /t 5 >nul
+) else (
+    pause
+)
+
+
 endlocal
-pause

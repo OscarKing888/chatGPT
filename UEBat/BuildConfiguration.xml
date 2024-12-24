@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration xmlns="https://www.unrealengine.com/BuildConfiguration">
+	<BuildConfiguration>
+        <!-- Enable support for UnrealBuildAccelerator -->
+        <bAllowUBAExecutor>true</bAllowUBAExecutor>
+		<bAllowFASTBuild>false</bAllowFASTBuild>
+    </BuildConfiguration>
+
+    <Horde>
+        <!-- Address of the Horde server -->
+        <Server>http://192.168.2.109:13340</Server>
+
+        <!-- Pool of machines to offload work to. Horde configures Win-UE5 by default. -->
+        <WindowsPool>Win-UE5</WindowsPool>
+    </Horde>
+
+    <UnrealBuildAccelerator>
+        <!-- Enable for visualizing UBA's progress (optional) -->
+        <bLaunchVisualizer>true</bLaunchVisualizer>
+		<!-- <bForceBuildAllRemote>true</bForceBuildAllRemote> -->
+    </UnrealBuildAccelerator>
+</Configuration>

@@ -5,6 +5,7 @@ import re
 import shutil
 import tempfile
 from zipfile import ZipFile
+import string
 
 def parse_page_ranges(page_ranges_str):
     """解析页面范围字符串，返回页面索引列表和范围分组"""
@@ -50,6 +51,56 @@ def parse_page_ranges(page_ranges_str):
         print(f"解析页面范围时出错：{str(e)}")
         return None, None
 
+def get_slide_title(slide):
+    """获取幻灯片的标题文本"""
+    title_text = ""
+    
+    # 查找标题形状
+    for shape in slide.shapes:
+        if hasattr(shape, "text"):
+            # 如果形状有文本，且文本不为空，我们假定它是标题
+            if shape.text.strip():
+                title_text = shape.text.strip()
+                break
+    
+    # 如果没找到标题，返回空字符串
+    return title_text
+
+def sanitize_filename(filename):
+    """清理文件名，将非法字符替换为下划线"""
+    # 替换换行符为短横线
+    filename = filename.replace('\n', '').replace('\r', '').replace('\x0b', '-')
+    
+    # 只保留可打印的ASCII字符和中文字符
+    result = ""
+    for char in filename:
+        # 检查是否是可打印的ASCII字符或中文字符
+        if char in string.printable or ord(char) > 127:
+            result += char
+        else:
+            result += '_'
+    
+    # 替换Windows文件名不允许的字符
+    invalid_chars = r'[\\/*?:"<>|]'
+    result = re.sub(invalid_chars, '_', result)
+    
+    # 移除开头和结尾的空格和点号
+    result = result.strip(" .")
+    
+    # 限制文件名长度
+    if len(result) > 150:
+        result = result[:147] + "..."
+    
+    # 如果文件名为空，返回默认值
+    if not result:
+        result = "untitled"
+    
+    # 打印调试信息
+    print(f"原始标题: {filename}")
+    print(f"处理后的文件名: {result}")
+    
+    return result
+
 def split_pptx(input_file, output_dir, page_ranges_str=None):
     """将PPTX文件按章节或指定页面范围切分"""
     if not os.path.exists(input_file):
@@ -91,13 +142,13 @@ def split_pptx(input_file, output_dir, page_ranges_str=None):
             
             # 如果是章节标题且不是第一页，保存当前章节
             if is_section_title and i > 0:
-                extract_slides(input_file, current_section[:-1], output_dir, base_name, section_count)
+                extract_slides(input_file, current_section[:-1], output_dir, base_name, section_count, prs)
                 current_section = [i]
                 section_count += 1
         
         # 保存最后一个章节
         if current_section:
-            extract_slides(input_file, current_section, output_dir, base_name, section_count)
+            extract_slides(input_file, current_section, output_dir, base_name, section_count, prs)
     else:
         # 检查页面范围是否有效
         if max(page_indices) >= total_slides:
@@ -107,41 +158,84 @@ def split_pptx(input_file, output_dir, page_ranges_str=None):
         print(f"准备切分 {len(range_groups)} 个章节")
         for i, range_group in enumerate(range_groups):
             print(f"切分章节 {i+1}，页面范围: {[idx+1 for idx in range_group]}")
-            extract_slides(input_file, range_group, output_dir, base_name, i)
+            extract_slides(input_file, range_group, output_dir, base_name, i, prs)
 
-def extract_slides(input_file, slide_indices, output_dir, base_name, section_count):
+def extract_slides(input_file, slide_indices, output_dir, base_name, section_count, prs=None):
     """提取指定索引的幻灯片并保存为新的PPTX文件"""
     if not slide_indices:
         print(f"章节 {section_count + 1} 没有有效的幻灯片，跳过")
         return
-        
+    
+    # 如果还没有加载演示文稿，现在加载
+    if prs is None:
+        prs = Presentation(input_file)
+    
+    # 获取第一页的标题作为文件名
+    first_slide_index = slide_indices[0]
+    if first_slide_index < len(prs.slides):
+        title_text = get_slide_title(prs.slides[first_slide_index])
+        if title_text:
+            section_name = sanitize_filename(title_text)
+        else:
+            section_name = f"section_{section_count + 1}"
+    else:
+        section_name = f"section_{section_count + 1}"
+    
     # 创建一个新的演示文稿
-    temp_pptx = os.path.join(output_dir, f"{base_name}_section_{section_count + 1}.pptx")
+    temp_pptx = os.path.join(output_dir, f"{base_name}_{section_name}.pptx")
     
-    # 复制原始文件
-    shutil.copy(input_file, temp_pptx)
-    
-    # 打开新文件
-    prs = Presentation(temp_pptx)
-    
-    # 获取要保留的幻灯片索引（倒序排列以避免删除影响索引）
-    keep_indices = sorted(slide_indices)
-    delete_indices = [i for i in range(len(prs.slides)) if i not in keep_indices]
-    delete_indices.sort(reverse=True)
-    
-    # 删除不需要的幻灯片
-    for idx in delete_indices:
-        if idx < len(prs.slides):
-            xml_slides = prs.slides._sldIdLst
-            slides = list(xml_slides)
-            xml_slides.remove(slides[idx])
-    
-    # 保存结果
     try:
-        prs.save(temp_pptx)
+        # 复制原始文件
+        shutil.copy(input_file, temp_pptx)
+        
+        # 打开新文件
+        new_prs = Presentation(temp_pptx)
+        
+        # 获取要保留的幻灯片索引（倒序排列以避免删除影响索引）
+        keep_indices = sorted(slide_indices)
+        delete_indices = [i for i in range(len(new_prs.slides)) if i not in keep_indices]
+        delete_indices.sort(reverse=True)
+        
+        # 删除不需要的幻灯片
+        for idx in delete_indices:
+            if idx < len(new_prs.slides):
+                xml_slides = new_prs.slides._sldIdLst
+                slides = list(xml_slides)
+                xml_slides.remove(slides[idx])
+        
+        # 保存结果
+        new_prs.save(temp_pptx)
         print(f"已保存章节 {section_count + 1} 到: {temp_pptx}")
     except Exception as e:
-        raise Exception(f"保存文件时出错：{str(e)}")
+        print(f"处理文件时出错：{str(e)}")
+        # 如果出错，尝试使用序号作为文件名
+        try:
+            fallback_name = f"{base_name}_section_{section_count + 1}.pptx"
+            temp_pptx = os.path.join(output_dir, fallback_name)
+            
+            # 复制原始文件
+            shutil.copy(input_file, temp_pptx)
+            
+            # 打开新文件
+            new_prs = Presentation(temp_pptx)
+            
+            # 获取要保留的幻灯片索引
+            keep_indices = sorted(slide_indices)
+            delete_indices = [i for i in range(len(new_prs.slides)) if i not in keep_indices]
+            delete_indices.sort(reverse=True)
+            
+            # 删除不需要的幻灯片
+            for idx in delete_indices:
+                if idx < len(new_prs.slides):
+                    xml_slides = new_prs.slides._sldIdLst
+                    slides = list(xml_slides)
+                    xml_slides.remove(slides[idx])
+            
+            # 保存结果
+            new_prs.save(temp_pptx)
+            print(f"使用备用文件名保存章节 {section_count + 1} 到: {temp_pptx}")
+        except Exception as e2:
+            raise Exception(f"保存文件时出错: {str(e2)}")
 
 def main():
     parser = argparse.ArgumentParser(description="PPTX文件切分工具")

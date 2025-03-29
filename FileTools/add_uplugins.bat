@@ -1,0 +1,1 @@
+python ./add_uplugins.py %1

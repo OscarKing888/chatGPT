@@ -1,0 +1,739 @@
+
+(resnet) C:\chatGPT\Resnet>train18m.bat --dataset STL10
+
+(resnet) C:\chatGPT\Resnet>python Resnet18.py --mode train --dataset STL10
+Memory allocated 1:0.0MB
+Using device: cuda
+batch_size:200, num_workers:2, pin_memory:True
+Files already downloaded and verified
+Files already downloaded and verified
+batch_size:200
+Memory allocated 1:42.67724609375MB
+used_dataset_name:STL10, use_scheduler:False, batch_size:200
+Memory allocated 1:42.67724609375MB
+Training:   0%|                                         | 0/100 [00:00<?, ?it/s]========= Train: 1 =========
+========= Test: 1 =========
+========= New Best: 1, Train Loss: 0.3601, Train Acc: 10.47%
+Epoch: 1, Train Loss: 0.0151, Train Acc: 15.16%, Test Loss: 0.3601, Test Acc: 10.47%
+Memory allocated 1:147.93408203125MB
+Training:   1%|▎                              | 1/100 [00:37<1:02:15, 37.73s/it]========= Train: 2 =========
+========= Test: 2 =========
+========= New Best: 2, Train Loss: 0.0104, Train Acc: 26.48%
+Epoch: 2, Train Loss: 0.0103, Train Acc: 23.98%, Test Loss: 0.0104, Test Acc: 26.48%
+Memory allocated 1:147.93408203125MB
+Training:   2%|▋                                | 2/100 [01:13<59:30, 36.43s/it]========= Train: 3 =========
+========= Test: 3 =========
+========= New Best: 3, Train Loss: 0.0088, Train Acc: 30.39%
+Epoch: 3, Train Loss: 0.0095, Train Acc: 28.90%, Test Loss: 0.0088, Test Acc: 30.39%
+Memory allocated 1:147.93408203125MB
+Training:   3%|▉                                | 3/100 [01:48<57:49, 35.77s/it]========= Train: 4 =========
+========= Test: 4 =========
+========= New Best: 4, Train Loss: 0.0087, Train Acc: 31.93%
+Epoch: 4, Train Loss: 0.0088, Train Acc: 31.34%, Test Loss: 0.0087, Test Acc: 31.93%
+Memory allocated 1:147.93408203125MB
+Training:   4%|█▎                               | 4/100 [02:23<57:01, 35.64s/it]========= Train: 5 =========
+========= Test: 5 =========
+========= New Best: 5, Train Loss: 0.0085, Train Acc: 32.69%
+Epoch: 5, Train Loss: 0.0086, Train Acc: 32.92%, Test Loss: 0.0085, Test Acc: 32.69%
+Memory allocated 1:147.93408203125MB
+Training:   5%|█▋                               | 5/100 [02:59<56:22, 35.60s/it]========= Train: 6 =========
+========= Test: 6 =========
+Epoch: 6, Train Loss: 0.0084, Train Acc: 33.46%, Test Loss: 0.0090, Test Acc: 31.70%
+Memory allocated 1:147.93408203125MB
+Training:   6%|█▉                               | 6/100 [03:34<55:36, 35.49s/it]========= Train: 7 =========
+========= Test: 7 =========
+========= New Best: 7, Train Loss: 0.0085, Train Acc: 33.31%
+Epoch: 7, Train Loss: 0.0083, Train Acc: 35.06%, Test Loss: 0.0085, Test Acc: 33.31%
+Memory allocated 1:147.93408203125MB
+Training:   7%|██▎                              | 7/100 [04:09<54:41, 35.29s/it]========= Train: 8 =========
+========= Test: 8 =========
+========= New Best: 8, Train Loss: 0.0082, Train Acc: 36.20%
+Epoch: 8, Train Loss: 0.0080, Train Acc: 36.76%, Test Loss: 0.0082, Test Acc: 36.20%
+Memory allocated 1:147.93408203125MB
+Training:   8%|██▋                              | 8/100 [04:44<53:59, 35.21s/it]========= Train: 9 =========
+========= Test: 9 =========
+========= New Best: 9, Train Loss: 0.0078, Train Acc: 38.50%
+Epoch: 9, Train Loss: 0.0078, Train Acc: 38.86%, Test Loss: 0.0078, Test Acc: 38.50%
+Memory allocated 1:147.93408203125MB
+Training:   9%|██▉                              | 9/100 [05:19<53:16, 35.13s/it]========= Train: 10 =========
+========= Test: 10 =========
+========= New Best: 10, Train Loss: 0.0078, Train Acc: 39.15%
+Epoch: 10, Train Loss: 0.0077, Train Acc: 40.66%, Test Loss: 0.0078, Test Acc: 39.15%
+Memory allocated 1:147.93408203125MB
+Training:  10%|███▏                            | 10/100 [05:55<52:56, 35.30s/it]========= Train: 11 =========
+========= Test: 11 =========
+========= New Best: 11, Train Loss: 0.0076, Train Acc: 40.69%
+Epoch: 11, Train Loss: 0.0075, Train Acc: 40.68%, Test Loss: 0.0076, Test Acc: 40.69%
+Memory allocated 1:147.93408203125MB
+Training:  11%|███▌                            | 11/100 [06:29<52:12, 35.20s/it]========= Train: 12 =========
+========= Test: 12 =========
+========= New Best: 12, Train Loss: 0.0075, Train Acc: 40.75%
+Epoch: 12, Train Loss: 0.0072, Train Acc: 44.16%, Test Loss: 0.0075, Test Acc: 40.75%
+Memory allocated 1:147.93408203125MB
+Training:  12%|███▊                            | 12/100 [07:05<51:33, 35.15s/it]========= Train: 13 =========
+========= Test: 13 =========
+========= New Best: 13, Train Loss: 0.0074, Train Acc: 42.54%
+Epoch: 13, Train Loss: 0.0072, Train Acc: 43.90%, Test Loss: 0.0074, Test Acc: 42.54%
+Memory allocated 1:147.93408203125MB
+Training:  13%|████▏                           | 13/100 [07:39<50:50, 35.06s/it]========= Train: 14 =========
+========= Test: 14 =========
+========= New Best: 14, Train Loss: 0.0073, Train Acc: 43.81%
+Epoch: 14, Train Loss: 0.0071, Train Acc: 44.72%, Test Loss: 0.0073, Test Acc: 43.81%
+Memory allocated 1:147.93408203125MB
+Training:  14%|████▍                           | 14/100 [08:14<50:13, 35.04s/it]========= Train: 15 =========
+========= Test: 15 =========
+========= New Best: 15, Train Loss: 0.0070, Train Acc: 47.30%
+Epoch: 15, Train Loss: 0.0068, Train Acc: 47.56%, Test Loss: 0.0070, Test Acc: 47.30%
+Memory allocated 1:147.93408203125MB
+Training:  15%|████▊                           | 15/100 [08:49<49:38, 35.04s/it]========= Train: 16 =========
+========= Test: 16 =========
+========= New Best: 16, Train Loss: 0.0068, Train Acc: 47.51%
+Epoch: 16, Train Loss: 0.0067, Train Acc: 48.36%, Test Loss: 0.0068, Test Acc: 47.51%
+Memory allocated 1:147.93408203125MB
+Training:  16%|█████                           | 16/100 [09:24<48:59, 35.00s/it]========= Train: 17 =========
+========= Test: 17 =========
+Epoch: 17, Train Loss: 0.0065, Train Acc: 50.10%, Test Loss: 0.0072, Test Acc: 47.27%
+Memory allocated 1:147.93408203125MB
+Training:  17%|█████▍                          | 17/100 [09:59<48:23, 34.98s/it]========= Train: 18 =========
+========= Test: 18 =========
+Epoch: 18, Train Loss: 0.0064, Train Acc: 52.12%, Test Loss: 0.0081, Test Acc: 40.21%
+Memory allocated 1:147.93408203125MB
+Training:  18%|█████▊                          | 18/100 [10:34<47:45, 34.94s/it]========= Train: 19 =========
+========= Test: 19 =========
+========= New Best: 19, Train Loss: 0.0065, Train Acc: 52.90%
+Epoch: 19, Train Loss: 0.0062, Train Acc: 53.34%, Test Loss: 0.0065, Test Acc: 52.90%
+Memory allocated 1:147.93408203125MB
+Training:  19%|██████                          | 19/100 [11:09<47:08, 34.91s/it]========= Train: 20 =========
+========= Test: 20 =========
+Epoch: 20, Train Loss: 0.0060, Train Acc: 55.18%, Test Loss: 0.0076, Test Acc: 45.30%
+Memory allocated 1:147.93408203125MB
+Training:  20%|██████▍                         | 20/100 [11:44<46:39, 35.00s/it]========= Train: 21 =========
+========= Test: 21 =========
+Epoch: 21, Train Loss: 0.0060, Train Acc: 54.14%, Test Loss: 0.0076, Test Acc: 49.05%
+Memory allocated 1:147.93408203125MB
+Training:  21%|██████▋                         | 21/100 [12:20<46:29, 35.31s/it]========= Train: 22 =========
+========= Test: 22 =========
+Epoch: 22, Train Loss: 0.0058, Train Acc: 56.48%, Test Loss: 0.0065, Test Acc: 52.66%
+Memory allocated 1:147.93408203125MB
+Training:  22%|███████                         | 22/100 [12:56<46:02, 35.41s/it]========= Train: 23 =========
+========= Test: 23 =========
+Epoch: 23, Train Loss: 0.0056, Train Acc: 57.90%, Test Loss: 0.0064, Test Acc: 51.85%
+Memory allocated 1:147.93408203125MB
+Training:  23%|███████▎                        | 23/100 [13:31<45:27, 35.43s/it]========= Train: 24 =========
+========= Test: 24 =========
+========= New Best: 24, Train Loss: 0.0063, Train Acc: 53.79%
+Epoch: 24, Train Loss: 0.0053, Train Acc: 60.70%, Test Loss: 0.0063, Test Acc: 53.79%
+Memory allocated 1:147.93408203125MB
+Training:  24%|███████▋                        | 24/100 [14:06<44:45, 35.33s/it]========= Train: 25 =========
+========= Test: 25 =========
+Epoch: 25, Train Loss: 0.0051, Train Acc: 62.64%, Test Loss: 0.0066, Test Acc: 52.49%
+Memory allocated 1:147.93408203125MB
+Training:  25%|████████                        | 25/100 [14:41<44:01, 35.22s/it]========= Train: 26 =========
+========= Test: 26 =========
+========= New Best: 26, Train Loss: 0.0065, Train Acc: 53.80%
+Epoch: 26, Train Loss: 0.0050, Train Acc: 63.34%, Test Loss: 0.0065, Test Acc: 53.80%
+Memory allocated 1:147.93408203125MB
+Training:  26%|████████▎                       | 26/100 [15:17<43:28, 35.25s/it]========= Train: 27 =========
+========= Test: 27 =========
+========= New Best: 27, Train Loss: 0.0062, Train Acc: 55.16%
+Epoch: 27, Train Loss: 0.0049, Train Acc: 63.36%, Test Loss: 0.0062, Test Acc: 55.16%
+Memory allocated 1:147.93408203125MB
+Training:  27%|████████▋                       | 27/100 [15:52<43:01, 35.36s/it]========= Train: 28 =========
+========= Test: 28 =========
+========= New Best: 28, Train Loss: 0.0063, Train Acc: 55.77%
+Epoch: 28, Train Loss: 0.0048, Train Acc: 64.78%, Test Loss: 0.0063, Test Acc: 55.77%
+Memory allocated 1:147.93408203125MB
+Training:  28%|████████▉                       | 28/100 [16:28<42:30, 35.43s/it]========= Train: 29 =========
+========= Test: 29 =========
+Epoch: 29, Train Loss: 0.0045, Train Acc: 67.30%, Test Loss: 0.0069, Test Acc: 53.86%
+Memory allocated 1:147.93408203125MB
+Training:  29%|█████████▎                      | 29/100 [17:04<41:59, 35.49s/it]========= Train: 30 =========
+========= Test: 30 =========
+Epoch: 30, Train Loss: 0.0044, Train Acc: 67.38%, Test Loss: 0.0071, Test Acc: 49.86%
+Memory allocated 1:147.93408203125MB
+Training:  30%|█████████▌                      | 30/100 [17:39<41:17, 35.39s/it]========= Train: 31 =========
+========= Test: 31 =========
+Epoch: 31, Train Loss: 0.0042, Train Acc: 69.08%, Test Loss: 0.0068, Test Acc: 55.05%
+Memory allocated 1:147.93408203125MB
+Training:  31%|█████████▉                      | 31/100 [18:14<40:39, 35.36s/it]========= Train: 32 =========
+========= Test: 32 =========
+========= New Best: 32, Train Loss: 0.0054, Train Acc: 61.26%
+Epoch: 32, Train Loss: 0.0042, Train Acc: 69.28%, Test Loss: 0.0054, Test Acc: 61.26%
+Memory allocated 1:147.93408203125MB
+Training:  32%|██████████▏                     | 32/100 [18:49<40:00, 35.30s/it]========= Train: 33 =========
+========= Test: 33 =========
+Epoch: 33, Train Loss: 0.0040, Train Acc: 71.14%, Test Loss: 0.0073, Test Acc: 51.39%
+Memory allocated 1:147.93408203125MB
+Training:  33%|██████████▌                     | 33/100 [19:24<39:22, 35.26s/it]========= Train: 34 =========
+========= Test: 34 =========
+Epoch: 34, Train Loss: 0.0037, Train Acc: 72.88%, Test Loss: 0.0060, Test Acc: 59.27%
+Memory allocated 1:147.93408203125MB
+Training:  34%|██████████▉                     | 34/100 [19:59<38:44, 35.22s/it]========= Train: 35 =========
+========= Test: 35 =========
+Epoch: 35, Train Loss: 0.0038, Train Acc: 72.16%, Test Loss: 0.0077, Test Acc: 52.90%
+Memory allocated 1:147.93408203125MB
+Training:  35%|███████████▏                    | 35/100 [20:35<38:06, 35.18s/it]========= Train: 36 =========
+========= Test: 36 =========
+Epoch: 36, Train Loss: 0.0036, Train Acc: 73.82%, Test Loss: 0.0071, Test Acc: 51.96%
+Memory allocated 1:147.93408203125MB
+Training:  36%|███████████▌                    | 36/100 [21:10<37:30, 35.17s/it]========= Train: 37 =========
+========= Test: 37 =========
+Epoch: 37, Train Loss: 0.0035, Train Acc: 74.54%, Test Loss: 0.0064, Test Acc: 58.76%
+Memory allocated 1:147.93408203125MB
+Training:  37%|███████████▊                    | 37/100 [21:45<36:50, 35.09s/it]========= Train: 38 =========
+========= Test: 38 =========
+Epoch: 38, Train Loss: 0.0034, Train Acc: 75.40%, Test Loss: 0.0062, Test Acc: 58.41%
+Memory allocated 1:147.93408203125MB
+Training:  38%|████████████▏                   | 38/100 [22:20<36:13, 35.05s/it]========= Train: 39 =========
+========= Test: 39 =========
+========= New Best: 39, Train Loss: 0.0055, Train Acc: 61.80%
+Epoch: 39, Train Loss: 0.0032, Train Acc: 76.42%, Test Loss: 0.0055, Test Acc: 61.80%
+Memory allocated 1:147.93408203125MB
+Training:  39%|████████████▍                   | 39/100 [22:55<35:36, 35.03s/it]========= Train: 40 =========
+========= Test: 40 =========
+Epoch: 40, Train Loss: 0.0033, Train Acc: 75.86%, Test Loss: 0.0063, Test Acc: 58.41%
+Memory allocated 1:147.93408203125MB
+Training:  40%|████████████▊                   | 40/100 [23:29<34:59, 34.99s/it]========= Train: 41 =========
+========= Test: 41 =========
+Epoch: 41, Train Loss: 0.0031, Train Acc: 77.28%, Test Loss: 0.0057, Test Acc: 61.59%
+Memory allocated 1:147.93408203125MB
+Training:  41%|█████████████                   | 41/100 [24:05<34:26, 35.02s/it]========= Train: 42 =========
+========= Test: 42 =========
+========= New Best: 42, Train Loss: 0.0054, Train Acc: 63.79%
+Epoch: 42, Train Loss: 0.0030, Train Acc: 78.96%, Test Loss: 0.0054, Test Acc: 63.79%
+Memory allocated 1:147.93408203125MB
+Training:  42%|█████████████▍                  | 42/100 [24:40<34:07, 35.30s/it]========= Train: 43 =========
+========= Test: 43 =========
+Epoch: 43, Train Loss: 0.0028, Train Acc: 79.94%, Test Loss: 0.0055, Test Acc: 63.58%
+Memory allocated 1:147.93408203125MB
+Training:  43%|█████████████▊                  | 43/100 [25:16<33:34, 35.34s/it]========= Train: 44 =========
+========= Test: 44 =========
+Epoch: 44, Train Loss: 0.0027, Train Acc: 80.82%, Test Loss: 0.0060, Test Acc: 60.70%
+Memory allocated 1:147.93408203125MB
+Training:  44%|██████████████                  | 44/100 [25:51<32:54, 35.26s/it]========= Train: 45 =========
+========= Test: 45 =========
+========= New Best: 45, Train Loss: 0.0054, Train Acc: 65.67%
+Epoch: 45, Train Loss: 0.0026, Train Acc: 81.10%, Test Loss: 0.0054, Test Acc: 65.67%
+Memory allocated 1:147.93408203125MB
+Training:  45%|██████████████▍                 | 45/100 [26:27<32:30, 35.46s/it]========= Train: 46 =========
+========= Test: 46 =========
+Epoch: 46, Train Loss: 0.0026, Train Acc: 81.42%, Test Loss: 0.0056, Test Acc: 62.02%
+Memory allocated 1:147.93408203125MB
+Training:  46%|██████████████▋                 | 46/100 [27:02<31:46, 35.31s/it]========= Train: 47 =========
+========= Test: 47 =========
+========= New Best: 47, Train Loss: 0.0050, Train Acc: 67.21%
+Epoch: 47, Train Loss: 0.0023, Train Acc: 83.12%, Test Loss: 0.0050, Test Acc: 67.21%
+Memory allocated 1:147.93408203125MB
+Training:  47%|███████████████                 | 47/100 [27:37<31:08, 35.26s/it]========= Train: 48 =========
+========= Test: 48 =========
+Epoch: 48, Train Loss: 0.0022, Train Acc: 83.90%, Test Loss: 0.0061, Test Acc: 62.77%
+Memory allocated 1:147.93408203125MB
+Training:  48%|███████████████▎                | 48/100 [28:12<30:27, 35.14s/it]========= Train: 49 =========
+========= Test: 49 =========
+Epoch: 49, Train Loss: 0.0022, Train Acc: 84.12%, Test Loss: 0.0058, Test Acc: 63.50%
+Memory allocated 1:147.93408203125MB
+Training:  49%|███████████████▋                | 49/100 [28:47<29:53, 35.16s/it]========= Train: 50 =========
+========= Test: 50 =========
+Epoch: 50, Train Loss: 0.0021, Train Acc: 85.48%, Test Loss: 0.0062, Test Acc: 62.62%
+Memory allocated 1:147.93408203125MB
+Training:  50%|████████████████                | 50/100 [29:23<29:25, 35.31s/it]========= Train: 51 =========
+========= Test: 51 =========
+Epoch: 51, Train Loss: 0.0020, Train Acc: 85.52%, Test Loss: 0.0053, Test Acc: 67.11%
+Memory allocated 1:147.93408203125MB
+Training:  51%|████████████████▎               | 51/100 [29:58<28:44, 35.19s/it]========= Train: 52 =========
+========= Test: 52 =========
+Epoch: 52, Train Loss: 0.0018, Train Acc: 87.78%, Test Loss: 0.0062, Test Acc: 63.84%
+Memory allocated 1:147.93408203125MB
+Training:  52%|████████████████▋               | 52/100 [30:33<28:07, 35.16s/it]========= Train: 53 =========
+========= Test: 53 =========
+========= New Best: 53, Train Loss: 0.0048, Train Acc: 69.81%
+Epoch: 53, Train Loss: 0.0016, Train Acc: 88.60%, Test Loss: 0.0048, Test Acc: 69.81%
+Memory allocated 1:147.93408203125MB
+Training:  53%|████████████████▉               | 53/100 [31:08<27:31, 35.14s/it]========= Train: 54 =========
+========= Test: 54 =========
+Epoch: 54, Train Loss: 0.0017, Train Acc: 88.02%, Test Loss: 0.0058, Test Acc: 65.54%
+Memory allocated 1:147.93408203125MB
+Training:  54%|█████████████████▎              | 54/100 [31:43<26:53, 35.07s/it]========= Train: 55 =========
+========= Test: 55 =========
+Epoch: 55, Train Loss: 0.0017, Train Acc: 88.42%, Test Loss: 0.0071, Test Acc: 59.66%
+Memory allocated 1:147.93408203125MB
+Training:  55%|█████████████████▌              | 55/100 [32:18<26:14, 34.99s/it]========= Train: 56 =========
+========= Test: 56 =========
+Epoch: 56, Train Loss: 0.0015, Train Acc: 89.14%, Test Loss: 0.0052, Test Acc: 69.11%
+Memory allocated 1:147.93408203125MB
+Training:  56%|█████████████████▉              | 56/100 [32:52<25:37, 34.94s/it]========= Train: 57 =========
+========= Test: 57 =========
+Epoch: 57, Train Loss: 0.0014, Train Acc: 91.08%, Test Loss: 0.0056, Test Acc: 69.00%
+Memory allocated 1:147.93408203125MB
+Training:  57%|██████████████████▏             | 57/100 [33:27<25:01, 34.91s/it]========= Train: 58 =========
+========= Test: 58 =========
+Epoch: 58, Train Loss: 0.0013, Train Acc: 91.26%, Test Loss: 0.0065, Test Acc: 65.51%
+Memory allocated 1:147.93408203125MB
+Training:  58%|██████████████████▌             | 58/100 [34:02<24:25, 34.89s/it]========= Train: 59 =========
+========= Test: 59 =========
+Epoch: 59, Train Loss: 0.0011, Train Acc: 92.76%, Test Loss: 0.0057, Test Acc: 68.19%
+Memory allocated 1:147.93408203125MB
+Training:  59%|██████████████████▉             | 59/100 [34:37<23:49, 34.87s/it]========= Train: 60 =========
+========= Test: 60 =========
+Epoch: 60, Train Loss: 0.0011, Train Acc: 92.46%, Test Loss: 0.0071, Test Acc: 63.65%
+Memory allocated 1:147.93408203125MB
+Training:  60%|███████████████████▏            | 60/100 [35:15<23:48, 35.72s/it]========= Train: 61 =========
+========= Test: 61 =========
+Epoch: 61, Train Loss: 0.0010, Train Acc: 92.80%, Test Loss: 0.0057, Test Acc: 68.51%
+Memory allocated 1:147.93408203125MB
+Training:  61%|███████████████████▌            | 61/100 [35:50<23:08, 35.61s/it]========= Train: 62 =========
+========= Test: 62 =========
+Epoch: 62, Train Loss: 0.0013, Train Acc: 90.70%, Test Loss: 0.0063, Test Acc: 67.15%
+Memory allocated 1:147.93408203125MB
+Training:  62%|███████████████████▊            | 62/100 [36:26<22:38, 35.75s/it]========= Train: 63 =========
+========= Test: 63 =========
+Epoch: 63, Train Loss: 0.0014, Train Acc: 90.56%, Test Loss: 0.0063, Test Acc: 63.30%
+Memory allocated 1:147.93408203125MB
+Training:  63%|████████████████████▏           | 63/100 [37:01<21:55, 35.54s/it]========= Train: 64 =========
+========= Test: 64 =========
+Epoch: 64, Train Loss: 0.0011, Train Acc: 92.86%, Test Loss: 0.0067, Test Acc: 65.45%
+Memory allocated 1:147.93408203125MB
+Training:  64%|████████████████████▍           | 64/100 [37:36<21:11, 35.32s/it]========= Train: 65 =========
+========= Test: 65 =========
+Epoch: 65, Train Loss: 0.0009, Train Acc: 94.54%, Test Loss: 0.0055, Test Acc: 69.06%
+Memory allocated 1:147.93408203125MB
+Training:  65%|████████████████████▊           | 65/100 [38:11<20:33, 35.24s/it]========= Train: 66 =========
+========= Test: 66 =========
+Epoch: 66, Train Loss: 0.0007, Train Acc: 95.80%, Test Loss: 0.0060, Test Acc: 68.84%
+Memory allocated 1:147.93408203125MB
+Training:  66%|█████████████████████           | 66/100 [38:48<20:13, 35.70s/it]========= Train: 67 =========
+========= Test: 67 =========
+Epoch: 67, Train Loss: 0.0007, Train Acc: 95.64%, Test Loss: 0.0064, Test Acc: 66.90%
+Memory allocated 1:147.93408203125MB
+Training:  67%|█████████████████████▍          | 67/100 [39:24<19:47, 35.98s/it]========= Train: 68 =========
+========= Test: 68 =========
+Epoch: 68, Train Loss: 0.0008, Train Acc: 94.88%, Test Loss: 0.0079, Test Acc: 62.70%
+Memory allocated 1:147.93408203125MB
+Training:  68%|█████████████████████▊          | 68/100 [40:00<19:12, 36.00s/it]========= Train: 69 =========
+========= Test: 69 =========
+Epoch: 69, Train Loss: 0.0008, Train Acc: 95.12%, Test Loss: 0.0062, Test Acc: 67.60%
+Memory allocated 1:147.93408203125MB
+Training:  69%|██████████████████████          | 69/100 [40:36<18:35, 35.97s/it]========= Train: 70 =========
+========= Test: 70 =========
+Epoch: 70, Train Loss: 0.0006, Train Acc: 96.20%, Test Loss: 0.0060, Test Acc: 67.76%
+Memory allocated 1:147.93408203125MB
+Training:  70%|██████████████████████▍         | 70/100 [41:12<17:59, 35.99s/it]========= Train: 71 =========
+========= Test: 71 =========
+Epoch: 71, Train Loss: 0.0005, Train Acc: 96.82%, Test Loss: 0.0077, Test Acc: 63.21%
+Memory allocated 1:147.93408203125MB
+Training:  71%|██████████████████████▋         | 71/100 [41:48<17:20, 35.86s/it]========= Train: 72 =========
+========= Test: 72 =========
+Epoch: 72, Train Loss: 0.0004, Train Acc: 97.50%, Test Loss: 0.0059, Test Acc: 69.46%
+Memory allocated 1:147.93408203125MB
+Training:  72%|███████████████████████         | 72/100 [42:20<16:15, 34.83s/it]========= Train: 73 =========
+========= Test: 73 =========
+Epoch: 73, Train Loss: 0.0004, Train Acc: 97.40%, Test Loss: 0.0063, Test Acc: 68.14%
+Memory allocated 1:147.93408203125MB
+Training:  73%|███████████████████████▎        | 73/100 [42:53<15:22, 34.16s/it]========= Train: 74 =========
+========= Test: 74 =========
+Epoch: 74, Train Loss: 0.0004, Train Acc: 97.70%, Test Loss: 0.0065, Test Acc: 68.04%
+Memory allocated 1:147.93408203125MB
+Training:  74%|███████████████████████▋        | 74/100 [43:26<14:36, 33.70s/it]========= Train: 75 =========
+========= Test: 75 =========
+Epoch: 75, Train Loss: 0.0005, Train Acc: 96.86%, Test Loss: 0.0064, Test Acc: 69.74%
+Memory allocated 1:147.93408203125MB
+Training:  75%|████████████████████████        | 75/100 [43:58<13:57, 33.48s/it]========= Train: 76 =========
+========= Test: 76 =========
+Epoch: 76, Train Loss: 0.0005, Train Acc: 97.10%, Test Loss: 0.0065, Test Acc: 67.97%
+Memory allocated 1:147.93408203125MB
+Training:  76%|████████████████████████▎       | 76/100 [44:31<13:13, 33.08s/it]========= Train: 77 =========
+========= Test: 77 =========
+Epoch: 77, Train Loss: 0.0004, Train Acc: 97.36%, Test Loss: 0.0078, Test Acc: 66.83%
+Memory allocated 1:147.93408203125MB
+Training:  77%|████████████████████████▋       | 77/100 [45:03<12:36, 32.90s/it]========= Train: 78 =========
+========= Test: 78 =========
+Epoch: 78, Train Loss: 0.0005, Train Acc: 96.42%, Test Loss: 0.0063, Test Acc: 68.76%
+Memory allocated 1:147.93408203125MB
+Training:  78%|████████████████████████▉       | 78/100 [45:36<12:04, 32.93s/it]========= Train: 79 =========
+========= Test: 79 =========
+Epoch: 79, Train Loss: 0.0006, Train Acc: 96.26%, Test Loss: 0.0065, Test Acc: 68.78%
+Memory allocated 1:147.93408203125MB
+Training:  79%|█████████████████████████▎      | 79/100 [46:09<11:32, 32.99s/it]========= Train: 80 =========
+========= Test: 80 =========
+========= New Best: 80, Train Loss: 0.0060, Train Acc: 69.89%
+Epoch: 80, Train Loss: 0.0005, Train Acc: 96.76%, Test Loss: 0.0060, Test Acc: 69.89%
+Memory allocated 1:147.93408203125MB
+Training:  80%|█████████████████████████▌      | 80/100 [46:44<11:11, 33.57s/it]========= Train: 81 =========
+========= Test: 81 =========
+========= New Best: 81, Train Loss: 0.0060, Train Acc: 70.56%
+Epoch: 81, Train Loss: 0.0005, Train Acc: 97.10%, Test Loss: 0.0060, Test Acc: 70.56%
+Memory allocated 1:147.93408203125MB
+Training:  81%|█████████████████████████▉      | 81/100 [47:20<10:50, 34.24s/it]========= Train: 82 =========
+========= Test: 82 =========
+Epoch: 82, Train Loss: 0.0004, Train Acc: 97.78%, Test Loss: 0.0064, Test Acc: 70.45%
+Memory allocated 1:147.93408203125MB
+Training:  82%|██████████████████████████▏     | 82/100 [48:07<11:24, 38.02s/it]========= Train: 83 =========
+========= Test: 83 =========
+Epoch: 83, Train Loss: 0.0004, Train Acc: 97.48%, Test Loss: 0.0065, Test Acc: 68.65%
+Memory allocated 1:147.93408203125MB
+Training:  83%|██████████████████████████▌     | 83/100 [48:47<10:57, 38.69s/it]========= Train: 84 =========
+========= Test: 84 =========
+========= New Best: 84, Train Loss: 0.0058, Train Acc: 72.72%
+Epoch: 84, Train Loss: 0.0004, Train Acc: 97.88%, Test Loss: 0.0058, Test Acc: 72.72%
+Memory allocated 1:147.93408203125MB
+Training:  84%|██████████████████████████▉     | 84/100 [49:35<11:05, 41.60s/it]========= Train: 85 =========
+========= Test: 85 =========
+Epoch: 85, Train Loss: 0.0004, Train Acc: 97.88%, Test Loss: 0.0060, Test Acc: 70.42%
+Memory allocated 1:147.93408203125MB
+Training:  85%|███████████████████████████▏    | 85/100 [50:10<09:52, 39.51s/it]========= Train: 86 =========
+========= Test: 86 =========
+Epoch: 86, Train Loss: 0.0004, Train Acc: 97.88%, Test Loss: 0.0059, Test Acc: 70.30%
+Memory allocated 1:147.93408203125MB
+Training:  86%|███████████████████████████▌    | 86/100 [50:46<08:57, 38.37s/it]========= Train: 87 =========
+========= Test: 87 =========
+Epoch: 87, Train Loss: 0.0004, Train Acc: 97.70%, Test Loss: 0.0073, Test Acc: 64.90%
+Memory allocated 1:147.93408203125MB
+Training:  87%|███████████████████████████▊    | 87/100 [51:23<08:13, 37.98s/it]========= Train: 88 =========
+========= Test: 88 =========
+Epoch: 88, Train Loss: 0.0003, Train Acc: 98.40%, Test Loss: 0.0060, Test Acc: 69.95%
+Memory allocated 1:147.93408203125MB
+Training:  88%|████████████████████████████▏   | 88/100 [52:01<07:37, 38.16s/it]========= Train: 89 =========
+========= Test: 89 =========
+Epoch: 89, Train Loss: 0.0002, Train Acc: 98.72%, Test Loss: 0.0058, Test Acc: 70.67%
+Memory allocated 1:147.93408203125MB
+Training:  89%|████████████████████████████▍   | 89/100 [52:43<07:11, 39.23s/it]========= Train: 90 =========
+========= Test: 90 =========
+Epoch: 90, Train Loss: 0.0002, Train Acc: 99.02%, Test Loss: 0.0068, Test Acc: 68.26%
+Memory allocated 1:147.93408203125MB
+Training:  90%|████████████████████████████▊   | 90/100 [53:26<06:43, 40.32s/it]========= Train: 91 =========
+========= Test: 91 =========
+Epoch: 91, Train Loss: 0.0002, Train Acc: 99.08%, Test Loss: 0.0064, Test Acc: 70.90%
+Memory allocated 1:147.93408203125MB
+Training:  91%|█████████████████████████████   | 91/100 [54:06<06:02, 40.25s/it]========= Train: 92 =========
+========= Test: 92 =========
+Epoch: 92, Train Loss: 0.0002, Train Acc: 98.86%, Test Loss: 0.0064, Test Acc: 69.51%
+Memory allocated 1:147.93408203125MB
+Training:  92%|█████████████████████████████▍  | 92/100 [54:39<05:04, 38.11s/it]========= Train: 93 =========
+========= Test: 93 =========
+Epoch: 93, Train Loss: 0.0002, Train Acc: 98.96%, Test Loss: 0.0060, Test Acc: 70.40%
+Memory allocated 1:147.93408203125MB
+Training:  93%|█████████████████████████████▊  | 93/100 [55:12<04:15, 36.56s/it]========= Train: 94 =========
+========= Test: 94 =========
+Epoch: 94, Train Loss: 0.0002, Train Acc: 99.32%, Test Loss: 0.0059, Test Acc: 71.56%
+Memory allocated 1:147.93408203125MB
+Training:  94%|██████████████████████████████  | 94/100 [55:50<03:42, 37.05s/it]========= Train: 95 =========
+========= Test: 95 =========
+Epoch: 95, Train Loss: 0.0001, Train Acc: 99.56%, Test Loss: 0.0065, Test Acc: 68.62%
+Memory allocated 1:147.93408203125MB
+Training:  95%|██████████████████████████████▍ | 95/100 [56:29<03:07, 37.55s/it]========= Train: 96 =========
+========= Test: 96 =========
+========= New Best: 96, Train Loss: 0.0056, Train Acc: 73.47%
+Epoch: 96, Train Loss: 0.0001, Train Acc: 99.62%, Test Loss: 0.0056, Test Acc: 73.47%
+Memory allocated 1:147.93408203125MB
+Training:  96%|██████████████████████████████▋ | 96/100 [57:05<02:27, 36.95s/it]========= Train: 97 =========
+========= Test: 97 =========
+========= New Best: 97, Train Loss: 0.0050, Train Acc: 75.97%
+Epoch: 97, Train Loss: 0.0001, Train Acc: 99.88%, Test Loss: 0.0050, Test Acc: 75.97%
+Memory allocated 1:147.93408203125MB
+Training:  97%|███████████████████████████████ | 97/100 [57:41<01:50, 36.73s/it]========= Train: 98 =========
+========= Test: 98 =========
+========= New Best: 98, Train Loss: 0.0048, Train Acc: 76.10%
+Epoch: 98, Train Loss: 0.0001, Train Acc: 99.84%, Test Loss: 0.0048, Test Acc: 76.10%
+Memory allocated 1:147.93408203125MB
+Training:  98%|███████████████████████████████▎| 98/100 [58:17<01:13, 36.65s/it]========= Train: 99 =========
+========= Test: 99 =========
+Epoch: 99, Train Loss: 0.0000, Train Acc: 99.94%, Test Loss: 0.0054, Test Acc: 74.06%
+Memory allocated 1:147.93408203125MB
+Training:  99%|███████████████████████████████▋| 99/100 [58:55<00:36, 36.94s/it]========= Train: 100 =========
+========= Test: 100 =========
+========= New Best: 100, Train Loss: 0.0044, Train Acc: 76.72%
+Epoch: 100, Train Loss: 0.0000, Train Acc: 100.00%, Test Loss: 0.0044, Test Acc: 76.72%
+Memory allocated 1:147.93408203125MB
+Training: 100%|███████████████████████████████| 100/100 [59:31<00:00, 35.71s/it]
+
+Training Report:
+Epoch     Train Loss     Train Acc      Test Loss      Test Acc
+---------------------------------------------------------------
+1         0.0151         15.16          0.3601         10.47
+2         0.0103         23.98          0.0104         26.48
+3         0.0095         28.90          0.0088         30.39
+4         0.0088         31.34          0.0087         31.93
+5         0.0086         32.92          0.0085         32.69
+6         0.0084         33.46          0.0090         31.70
+7         0.0083         35.06          0.0085         33.31
+8         0.0080         36.76          0.0082         36.20
+9         0.0078         38.86          0.0078         38.50
+10        0.0077         40.66          0.0078         39.15
+11        0.0075         40.68          0.0076         40.69
+12        0.0072         44.16          0.0075         40.75
+13        0.0072         43.90          0.0074         42.54
+14        0.0071         44.72          0.0073         43.81
+15        0.0068         47.56          0.0070         47.30
+16        0.0067         48.36          0.0068         47.51
+17        0.0065         50.10          0.0072         47.27
+18        0.0064         52.12          0.0081         40.21
+19        0.0062         53.34          0.0065         52.90
+20        0.0060         55.18          0.0076         45.30
+21        0.0060         54.14          0.0076         49.05
+22        0.0058         56.48          0.0065         52.66
+23        0.0056         57.90          0.0064         51.85
+24        0.0053         60.70          0.0063         53.79
+25        0.0051         62.64          0.0066         52.49
+26        0.0050         63.34          0.0065         53.80
+27        0.0049         63.36          0.0062         55.16
+28        0.0048         64.78          0.0063         55.77
+29        0.0045         67.30          0.0069         53.86
+30        0.0044         67.38          0.0071         49.86
+31        0.0042         69.08          0.0068         55.05
+32        0.0042         69.28          0.0054         61.26
+33        0.0040         71.14          0.0073         51.39
+34        0.0037         72.88          0.0060         59.27
+35        0.0038         72.16          0.0077         52.90
+36        0.0036         73.82          0.0071         51.96
+37        0.0035         74.54          0.0064         58.76
+38        0.0034         75.40          0.0062         58.41
+39        0.0032         76.42          0.0055         61.80
+40        0.0033         75.86          0.0063         58.41
+41        0.0031         77.28          0.0057         61.59
+42        0.0030         78.96          0.0054         63.79
+43        0.0028         79.94          0.0055         63.58
+44        0.0027         80.82          0.0060         60.70
+45        0.0026         81.10          0.0054         65.67
+46        0.0026         81.42          0.0056         62.02
+47        0.0023         83.12          0.0050         67.21
+48        0.0022         83.90          0.0061         62.77
+49        0.0022         84.12          0.0058         63.50
+50        0.0021         85.48          0.0062         62.62
+51        0.0020         85.52          0.0053         67.11
+52        0.0018         87.78          0.0062         63.84
+53        0.0016         88.60          0.0048         69.81
+54        0.0017         88.02          0.0058         65.54
+55        0.0017         88.42          0.0071         59.66
+56        0.0015         89.14          0.0052         69.11
+57        0.0014         91.08          0.0056         69.00
+58        0.0013         91.26          0.0065         65.51
+59        0.0011         92.76          0.0057         68.19
+60        0.0011         92.46          0.0071         63.65
+61        0.0010         92.80          0.0057         68.51
+62        0.0013         90.70          0.0063         67.15
+63        0.0014         90.56          0.0063         63.30
+64        0.0011         92.86          0.0067         65.45
+65        0.0009         94.54          0.0055         69.06
+66        0.0007         95.80          0.0060         68.84
+67        0.0007         95.64          0.0064         66.90
+68        0.0008         94.88          0.0079         62.70
+69        0.0008         95.12          0.0062         67.60
+70        0.0006         96.20          0.0060         67.76
+71        0.0005         96.82          0.0077         63.21
+72        0.0004         97.50          0.0059         69.46
+73        0.0004         97.40          0.0063         68.14
+74        0.0004         97.70          0.0065         68.04
+75        0.0005         96.86          0.0064         69.74
+76        0.0005         97.10          0.0065         67.97
+77        0.0004         97.36          0.0078         66.83
+78        0.0005         96.42          0.0063         68.76
+79        0.0006         96.26          0.0065         68.78
+80        0.0005         96.76          0.0060         69.89
+81        0.0005         97.10          0.0060         70.56
+82        0.0004         97.78          0.0064         70.45
+83        0.0004         97.48          0.0065         68.65
+84        0.0004         97.88          0.0058         72.72
+85        0.0004         97.88          0.0060         70.42
+86        0.0004         97.88          0.0059         70.30
+87        0.0004         97.70          0.0073         64.90
+88        0.0003         98.40          0.0060         69.95
+89        0.0002         98.72          0.0058         70.67
+90        0.0002         99.02          0.0068         68.26
+91        0.0002         99.08          0.0064         70.90
+92        0.0002         98.86          0.0064         69.51
+93        0.0002         98.96          0.0060         70.40
+94        0.0002         99.32          0.0059         71.56
+95        0.0001         99.56          0.0065         68.62
+96        0.0001         99.62          0.0056         73.47
+97        0.0001         99.88          0.0050         75.97
+98        0.0001         99.84          0.0048         76.10
+99        0.0000         99.94          0.0054         74.06
+100       0.0000         100.00         0.0044         76.72          *
+
+(resnet) C:\chatGPT\Resnet>predict18M.bat --dataset STL10
+
+(resnet) C:\chatGPT\Resnet>python Resnet18.py --mode predict --dataset STL10
+Memory allocated 1:0.0MB
+Using device: cuda
+batch_size:200, num_workers:2, pin_memory:True
+Files already downloaded and verified
+Files already downloaded and verified
+batch_size:200
+Memory allocated 1:42.67724609375MB
+used_dataset_name:STL10, use_scheduler:False, batch_size:200
+Processing images: 100%|████████████████████████| 98/98 [00:02<00:00, 39.45it/s]
+
+Prediction Report:
+Image Filename                Predicted Class     Class Name          Hit
+1boy.png                      5                   dog                 ?
+1gir2.png                     5                   dog                 ?
+1gir3.png                     3                   cat                 ?
+1girl.png                     5                   dog                 ?
+app_icon_dog.png              1                   bird                dog
+cat1.jpg                      3                   cat                 cat
+cat1.png                      5                   dog                 cat
+cat2.jpg                      3                   cat                 cat
+cat2.png                      5                   dog                 cat
+cat22.jpg                     3                   cat                 cat
+cat3.jpg                      3                   cat                 cat
+cat3.png                      3                   cat                 cat
+cat4.jpg                      0                   airplane            cat
+cat4.png                      5                   dog                 cat
+cat5.jpg                      3                   cat                 cat
+cat5.png                      5                   dog                 cat
+cat6.jpg                      5                   dog                 cat
+cat6.png                      3                   cat                 cat
+cat7.jpg                      3                   cat                 cat
+cat7.png                      3                   cat                 cat
+cat8.png                      5                   dog                 cat
+cat9.png                      3                   cat                 cat
+catface.jpg                   3                   cat                 cat
+catface2.jpg                  6                   horse               cat
+dog1.jpg                      5                   dog                 dog
+dog1.png                      5                   dog                 dog
+dog11.png                     4                   deer                dog
+dog1234.jpg                   6                   horse               dog
+dog13.png                     2                   car                 dog
+dog15.png                     2                   car                 dog
+dog17.png                     2                   car                 dog
+dog19.png                     2                   car                 dog
+dog2.jpg                      5                   dog                 dog
+dog2.png                      1                   bird                dog
+dog21.png                     2                   car                 dog
+dog22.jpg                     5                   dog                 dog
+dog23.png                     9                   truck               dog
+dog25.png                     2                   car                 dog
+dog27.png                     2                   car                 dog
+dog29.png                     2                   car                 dog
+dog3.jpg                      5                   dog                 dog
+dog3.png                      2                   car                 dog
+dog31.png                     4                   deer                dog
+dog33.png                     6                   horse               dog
+dog35.png                     2                   car                 dog
+dog37.png                     6                   horse               dog
+dog39.png                     2                   car                 dog
+dog4.jpg                      1                   bird                dog
+dog4.png                      2                   car                 dog
+dog41.png                     2                   car                 dog
+dog43.png                     4                   deer                dog
+dog45.png                     2                   car                 dog
+dog47.png                     2                   car                 dog
+dog49.png                     2                   car                 dog
+dog5.jpg                      5                   dog                 dog
+dog5.png                      2                   car                 dog
+dog51.png                     2                   car                 dog
+dog53.png                     2                   car                 dog
+dog55.png                     5                   dog                 dog
+dog57.png                     5                   dog                 dog
+dog59.png                     2                   car                 dog
+dog6.jpg                      1                   bird                dog
+dog61.png                     2                   car                 dog
+dog63.png                     2                   car                 dog
+dog65.png                     2                   car                 dog
+dog67.png                     4                   deer                dog
+dog69.png                     1                   bird                dog
+dog7.jpg                      1                   bird                dog
+dog71.png                     2                   car                 dog
+dog73.png                     6                   horse               dog
+dog75.png                     1                   bird                dog
+dog77.png                     2                   car                 dog
+dog79.png                     2                   car                 dog
+dog81.png                     2                   car                 dog
+dog83.png                     2                   car                 dog
+dog85.png                     8                   ship                dog
+dog87.png                     2                   car                 dog
+dog89.png                     2                   car                 dog
+dog91.png                     4                   deer                dog
+dog93.png                     2                   car                 dog
+dog95.png                     4                   deer                dog
+dog97.png                     2                   car                 dog
+dog99.png                     2                   car                 dog
+dogblack.jpg                  6                   horse               dog
+dogface.jpg                   5                   dog                 dog
+dog_博美.jpg                  5                   dog                 dog
+dog_吉娃娃.png                5                   dog                 dog
+dog_喜乐蒂牧羊犬.jpg          5                   dog                 dog
+dog_松狮.jpg                  7                   monkey              dog
+dog_比利时牧羊犬1.jpg         5                   dog                 dog
+dog_比利时牧羊犬2.jpg         5                   dog                 dog
+dog_比利时牧羊犬3.jpg         5                   dog                 dog
+dog_边境牧羊犬.jpg            5                   dog                 dog
+dog_阿拉斯加犬1.jpg           5                   dog                 dog
+dog_阿拉斯加犬2.jpg           5                   dog                 dog
+dog_黑背.jpg                  6                   horse               dog
+long_file_04763-3000479037-...1                   bird                ?
+mech.png                      1                   bird                ?
+
+Prediction Report of err?:
+Image Filename                Predicted Class     Class Name          Hit
+1boy.png                      5                   dog                 ?
+1gir2.png                     5                   dog                 ?
+1gir3.png                     3                   cat                 ?
+1girl.png                     5                   dog                 ?
+app_icon_dog.png              1                   bird                dog
+cat1.png                      5                   dog                 cat
+cat2.png                      5                   dog                 cat
+cat4.jpg                      0                   airplane            cat
+cat4.png                      5                   dog                 cat
+cat5.png                      5                   dog                 cat
+cat6.jpg                      5                   dog                 cat
+cat8.png                      5                   dog                 cat
+catface2.jpg                  6                   horse               cat
+dog11.png                     4                   deer                dog
+dog1234.jpg                   6                   horse               dog
+dog13.png                     2                   car                 dog
+dog15.png                     2                   car                 dog
+dog17.png                     2                   car                 dog
+dog19.png                     2                   car                 dog
+dog2.png                      1                   bird                dog
+dog21.png                     2                   car                 dog
+dog23.png                     9                   truck               dog
+dog25.png                     2                   car                 dog
+dog27.png                     2                   car                 dog
+dog29.png                     2                   car                 dog
+dog3.png                      2                   car                 dog
+dog31.png                     4                   deer                dog
+dog33.png                     6                   horse               dog
+dog35.png                     2                   car                 dog
+dog37.png                     6                   horse               dog
+dog39.png                     2                   car                 dog
+dog4.jpg                      1                   bird                dog
+dog4.png                      2                   car                 dog
+dog41.png                     2                   car                 dog
+dog43.png                     4                   deer                dog
+dog45.png                     2                   car                 dog
+dog47.png                     2                   car                 dog
+dog49.png                     2                   car                 dog
+dog5.png                      2                   car                 dog
+dog51.png                     2                   car                 dog
+dog53.png                     2                   car                 dog
+dog59.png                     2                   car                 dog
+dog6.jpg                      1                   bird                dog
+dog61.png                     2                   car                 dog
+dog63.png                     2                   car                 dog
+dog65.png                     2                   car                 dog
+dog67.png                     4                   deer                dog
+dog69.png                     1                   bird                dog
+dog7.jpg                      1                   bird                dog
+dog71.png                     2                   car                 dog
+dog73.png                     6                   horse               dog
+dog75.png                     1                   bird                dog
+dog77.png                     2                   car                 dog
+dog79.png                     2                   car                 dog
+dog81.png                     2                   car                 dog
+dog83.png                     2                   car                 dog
+dog85.png                     8                   ship                dog
+dog87.png                     2                   car                 dog
+dog89.png                     2                   car                 dog
+dog91.png                     4                   deer                dog
+dog93.png                     2                   car                 dog
+dog95.png                     4                   deer                dog
+dog97.png                     2                   car                 dog
+dog99.png                     2                   car                 dog
+dogblack.jpg                  6                   horse               dog
+dog_松狮.jpg                  7                   monkey              dog
+dog_黑背.jpg                  6                   horse               dog
+long_file_04763-3000479037-...1                   bird                ?
+mech.png                      1                   bird                ?
+
+(resnet) C:\chatGPT\Resnet>

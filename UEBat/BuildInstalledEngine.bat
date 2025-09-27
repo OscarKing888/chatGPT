@@ -17,14 +17,18 @@ rem 运行 AutomationTool 进行构建
 call "%ENGINE_ROOT%Engine\Build\BatchFiles\RunUAT.bat" BuildGraph ^
     -target="Make Installed Build Win64" ^
     -script="%ENGINE_ROOT%Engine\Build\InstalledEngineBuild.xml" ^
-    -set:WithDDC=false ^
+    -set:WithDDC=true ^
     -set:SignExecutables=false ^
     -set:EmbedSrcSrvInfo=false ^
     -set:GameConfigurations=Development ^
     -set:WithFullDebugInfo=false ^
     -set:HostPlatformEditorOnly=false ^
     -set:AnalyticsTypeOverride= ^
-    -set:BuildDir=%OUTPUT_DIR%
+    -set:BuildDir=%OUTPUT_DIR% ^
+    -set:WithServer=true ^
+    -set:WithClient=true ^
+    -set:HostPlatformDDCOnly=true ^    
+
 
 if %ERRORLEVEL% neq 0 (
     echo 构建失败！
@@ -32,3 +36,5 @@ if %ERRORLEVEL% neq 0 (
 )
 
 echo 构建成功！已生成已安装版本于：%OUTPUT_DIR%
+
+pause

@@ -1,0 +1,1 @@
+"/Volumes/USB_2T/UE561/LocalBuilds/Engine/Mac/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh"  -project="/Volumes/USB_2T/SoccerBallGit/SoccerBallGame/SoccerBallGame.uproject" -game  -vscode

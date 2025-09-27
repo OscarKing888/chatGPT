@@ -1,24 +1,23 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <Configuration xmlns="https://www.unrealengine.com/BuildConfiguration">
-	<BuildConfiguration>
-        <!-- Enable support for UnrealBuildAccelerator -->
-        <bAllowUBAExecutor>true</bAllowUBAExecutor>
+  <BuildConfiguration>
+    <!-- 允许 UBA 执行器，并把远端执行优先级设为 UBA -->
+    <bAllowUBAExecutor>true</bAllowUBAExecutor>
 		<bAllowFASTBuild>false</bAllowFASTBuild>
-    </BuildConfiguration>
+  </BuildConfiguration>
 
-    <Horde>
-        <!-- Address of the Horde server -->
-        <Server>http://192.168.2.109:13340</Server>
+  <Horde>
+    <Server>http://192.168.2.113:13340</Server>
+    <WindowsPool>Win-UE5</WindowsPool>
+    <MaxCores>128</MaxCores>
+    <!-- 可选：多地域/自动选择集群时使用 -->
+    <!-- <Cluster>_auto</Cluster> -->
+  </Horde>
 
-        <!-- Pool of machines to offload work to. Horde configures Win-UE5 by default. -->
-        <WindowsPool>Win-UE5</WindowsPool>
-    </Horde>
-
-    <UnrealBuildAccelerator>
-		<bLinkRemote>true</bLinkRemote>
-		<bPrintSummary>true</bPrintSummary>
-        <!-- Enable for visualizing UBA's progress (optional) -->
-        <bLaunchVisualizer>true</bLaunchVisualizer>
-		<!-- <bForceBuildAllRemote>true</bForceBuildAllRemote> -->
-    </UnrealBuildAccelerator>
+  <UnrealBuildAccelerator>
+    <StoreCapacityGb>60</StoreCapacityGb>
+    <bLaunchVisualizer>true</bLaunchVisualizer>
+    <!-- 仅测试时可强制所有编译都走远程： -->
+    <bForceBuildAllRemote>false</bForceBuildAllRemote>
+  </UnrealBuildAccelerator>
 </Configuration>

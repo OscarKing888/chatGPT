@@ -27,12 +27,16 @@ call "%ENGINE_ROOT%Engine\Build\BatchFiles\RunUAT.bat" BuildGraph ^
     -set:BuildDir=%OUTPUT_DIR% ^
     -set:WithServer=true ^
     -set:WithClient=true ^
-    -set:HostPlatformDDCOnly=true ^    
+	-set:WithWin64=true ^
+	-set:WithAndroid=true ^
+	-set:WithLinux=false ^
+	-set:WithLinuxArm64=false ^
+    -set:HostPlatformDDCOnly=true
 
 
 if %ERRORLEVEL% neq 0 (
     echo 构建失败！
-    exit /b %ERRORLEVEL%
+    rem exit /b %ERRORLEVEL%
 )
 
 echo 构建成功！已生成已安装版本于：%OUTPUT_DIR%

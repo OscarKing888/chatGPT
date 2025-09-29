@@ -17,14 +17,13 @@ rem 运行 AutomationTool 进行构建
 call "%ENGINE_ROOT%Engine\Build\BatchFiles\RunUAT.bat" BuildGraph ^
     -target="Make Installed Build Win64" ^
     -script="%ENGINE_ROOT%Engine\Build\InstalledEngineBuild.xml" ^
-    -set:WithDDC=true ^
+    -set:WithDDC=false ^
     -set:SignExecutables=false ^
     -set:EmbedSrcSrvInfo=false ^
-    -set:GameConfigurations=Development ^
+    -set:GameConfigurations=Shipping;Development;DebugGame ^
     -set:WithFullDebugInfo=false ^
     -set:HostPlatformEditorOnly=false ^
     -set:AnalyticsTypeOverride= ^
-    -set:BuildDir=%OUTPUT_DIR% ^
     -set:WithServer=true ^
     -set:WithClient=true ^
 	-set:WithWin64=true ^

@@ -10,7 +10,6 @@ import re
 import subprocess
 import sys
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Iterable, List, Sequence
 
 
@@ -25,6 +24,15 @@ class WorkspaceInfo:
     host: str
     owner: str
     root: str
+
+
+@dataclass(frozen=True)
+class LookupResult:
+    """The outcome of resolving an IP to Perforce workspaces."""
+
+    ip_address: str
+    resolved_host_names: tuple[str, ...]
+    workspaces: tuple[WorkspaceInfo, ...]
 
 
 def normalize_host_name(name: str) -> str:
@@ -80,15 +88,14 @@ class HostResolver:
         self.runner = runner or CommandRunner()
 
     def resolve_host_names(self, ip_address: str) -> List[str]:
+        candidates: List[str] = []
         for strategy in (
             self._resolve_via_dns,
             self._resolve_via_ping,
             self._resolve_via_nbtstat,
         ):
-            candidates = dedupe_preserve_order(strategy(ip_address))
-            if candidates:
-                return candidates
-        return []
+            candidates.extend(strategy(ip_address))
+        return dedupe_preserve_order(candidates)
 
     def _resolve_via_dns(self, ip_address: str) -> List[str]:
         command = [
@@ -157,8 +164,12 @@ class PerforceClient:
 
     def __init__(self, runner: CommandRunner | None = None) -> None:
         self.runner = runner or CommandRunner(timeout=15)
+        self._workspace_cache: List[WorkspaceInfo] | None = None
 
     def list_workspaces(self) -> List[WorkspaceInfo]:
+        if self._workspace_cache is not None:
+            return list(self._workspace_cache)
+
         try:
             completed = self.runner.run(["p4", "-ztag", "clients", "-a"])
         except FileNotFoundError as exc:
@@ -170,7 +181,8 @@ class PerforceClient:
             stderr = completed.stderr.strip()
             raise RuntimeError(stderr or "Failed to query Perforce workspaces.")
 
-        return list(self._parse_tagged_clients(completed.stdout))
+        self._workspace_cache = list(self._parse_tagged_clients(completed.stdout))
+        return list(self._workspace_cache)
 
     def find_workspaces_by_host(self, host_name: str) -> List[WorkspaceInfo]:
         expected_host = normalize_host_name(host_name)
@@ -223,18 +235,40 @@ def find_workspaces_by_ip(
     perforce: PerforceClient | None = None,
 ) -> List[WorkspaceInfo]:
     """Resolve an IP to machine names and return matching Perforce workspaces."""
+    return list(lookup_workspaces_by_ip(ip_address, resolver=resolver, perforce=perforce).workspaces)
+
+
+def lookup_workspaces_by_ip(
+    ip_address: str,
+    *,
+    resolver: HostResolver | None = None,
+    perforce: PerforceClient | None = None,
+) -> LookupResult:
+    """Resolve an IP to machine names and return structured lookup details."""
     resolver = resolver or HostResolver()
     perforce = perforce or PerforceClient()
 
+    host_names = resolver.resolve_host_names(ip_address)
+    workspaces_by_host: dict[str, List[WorkspaceInfo]] = {}
+    for workspace in perforce.list_workspaces():
+        if not workspace.host:
+            continue
+        key = normalize_host_name(workspace.host)
+        workspaces_by_host.setdefault(key, []).append(workspace)
+
     results: List[WorkspaceInfo] = []
     seen: set[str] = set()
-    for host_name in resolver.resolve_host_names(ip_address):
-        for workspace in perforce.find_workspaces_by_host(host_name):
+    for host_name in host_names:
+        for workspace in workspaces_by_host.get(normalize_host_name(host_name), []):
             if workspace.name in seen:
                 continue
             seen.add(workspace.name)
             results.append(workspace)
-    return results
+    return LookupResult(
+        ip_address=ip_address,
+        resolved_host_names=tuple(host_names),
+        workspaces=tuple(results),
+    )
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -242,6 +276,11 @@ def build_argument_parser() -> argparse.ArgumentParser:
         description="Find Perforce workspaces whose Host matches the machine name resolved from an IP address."
     )
     parser.add_argument("ip_address", help="IPv4 or IPv6 address to look up")
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="write lookup diagnostics to stderr when no workspaces are returned",
+    )
     return parser
 
 
@@ -255,12 +294,24 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error(f"invalid IP address: {args.ip_address}")
 
     try:
-        workspaces = find_workspaces_by_ip(args.ip_address)
+        result = lookup_workspaces_by_ip(args.ip_address)
     except RuntimeError as exc:
         print(str(exc), file=sys.stderr)
         return 1
 
-    for workspace in workspaces:
+    if args.debug:
+        if result.resolved_host_names:
+            print(
+                f"Resolved host names: {', '.join(result.resolved_host_names)}",
+                file=sys.stderr,
+            )
+        else:
+            print(f"No host name could be resolved for {result.ip_address}.", file=sys.stderr)
+
+        if not result.workspaces and result.resolved_host_names:
+            print("No Perforce workspace matched the resolved host name(s).", file=sys.stderr)
+
+    for workspace in result.workspaces:
         print(workspace.name)
     return 0
 
